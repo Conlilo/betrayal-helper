@@ -17,6 +17,7 @@ import {
   createGame,
   addCharacterFromTemplate,
   adjustStat,
+  nextTurn,
   CHARACTER_TEMPLATES,
   currentStat,
 } from '@/modules/game-engine';
@@ -87,5 +88,25 @@ describe('game-engine slice', () => {
 
     expect(state.characters).toHaveLength(1);
     expect(after).toBeLessThan(before);
+  });
+
+  it('advances turns in choice order and counts rounds', () => {
+    let state = gameReducer(undefined, createGame('Test'));
+    state = gameReducer(state, addCharacterFromTemplate(CHARACTER_TEMPLATES[0]));
+    state = gameReducer(state, addCharacterFromTemplate(CHARACTER_TEMPLATES[1]));
+    const [a, b] = state.characters.map(c => c.id);
+
+    // First chosen character starts the turn.
+    expect(state.activeCharacterId).toBe(a);
+    expect(state.round).toBe(1);
+
+    state = gameReducer(state, nextTurn());
+    expect(state.activeCharacterId).toBe(b);
+    expect(state.round).toBe(1);
+
+    // Wrapping back to the first player starts round 2.
+    state = gameReducer(state, nextTurn());
+    expect(state.activeCharacterId).toBe(a);
+    expect(state.round).toBe(2);
   });
 });

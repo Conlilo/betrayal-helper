@@ -37,6 +37,11 @@ export function ItemScreen(_props: RootScreenProps<'Items'>) {
       {items.map(card => (
         <Card key={card.id} title={card.name}>
           <Text style={styles.desc}>{card.description}</Text>
+          {card.effect ? (
+            <Text style={styles.effect}>
+              {t('common.effect')}: {card.effect}
+            </Text>
+          ) : null}
           <Text style={styles.owner}>
             {t('items.heldBy', { name: ownerName(card.ownerId) })}
           </Text>
@@ -75,8 +80,14 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
   desc: {
+    color: colors.textMuted,
+    fontSize: typography.body,
+    fontStyle: 'italic',
+  },
+  effect: {
     color: colors.text,
     fontSize: typography.body,
+    fontWeight: '600',
   },
   owner: {
     color: colors.warning,

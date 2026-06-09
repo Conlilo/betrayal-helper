@@ -30,6 +30,11 @@ export function EventScreen(_props: RootScreenProps<'Events'>) {
       {events.map(card => (
         <Card key={card.id} title={card.name}>
           <Text style={styles.desc}>{card.description}</Text>
+          {card.effect ? (
+            <Text style={styles.effect}>
+              {t('common.effect')}: {card.effect}
+            </Text>
+          ) : null}
           <View style={styles.footer}>
             <Button
               label={t('events.resolveDiscard')}
@@ -51,8 +56,14 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
   desc: {
+    color: colors.textMuted,
+    fontSize: typography.body,
+    fontStyle: 'italic',
+  },
+  effect: {
     color: colors.text,
     fontSize: typography.body,
+    fontWeight: '600',
   },
   footer: {
     marginTop: spacing.sm,

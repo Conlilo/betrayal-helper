@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Modal,
   Pressable,
@@ -15,6 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Button, colors, radius, spacing, typography } from '@/modules/ui';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { nextTurn, setCharacterRoom, type Character } from '@/modules/game-engine';
 import {
   BOARD_CENTER,
   BOARD_SIZE,
@@ -31,10 +32,14 @@ import {
   roomAt,
   roomDefsForFloor,
   setFloor,
+  symbolOfDef,
+  effectOfDef,
   type Direction,
   type Floor,
   type PlacedRoom,
 } from '@/modules/room-engine';
+import type { CardType } from '@/modules/card-engine';
+import { ResolutionSheet } from '@/features/play/ResolutionSheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { ID } from '@/types/shared';
 import type { RootScreenProps } from '@/navigation/types';
@@ -44,24 +49,56 @@ const BOARD_PX = BOARD_SIZE * CELL;
 const MIN_SCALE = 0.45;
 const MAX_SCALE = 2.5;
 
+const SYMBOL_ICON: Record<string, string> = {
+  event: '🎴',
+  omen: '🔮',
+  item: '🗡️',
+  none: '·',
+};
+
 export function BoardScreen(_props: RootScreenProps<'Board'>) {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const rooms = useAppSelector(s => s.rooms.rooms);
   const floor = useAppSelector(s => s.rooms.currentFloor);
+  const characters = useAppSelector(s => s.game.characters);
+  const turnCharId = useAppSelector(s => s.game.activeCharacterId);
+  const round = useAppSelector(s => s.game.round ?? 1);
+  const turnChar = characters.find(c => c.id === turnCharId) ?? null;
 
   const [selectedId, setSelectedId] = useState<ID | null>(null);
   const [moveMode, setMoveMode] = useState(false);
   const [placingAt, setPlacingAt] = useState<{ x: number; y: number } | null>(
     null,
   );
+  // Character selected from the tray, waiting to be placed onto a room.
+  const [activeCharId, setActiveCharId] = useState<ID | null>(null);
+  // When an explorer places a NEW room, this remembers them so we can move
+  // their token in and trigger the card resolution once the room exists.
+  const [pendingExplore, setPendingExplore] = useState<ID | null>(null);
+  const [justPlaced, setJustPlaced] = useState<
+    { charId: ID; x: number; y: number; defId: string } | null
+  >(null);
+  const [resolve, setResolve] = useState<
+    { explorerId: ID; symbol: CardType } | null
+  >(null);
 
   const selected = rooms.find(r => r.id === selectedId) ?? null;
+  const activeChar = characters.find(c => c.id === activeCharId) ?? null;
   const roomsOnFloor = useMemo(
     () => rooms.filter(r => r.floor === floor),
     [rooms, floor],
   );
+
+  // roomId -> characters standing on it.
+  const tokensByRoom = useMemo(() => {
+    const map: Record<string, Character[]> = {};
+    characters.forEach(c => {
+      if (c.roomId) (map[c.roomId] ??= []).push(c);
+    });
+    return map;
+  }, [characters]);
 
   // ----- pan + pinch (reanimated shared values) -----
   const scale = useSharedValue(0.8);
@@ -103,8 +140,36 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
   }));
 
   // ----- cell tap handling -----
+  const canPlace = (x: number, y: number) =>
+    isPlaceable(rooms, floor, x, y) ||
+    (roomsOnFloor.length === 0 && x === BOARD_CENTER && y === BOARD_CENTER);
+
   const onCellPress = (x: number, y: number) => {
     const room = roomAt(rooms, floor, x, y);
+
+    // An explorer is selected from the tray.
+    if (activeChar) {
+      if (room) {
+        // Move the token into an existing room (no new exploration).
+        dispatch(
+          setCharacterRoom({
+            characterId: activeChar.id,
+            roomId: room.id,
+            roomName: room.name,
+          }),
+        );
+        setActiveCharId(null);
+        return;
+      }
+      if (canPlace(x, y)) {
+        // Explore: place a new room here, then move the token + resolve.
+        setPendingExplore(activeChar.id);
+        setPlacingAt({ x, y });
+        return;
+      }
+      setActiveCharId(null);
+      return;
+    }
 
     if (moveMode && selected && !room) {
       dispatch(moveRoom({ id: selected.id, x, y }));
@@ -116,10 +181,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
       setMoveMode(false);
       return;
     }
-    const placeable =
-      isPlaceable(rooms, floor, x, y) ||
-      (roomsOnFloor.length === 0 && x === BOARD_CENTER && y === BOARD_CENTER);
-    if (placeable) {
+    if (canPlace(x, y)) {
       setPlacingAt({ x, y });
       return;
     }
@@ -128,25 +190,57 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
 
   const onPickRoom = (defId: string) => {
     if (!placingAt) return;
-    dispatch(placeRoom({ defId, floor, x: placingAt.x, y: placingAt.y }));
+    const { x, y } = placingAt;
+    dispatch(placeRoom({ defId, floor, x, y }));
+    if (pendingExplore) {
+      setJustPlaced({ charId: pendingExplore, x, y, defId });
+      setPendingExplore(null);
+    }
     setPlacingAt(null);
   };
+
+  const cancelPicker = () => {
+    setPlacingAt(null);
+    setPendingExplore(null);
+  };
+
+  // Once a freshly explored room exists in the store, move the explorer's
+  // token into it and open the resolution sheet if it has a card symbol.
+  useEffect(() => {
+    if (!justPlaced) return;
+    const room = roomAt(rooms, floor, justPlaced.x, justPlaced.y);
+    if (!room) return;
+    dispatch(
+      setCharacterRoom({
+        characterId: justPlaced.charId,
+        roomId: room.id,
+        roomName: room.name,
+      }),
+    );
+    const sym = symbolOfDef(justPlaced.defId);
+    if (sym !== 'none') {
+      setResolve({ explorerId: justPlaced.charId, symbol: sym });
+    }
+    setActiveCharId(null);
+    setJustPlaced(null);
+  }, [rooms, justPlaced, floor, dispatch]);
 
   const floorDefs = roomDefsForFloor(floor);
   const randomDef = () =>
     floorDefs[Math.floor(Math.random() * floorDefs.length)];
+
+  const selectChar = (id: ID) => {
+    setActiveCharId(prev => (prev === id ? null : id));
+    setSelectedId(null);
+    setMoveMode(false);
+  };
 
   // ----- render grid cells -----
   const cells = [];
   for (let y = 0; y < BOARD_SIZE; y += 1) {
     for (let x = 0; x < BOARD_SIZE; x += 1) {
       const room = roomAt(rooms, floor, x, y);
-      const placeable =
-        !room &&
-        (isPlaceable(rooms, floor, x, y) ||
-          (roomsOnFloor.length === 0 &&
-            x === BOARD_CENTER &&
-            y === BOARD_CENTER));
+      const placeable = !room && canPlace(x, y);
       const moveTarget = moveMode && !room;
       cells.push(
         <Cell
@@ -155,8 +249,10 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
           y={y}
           room={room}
           rooms={rooms}
+          tokens={room ? tokensByRoom[room.id] ?? [] : []}
           placeable={placeable}
           moveTarget={moveTarget}
+          highlight={Boolean(activeChar && room)}
           selected={room ? room.id === selectedId : false}
           onPress={() => onCellPress(x, y)}
         />,
@@ -195,9 +291,94 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
         </View>
       </GestureDetector>
 
+      {/* Character tray + turn tracker */}
+      <View style={styles.tray}>
+        {characters.length === 0 ? (
+          <>
+            <Text style={styles.trayTitle}>{t('board.tokensTitle')}</Text>
+            <Text style={styles.hint}>{t('board.noCharacters')}</Text>
+          </>
+        ) : (
+          <>
+            <View style={styles.turnRow}>
+              <Text style={styles.turnLabel} numberOfLines={1}>
+                {turnChar
+                  ? t('board.turn', { name: turnChar.name, round })
+                  : t('board.tokensTitle')}
+              </Text>
+              <Pressable
+                onPress={() => dispatch(nextTurn())}
+                style={styles.endTurnBtn}>
+                <Text style={styles.endTurnText}>{t('board.endTurn')}</Text>
+              </Pressable>
+            </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.trayRow}>
+              {characters.map(c => {
+                const room = rooms.find(r => r.id === c.roomId);
+                const active = c.id === activeCharId;
+                const isTurn = c.id === turnCharId;
+                return (
+                  <Pressable
+                    key={c.id}
+                    onPress={() => selectChar(c.id)}
+                    style={[
+                      styles.chip,
+                      active && styles.chipActive,
+                      (active || isTurn) && { borderColor: c.color },
+                    ]}>
+                    <View style={[styles.chipDot, { backgroundColor: c.color }]}>
+                      <Text style={styles.chipInitial}>{initial(c.name)}</Text>
+                    </View>
+                    <View>
+                      <Text style={styles.chipName}>
+                        {isTurn ? '▶ ' : ''}
+                        {c.name}
+                      </Text>
+                      <Text style={styles.chipRoom}>
+                        {room ? room.name : t('board.offBoard')}
+                      </Text>
+                    </View>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </>
+        )}
+      </View>
+
       {/* Bottom controls */}
       <View style={[styles.controls, { paddingBottom: insets.bottom + spacing.sm }]}>
-        {selected ? (
+        {activeChar ? (
+          <View style={styles.actionRow}>
+            <Text style={styles.placeHint}>
+              {t('board.exploreHint', { name: activeChar.name })}
+            </Text>
+            {activeChar.roomId ? (
+              <Button
+                label={t('board.offBoard')}
+                variant="secondary"
+                onPress={() => {
+                  dispatch(
+                    setCharacterRoom({
+                      characterId: activeChar.id,
+                      roomId: null,
+                      roomName: '',
+                    }),
+                  );
+                  setActiveCharId(null);
+                }}
+              />
+            ) : null}
+            <Button
+              label={t('board.cancel')}
+              variant="secondary"
+              onPress={() => setActiveCharId(null)}
+            />
+          </View>
+        ) : selected ? (
           moveMode ? (
             <View style={styles.actionRow}>
               <Text style={styles.moveHint}>{t('board.moveHint')}</Text>
@@ -212,6 +393,9 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
               <Text style={styles.selectedLabel}>
                 {t('board.selected', { name: selected.name })}
               </Text>
+              {effectOfDef(selected.defId) ? (
+                <Text style={styles.effectText}>{effectOfDef(selected.defId)}</Text>
+              ) : null}
               <View style={styles.actionRow}>
                 <Button
                   label={t('board.rotate')}
@@ -248,6 +432,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
             dispatch(resetRooms());
             setSelectedId(null);
             setMoveMode(false);
+            setActiveCharId(null);
           }}
         />
       </View>
@@ -257,10 +442,12 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
         visible={placingAt !== null}
         transparent
         animationType="slide"
-        onRequestClose={() => setPlacingAt(null)}>
-        <Pressable style={styles.backdrop} onPress={() => setPlacingAt(null)}>
+        onRequestClose={cancelPicker}>
+        <Pressable style={styles.backdrop} onPress={cancelPicker}>
           <Pressable style={styles.sheet}>
-            <Text style={styles.sheetTitle}>{t('board.pickRoom')}</Text>
+            <Text style={styles.sheetTitle}>
+              {pendingExplore ? t('board.exploreRoom') : t('board.pickRoom')}
+            </Text>
             <Button
               label={t('board.random')}
               onPress={() => {
@@ -276,7 +463,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
                   onPress={() => onPickRoom(def.defId)}>
                   <Text style={styles.defName}>{def.name}</Text>
                   <Text style={styles.defDoors}>
-                    {def.doors.join(' · ') || '—'}
+                    {SYMBOL_ICON[def.symbol]} · {def.doors.join(' · ') || '—'}
                   </Text>
                 </Pressable>
               ))}
@@ -284,24 +471,38 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
             <Button
               label={t('board.cancel')}
               variant="secondary"
-              onPress={() => setPlacingAt(null)}
+              onPress={cancelPicker}
             />
           </Pressable>
         </Pressable>
       </Modal>
+
+      {/* Card resolution for a freshly explored symbol room */}
+      <ResolutionSheet
+        visible={resolve !== null}
+        explorerId={resolve?.explorerId ?? null}
+        symbol={resolve?.symbol ?? null}
+        onClose={() => setResolve(null)}
+      />
     </View>
   );
 }
 
 // ---------------------------------------------------------------------------
 
+function initial(name: string): string {
+  return name.trim().charAt(0).toUpperCase() || '?';
+}
+
 interface CellProps {
   x: number;
   y: number;
   room?: PlacedRoom;
   rooms: PlacedRoom[];
+  tokens: Character[];
   placeable: boolean;
   moveTarget: boolean;
+  highlight: boolean;
   selected: boolean;
   onPress: () => void;
 }
@@ -311,8 +512,10 @@ function Cell({
   y,
   room,
   rooms,
+  tokens,
   placeable,
   moveTarget,
+  highlight,
   selected,
   onPress,
 }: CellProps) {
@@ -328,7 +531,15 @@ function Cell({
         placeable && styles.cellPlaceable,
         moveTarget && !room && styles.cellMoveTarget,
       ]}>
-      {room ? <RoomTile room={room} rooms={rooms} selected={selected} /> : null}
+      {room ? (
+        <RoomTile
+          room={room}
+          rooms={rooms}
+          tokens={tokens}
+          selected={selected}
+          highlight={highlight}
+        />
+      ) : null}
     </Pressable>
   );
 }
@@ -336,11 +547,15 @@ function Cell({
 function RoomTile({
   room,
   rooms,
+  tokens,
   selected,
+  highlight,
 }: {
   room: PlacedRoom;
   rooms: PlacedRoom[];
+  tokens: Character[];
   selected: boolean;
+  highlight: boolean;
 }) {
   const defDoors = doorsOfDef(room.defId);
   const doors = effectiveDoors(defDoors, room.rotation);
@@ -352,13 +567,29 @@ function RoomTile({
   );
 
   return (
-    <View style={[styles.tile, selected && styles.tileSelected]}>
-      <Text style={styles.tileName} numberOfLines={3}>
+    <View
+      style={[
+        styles.tile,
+        selected && styles.tileSelected,
+        highlight && styles.tileHighlight,
+      ]}>
+      <Text style={styles.tileName} numberOfLines={2}>
         {room.name}
       </Text>
       {doors.map(dir => (
         <Door key={dir} dir={dir} connected={connected.includes(dir)} />
       ))}
+      {tokens.length > 0 ? (
+        <View style={styles.tokens}>
+          {tokens.map(c => (
+            <View
+              key={c.id}
+              style={[styles.token, { backgroundColor: c.color }]}>
+              <Text style={styles.tokenText}>{initial(c.name)}</Text>
+            </View>
+          ))}
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -459,6 +690,9 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     backgroundColor: colors.surfaceAlt,
   },
+  tileHighlight: {
+    borderColor: colors.hero,
+  },
   tileName: {
     color: colors.text,
     fontSize: 11,
@@ -493,6 +727,106 @@ const styles = StyleSheet.create({
     width: DOOR_THICK,
     height: DOOR_LEN,
   },
+  tokens: {
+    position: 'absolute',
+    bottom: 2,
+    left: 2,
+    right: 2,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 2,
+  },
+  token: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.4)',
+  },
+  tokenText: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '800',
+  },
+  tray: {
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.sm,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xs,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    gap: spacing.xs,
+  },
+  trayTitle: {
+    color: colors.textMuted,
+    fontSize: typography.caption,
+    fontWeight: '700',
+  },
+  turnRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.sm,
+  },
+  turnLabel: {
+    flex: 1,
+    color: colors.text,
+    fontSize: typography.body,
+    fontWeight: '700',
+  },
+  endTurnBtn: {
+    backgroundColor: colors.primary,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.sm,
+  },
+  endTurnText: {
+    color: colors.text,
+    fontSize: typography.caption,
+    fontWeight: '700',
+  },
+  trayRow: {
+    gap: spacing.sm,
+    paddingVertical: 2,
+  },
+  chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    borderRadius: radius.sm,
+    backgroundColor: colors.surfaceAlt,
+    borderWidth: 1.5,
+    borderColor: 'transparent',
+  },
+  chipActive: {
+    backgroundColor: colors.background,
+  },
+  chipDot: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  chipInitial: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  chipName: {
+    color: colors.text,
+    fontSize: typography.caption,
+    fontWeight: '700',
+  },
+  chipRoom: {
+    color: colors.textMuted,
+    fontSize: 11,
+  },
   controls: {
     padding: spacing.sm,
     gap: spacing.sm,
@@ -504,6 +838,10 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: typography.body,
     fontWeight: '700',
+  },
+  effectText: {
+    color: colors.textMuted,
+    fontSize: typography.caption,
   },
   actionRow: {
     flexDirection: 'row',
@@ -517,6 +855,12 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.hero,
     fontSize: typography.caption,
+  },
+  placeHint: {
+    flex: 1,
+    color: colors.hero,
+    fontSize: typography.caption,
+    fontWeight: '600',
   },
   hint: {
     color: colors.textMuted,

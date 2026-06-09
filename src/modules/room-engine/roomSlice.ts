@@ -1,9 +1,9 @@
 import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
 import type { ID } from '@/types/shared';
 import type { Floor, PlacedRoom, RoomState } from './types';
-import { BOARD_CENTER } from './types';
+import { BOARD_CENTER, FLOORS } from './types';
 import { nextRotation } from './geometry';
-import { ROOM_DEFS_BY_ID } from './data/rooms';
+import { ROOM_DEFS_BY_ID, FLOOR_LANDING } from './data/rooms';
 
 const initialState: RoomState = {
   rooms: [],
@@ -18,26 +18,29 @@ const roomSlice = createSlice({
       state.currentFloor = action.payload;
     },
 
-    /** Seed the ground floor with the Foyer if the board is empty. */
+    /** Seed each floor's fixed landing (4 doors, centre) if the board is empty. */
     seedBoard: {
-      reducer(state, action: PayloadAction<PlacedRoom>) {
+      reducer(state, action: PayloadAction<PlacedRoom[]>) {
         if (state.rooms.length === 0) {
-          state.rooms.push(action.payload);
+          state.rooms.push(...action.payload);
           state.currentFloor = 'ground';
         }
       },
       prepare() {
-        const def = ROOM_DEFS_BY_ID.foyer;
-        const room: PlacedRoom = {
-          id: nanoid(),
-          defId: 'foyer',
-          name: def?.name ?? 'Foyer',
-          floor: 'ground',
-          x: BOARD_CENTER,
-          y: BOARD_CENTER,
-          rotation: 0,
-        };
-        return { payload: room };
+        const landings: PlacedRoom[] = FLOORS.map(floor => {
+          const defId = FLOOR_LANDING[floor];
+          const def = ROOM_DEFS_BY_ID[defId];
+          return {
+            id: nanoid(),
+            defId,
+            name: def?.name ?? defId,
+            floor,
+            x: BOARD_CENTER,
+            y: BOARD_CENTER,
+            rotation: 0,
+          };
+        });
+        return { payload: landings };
       },
     },
 

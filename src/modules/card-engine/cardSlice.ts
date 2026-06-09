@@ -22,6 +22,7 @@ const cardSlice = createSlice({
           type: def.type,
           name: def.name,
           description: def.description,
+          effect: def.effect,
           ownerId: def.type === 'item' ? ownerId : null,
           drawnAt: Date.now(),
         };

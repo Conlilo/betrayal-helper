@@ -11,6 +11,8 @@ export interface CharacterTemplate {
   name: string;
   color: string;
   stats: Record<StatKey, StatTrack>;
+  /** Optional special ability text. */
+  ability?: string;
 }
 
 const track = (values: number[], startValue: number): StatTrack => ({
@@ -70,8 +72,10 @@ export function characterFromTemplate(template: CharacterTemplate): Character {
     side: 'explorer',
     controller: 'human',
     stats: cloneStats(template.stats),
+    ability: template.ability,
     itemIds: [],
     location: 'Entrance Hall',
+    roomId: null,
     alive: true,
   };
 }

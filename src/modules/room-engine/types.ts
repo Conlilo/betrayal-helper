@@ -1,9 +1,9 @@
 import type { ID } from '@/types/shared';
 
-/** The three levels of the house. */
-export type Floor = 'basement' | 'ground' | 'upper';
+/** The levels of the house, from bottom to top. */
+export type Floor = 'basement' | 'ground' | 'upper' | 'roof';
 
-export const FLOORS: Floor[] = ['basement', 'ground', 'upper'];
+export const FLOORS: Floor[] = ['basement', 'ground', 'upper', 'roof'];
 
 /** Cardinal edge of a square tile. */
 export type Direction = 'N' | 'E' | 'S' | 'W';
@@ -13,6 +13,12 @@ export const DIRECTIONS: Direction[] = ['N', 'E', 'S', 'W'];
 /** Tile rotation in degrees (clockwise). */
 export type Rotation = 0 | 90 | 180 | 270;
 
+/**
+ * The card symbol printed on a room tile. Entering a room with a symbol makes
+ * the explorer draw a card of that type. 'none' means nothing happens.
+ */
+export type RoomSymbol = 'event' | 'omen' | 'item' | 'none';
+
 /** A printed room tile definition (independent of any match). */
 export interface RoomDef {
   defId: string;
@@ -21,6 +27,10 @@ export interface RoomDef {
   floors: Floor[];
   /** Edges that have a door, in the tile's un-rotated orientation. */
   doors: Direction[];
+  /** Card symbol that triggers on entering this room. */
+  symbol: RoomSymbol;
+  /** The room's printed special effect, if any (free text). */
+  effect?: string;
 }
 
 /** A room tile placed on the board during a game. */

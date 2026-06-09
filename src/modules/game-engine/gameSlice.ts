@@ -15,6 +15,7 @@ const initialState: GameState = {
   characters: [],
   turnOrder: [],
   activeCharacterId: null,
+  round: 1,
   omenCount: 0,
   log: [],
   createdAt: null,
@@ -55,6 +56,10 @@ const gameSlice = createSlice({
       state.characters.push(character);
       state.turnOrder.push(character.id);
       state.playerCount = state.characters.length;
+      // The first character chosen starts the turn order.
+      if (state.activeCharacterId === null) {
+        state.activeCharacterId = character.id;
+      }
       touch(state, `${character.name} joined the game.`);
     },
 
@@ -97,6 +102,29 @@ const gameSlice = createSlice({
       touch(state);
     },
 
+    /** Place (or move) a character's board token onto a room, or clear it. */
+    setCharacterRoom(
+      state,
+      action: PayloadAction<{
+        characterId: ID;
+        roomId: ID | null;
+        roomName: string;
+      }>,
+    ) {
+      const character = state.characters.find(
+        c => c.id === action.payload.characterId,
+      );
+      if (!character) return;
+      character.roomId = action.payload.roomId;
+      if (action.payload.roomName) character.location = action.payload.roomName;
+      touch(
+        state,
+        action.payload.roomId
+          ? `${character.name} → ${action.payload.roomName}`
+          : `${character.name} removed from board.`,
+      );
+    },
+
     setCharacterSide(
       state,
       action: PayloadAction<{ characterId: ID; side: Side; controller?: Controller }>,
@@ -117,19 +145,34 @@ const gameSlice = createSlice({
       touch(state, `Phase → ${action.payload}.`);
     },
 
+    /** Append a free-form message to the action history. */
+    logAction(state, action: PayloadAction<string>) {
+      touch(state, action.payload);
+    },
+
     incrementOmenCount(state) {
       state.omenCount += 1;
       touch(state, `Omen drawn (total ${state.omenCount}).`);
     },
 
+    /** Advance to the next living character in choice order. */
     nextTurn(state) {
-      if (state.turnOrder.length === 0) return;
+      const aliveById = new Map(
+        state.characters.filter(c => c.alive).map(c => [c.id, c] as const),
+      );
+      const order = state.turnOrder.filter(id => aliveById.has(id));
+      if (order.length === 0) return;
       const currentIndex = state.activeCharacterId
-        ? state.turnOrder.indexOf(state.activeCharacterId)
+        ? order.indexOf(state.activeCharacterId)
         : -1;
-      const nextIndex = (currentIndex + 1) % state.turnOrder.length;
-      state.activeCharacterId = state.turnOrder[nextIndex];
-      touch(state);
+      const nextIndex = (currentIndex + 1) % order.length;
+      // Wrapping back to the first player starts a new round.
+      if (currentIndex !== -1 && nextIndex === 0) {
+        state.round = (state.round ?? 1) + 1;
+      }
+      state.activeCharacterId = order[nextIndex];
+      const next = aliveById.get(order[nextIndex]);
+      touch(state, next ? `${next.name}'s turn (round ${state.round ?? 1}).` : undefined);
     },
 
     /** Replace the whole game state (used by load / undo). */
@@ -152,8 +195,10 @@ export const {
   removeCharacter,
   adjustStat,
   setCharacterLocation,
+  setCharacterRoom,
   setCharacterSide,
   setPhase,
+  logAction,
   incrementOmenCount,
   nextTurn,
   loadGame,

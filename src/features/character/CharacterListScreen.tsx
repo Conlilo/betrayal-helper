@@ -21,7 +21,9 @@ import {
 import { STAT_KEYS, type StatKey } from '@/types/shared';
 import type { RootScreenProps } from '@/navigation/types';
 
-export function CharacterListScreen(_props: RootScreenProps<'Characters'>) {
+export function CharacterListScreen({
+  navigation,
+}: RootScreenProps<'Characters'>) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const characters = useAppSelector(s => s.game.characters);
@@ -62,6 +64,9 @@ export function CharacterListScreen(_props: RootScreenProps<'Characters'>) {
           </View>
 
           <Text style={styles.location}>📍 {character.location}</Text>
+          {character.ability ? (
+            <Text style={styles.ability}>✦ {character.ability}</Text>
+          ) : null}
 
           <View style={styles.stats}>
             {STAT_KEYS.map((stat: StatKey) => (
@@ -86,6 +91,13 @@ export function CharacterListScreen(_props: RootScreenProps<'Characters'>) {
           />
         </Card>
       ))}
+
+      {characters.length > 0 ? (
+        <Button
+          label={t('characters.toBoard')}
+          onPress={() => navigation.navigate('Board')}
+        />
+      ) : null}
     </Screen>
   );
 }
@@ -137,6 +149,10 @@ const styles = StyleSheet.create({
   },
   location: {
     color: colors.textMuted,
+    fontSize: typography.caption,
+  },
+  ability: {
+    color: colors.warning,
     fontSize: typography.caption,
   },
   stats: {

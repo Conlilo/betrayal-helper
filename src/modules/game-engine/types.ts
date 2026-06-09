@@ -24,10 +24,14 @@ export interface Character {
   side: Side;
   controller: Controller;
   stats: Record<StatKey, StatTrack>;
+  /** Optional special ability text printed on the character card. */
+  ability?: string;
   /** Ids of items currently held (see card-engine). */
   itemIds: ID[];
-  /** Free-text room / tile the character is on. Map handling is future work. */
+  /** Human-readable room/tile label (kept in sync with the board token). */
   location: string;
+  /** Id of the PlacedRoom this character stands on (board token), or null. */
+  roomId: ID | null;
   alive: boolean;
 }
 
@@ -45,9 +49,11 @@ export interface GameState {
   phase: GamePhase;
   playerCount: number;
   characters: Character[];
-  /** Character ids in turn order. */
+  /** Character ids in turn order (order they were chosen). */
   turnOrder: ID[];
   activeCharacterId: ID | null;
+  /** Current round number (one round = every living character acts once). */
+  round: number;
   /** Number of omens drawn so far — feeds the Haunt roll. */
   omenCount: number;
   log: LogEntry[];
