@@ -13,7 +13,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import {
   CHARACTER_TEMPLATES,
-  addCharacterFromTemplate,
+  addCharacter,
   removeCharacter,
   adjustStat,
   currentStat,
@@ -27,23 +27,34 @@ export function CharacterListScreen({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const characters = useAppSelector(s => s.game.characters);
-  const usedNames = new Set(characters.map(c => c.name));
+  // Only one explorer per figure colour may be in play.
+  const usedColors = new Set(characters.map(c => c.color));
 
   return (
     <Screen>
       <Card title={t('characters.addCharacter')}>
-        <View style={styles.templateRow}>
-          {CHARACTER_TEMPLATES.map(template => (
-            <Button
-              key={template.name}
-              label={`+ ${template.name}`}
-              variant="secondary"
-              disabled={usedNames.has(template.name)}
-              style={styles.templateBtn}
-              onPress={() => dispatch(addCharacterFromTemplate(template))}
-            />
-          ))}
-        </View>
+        {CHARACTER_TEMPLATES.map(group => {
+          const colorUsed = usedColors.has(group.color);
+          return (
+            <View key={group.color} style={styles.groupRow}>
+              <View
+                style={[styles.groupDot, { backgroundColor: group.color }]}
+              />
+              {group.characters.map(option => (
+                <Button
+                  key={option.id}
+                  label={option.name}
+                  variant="secondary"
+                  disabled={colorUsed}
+                  style={styles.templateBtn}
+                  onPress={() =>
+                    dispatch(addCharacter({ option, color: group.color }))
+                  }
+                />
+              ))}
+            </View>
+          );
+        })}
       </Card>
 
       {characters.length === 0 ? (
@@ -103,13 +114,20 @@ export function CharacterListScreen({
 }
 
 const styles = StyleSheet.create({
-  templateRow: {
+  groupRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: 'center',
     gap: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  groupDot: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
   },
   templateBtn: {
     flexGrow: 1,
+    flexShrink: 1,
   },
   empty: {
     color: colors.textMuted,

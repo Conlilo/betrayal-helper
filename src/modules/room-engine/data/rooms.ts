@@ -15,6 +15,13 @@ export const ROOM_DEFS: RoomDef[] = [
     symbol: 'none',
   },
   {
+    defId: 'entrance-hall',
+    name: 'Entrance Hall',
+    floors: ['ground'],
+    doors: ['N', 'E', 'W'],
+    symbol: 'none',
+  },
+  {
     defId: 'grand-staircase',
     name: 'Grand Staircase',
     floors: ['ground'],
@@ -114,26 +121,52 @@ export const ROOM_DEFS: RoomDef[] = [
     doors: ['N', 'S'],
     symbol: 'event',
   },
+  {
+    defId: 'dumbwaiter',
+    name: 'Dumbwaiter',
+    floors: ['basement', 'ground', 'upper'],
+    doors: ['N'],
+    symbol: 'dumbwaiter',
+    effect: 'When moving via the Dumbwaiter you may move to any landing.',
+  },
 ];
 
-/** The fixed landing tile auto-placed at the centre of each floor. */
-export const FLOOR_LANDING: Record<Floor, string> = {
-  basement: 'basement-landing',
-  ground: 'foyer',
-  upper: 'upper-landing',
-  roof: 'roof-landing',
+/**
+ * Fixed starting tiles auto-placed on each floor, with their offset (dx, dy)
+ * from the board centre. The ground floor always starts with the classic row
+ * Grand Staircase — Foyer — Entrance Hall (top→bottom). Other floors start
+ * with their single landing.
+ */
+export interface SeedTile {
+  defId: string;
+  dx: number;
+  dy: number;
+}
+
+export const FLOOR_SEED: Record<Floor, SeedTile[]> = {
+  basement: [{ defId: 'basement-landing', dx: 0, dy: 0 }],
+  ground: [
+    { defId: 'grand-staircase', dx: 0, dy: -1 },
+    { defId: 'foyer', dx: 0, dy: 0 },
+    { defId: 'entrance-hall', dx: 0, dy: 1 },
+  ],
+  upper: [{ defId: 'upper-landing', dx: 0, dy: 0 }],
+  roof: [{ defId: 'roof-landing', dx: 0, dy: 0 }],
 };
 
-const LANDING_IDS = new Set(Object.values(FLOOR_LANDING));
+/** defIds that are auto-placed at seed time — never drawn from the pool. */
+const SEEDED_IDS = new Set(
+  Object.values(FLOOR_SEED).flat().map(s => s.defId),
+);
 
 export const ROOM_DEFS_BY_ID: Record<string, RoomDef> = Object.fromEntries(
   ROOM_DEFS.map(r => [r.defId, r]),
 );
 
-/** Room tiles legal to place on a given floor (excludes fixed landing tiles). */
+/** Room tiles legal to draw/place on a floor (excludes fixed starting tiles). */
 export function roomDefsForFloor(floor: Floor): RoomDef[] {
   return ROOM_DEFS.filter(
-    r => r.floors.includes(floor) && !LANDING_IDS.has(r.defId),
+    r => r.floors.includes(floor) && !SEEDED_IDS.has(r.defId),
   );
 }
 

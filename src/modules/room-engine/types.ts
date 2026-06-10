@@ -14,10 +14,22 @@ export const DIRECTIONS: Direction[] = ['N', 'E', 'S', 'W'];
 export type Rotation = 0 | 90 | 180 | 270;
 
 /**
- * The card symbol printed on a room tile. Entering a room with a symbol makes
- * the explorer draw a card of that type. 'none' means nothing happens.
+ * The symbol printed on a room tile.
+ * - `event` / `omen` / `item`: entering makes the explorer draw that card.
+ * - `dumbwaiter`: a special feature (move between floors), not a card draw.
+ * - `none`: nothing happens.
  */
-export type RoomSymbol = 'event' | 'omen' | 'item' | 'none';
+export type RoomSymbol = 'event' | 'omen' | 'item' | 'dumbwaiter' | 'none';
+
+/** Symbols that trigger drawing a card (a subset of RoomSymbol). */
+export const CARD_SYMBOLS = ['event', 'omen', 'item'] as const;
+
+/** True when a room symbol makes the explorer draw a card. */
+export function isCardSymbol(
+  symbol: RoomSymbol,
+): symbol is 'event' | 'omen' | 'item' {
+  return symbol === 'event' || symbol === 'omen' || symbol === 'item';
+}
 
 /** A printed room tile definition (independent of any match). */
 export interface RoomDef {

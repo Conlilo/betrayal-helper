@@ -34,6 +34,7 @@ import {
   setFloor,
   symbolOfDef,
   effectOfDef,
+  isCardSymbol,
   type Direction,
   type Floor,
   type PlacedRoom,
@@ -53,6 +54,7 @@ const SYMBOL_ICON: Record<string, string> = {
   event: '🎴',
   omen: '🔮',
   item: '🗡️',
+  dumbwaiter: '🛗',
   none: '·',
 };
 
@@ -218,7 +220,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
       }),
     );
     const sym = symbolOfDef(justPlaced.defId);
-    if (sym !== 'none') {
+    if (isCardSymbol(sym)) {
       setResolve({ explorerId: justPlaced.charId, symbol: sym });
     }
     setActiveCharId(null);

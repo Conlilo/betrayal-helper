@@ -15,12 +15,20 @@ import {
 import {
   gameReducer,
   createGame,
-  addCharacterFromTemplate,
+  addCharacter,
   adjustStat,
   nextTurn,
   CHARACTER_TEMPLATES,
   currentStat,
 } from '@/modules/game-engine';
+
+/** Helper: add the Nth explorer option (flattened across colour groups). */
+const addNth = (state: ReturnType<typeof gameReducer>, n: number) => {
+  const flat = CHARACTER_TEMPLATES.flatMap(g =>
+    g.characters.map(option => ({ option, color: g.color })),
+  );
+  return gameReducer(state, addCharacter(flat[n]));
+};
 
 describe('combat-engine', () => {
   it('damages the loser by the difference', () => {
@@ -79,7 +87,7 @@ describe('haunt-engine', () => {
 describe('game-engine slice', () => {
   it('adds a character and applies damage to a stat', () => {
     let state = gameReducer(undefined, createGame('Test'));
-    state = gameReducer(state, addCharacterFromTemplate(CHARACTER_TEMPLATES[0]));
+    state = addNth(state, 0);
     const id = state.characters[0].id;
     const before = currentStat(state.characters[0].stats.might);
 
@@ -92,8 +100,8 @@ describe('game-engine slice', () => {
 
   it('advances turns in choice order and counts rounds', () => {
     let state = gameReducer(undefined, createGame('Test'));
-    state = gameReducer(state, addCharacterFromTemplate(CHARACTER_TEMPLATES[0]));
-    state = gameReducer(state, addCharacterFromTemplate(CHARACTER_TEMPLATES[1]));
+    state = addNth(state, 0);
+    state = addNth(state, 1);
     const [a, b] = state.characters.map(c => c.id);
 
     // First chosen character starts the turn.

@@ -7,7 +7,7 @@ Google Sheet, JSON, hay text đều được) — mình sẽ convert vào code. 
 Giá trị enum dùng chung:
 - **floors (tầng):** `basement` (hầm) · `ground` (trệt) · `upper` (trên) · `roof` (mái)
 - **doors (cửa):** `N` (trên) · `E` (phải) · `S` (dưới) · `W` (trái) — theo hình in trên tile gốc; app tự xử lý xoay khi đặt.
-- **symbol:** `event` · `omen` · `item` · `none` (không có)
+- **symbol:** `event` · `omen` · `item` · `dumbwaiter` (di chuyển giữa tầng — không rút thẻ) · `none` (không có)
 - **stat:** `might` · `speed` · `knowledge` · `sanity`
 
 > `id`: chuỗi ngắn, **duy nhất**, không dấu, không khoảng trắng (vd `kitchen`, `the-dog`).
@@ -103,29 +103,36 @@ effect: +1 xúc xắc khi chiến đấu nếu nó đi cùng bạn.
 
 ## 5. Thẻ nhân vật (Character) → `src/modules/game-engine/characters.ts`
 
+Nhân vật **gom theo màu** (mỗi màu = 1 quân, có **2 nhân vật** ở 2 mặt thẻ). Trong
+1 ván, mỗi màu chỉ chọn **1** nhân vật. Mỗi nhân vật gồm:
+
 | Field | Bắt buộc | Kiểu | Ghi chú |
 |---|---|---|---|
+| id | ✅ | text | slug duy nhất, vd `ox_bellows` |
 | name | ✅ | text | tên nhân vật |
-| color | tùy chọn | hex | màu token, vd `#3C8DBC` (thiếu thì mình gán) |
-| might | ✅ | dãy số + start | xem dưới |
-| speed | ✅ | dãy số + start | |
-| knowledge | ✅ | dãy số + start | |
-| sanity | ✅ | dãy số + start | |
-| ability | tùy chọn | text | kỹ năng đặc biệt (nếu có) |
+| speed / might / sanity / knowledge | ✅ | 8 số | dãy số in trên thẻ trái→phải (kể cả ô skull `0` ngoài cùng trái) |
+| *start* mỗi chỉ số | ✅ | số | số được **khoanh tròn** trên thẻ (điểm bắt đầu) |
 
-**Mỗi chỉ số** = dãy số in trên thẻ (trái→phải, kể cả ô skull `0` ngoài cùng trái)
-**+ số bắt đầu** (số được khoanh tròn trên thẻ).
+Và mỗi **màu**: `color` (hex) + `colorName`.
 
-**Ví dụ (Ox Bellows):**
+**Ví dụ (1 màu = 2 nhân vật):**
 ```
-name: Ox Bellows
-color: #3C8DBC
-might:     values = 0 4 5 5 6 7 8 8 ; start = 6
-speed:     values = 0 2 3 3 4 5 5 6 ; start = 3
-knowledge: values = 0 2 2 3 4 5 5 6 ; start = 2
-sanity:    values = 0 3 3 4 5 6 6 7 ; start = 4
-ability: (không có)
+color: #C0392B   colorName: Red
+─ ox_bellows · Ox Bellows
+    speed:     2 2 2 3 4 5 5 6   (start 4)
+    might:     4 5 5 6 6 7 8 8   (start 5)
+    sanity:    2 2 3 4 5 5 6 7   (start 3)
+    knowledge: 2 2 3 3 5 5 6 6   (start 3)
+─ flash_williams · Darrin "Flash" Williams
+    speed:     3 3 4 5 6 7 7 8   (start 6)
+    might:     2 3 3 4 5 6 6 7   (start 3)
+    sanity:    1 2 3 4 5 5 5 7   (start 3)
+    knowledge: 2 3 3 4 5 5 5 7   (start 3)
 ```
+
+> Trong code: dãy số nằm trong `CHARACTER_TEMPLATES` (gom theo màu), còn các số
+> *start* nằm ở object `characterStarts` (key = id). Bạn chỉ cần cung cấp đủ
+> dãy số + start cho mỗi nhân vật; mình ráp vào đúng chỗ.
 
 ---
 

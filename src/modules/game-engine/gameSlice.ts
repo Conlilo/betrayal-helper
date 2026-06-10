@@ -3,8 +3,8 @@ import type { ID, StatKey, GamePhase, Side, Controller } from '@/types/shared';
 import type { Character, GameState } from './types';
 import {
   CHARACTER_TEMPLATES,
-  characterFromTemplate,
-  type CharacterTemplate,
+  characterFromOption,
+  type CharacterOption,
 } from './characters';
 
 const initialState: GameState = {
@@ -51,8 +51,14 @@ const gameSlice = createSlice({
       },
     },
 
-    addCharacterFromTemplate(state, action: PayloadAction<CharacterTemplate>) {
-      const character = characterFromTemplate(action.payload);
+    addCharacter(
+      state,
+      action: PayloadAction<{ option: CharacterOption; color: string }>,
+    ) {
+      const character = characterFromOption(
+        action.payload.option,
+        action.payload.color,
+      );
       state.characters.push(character);
       state.turnOrder.push(character.id);
       state.playerCount = state.characters.length;
@@ -191,7 +197,7 @@ const STAT_DEATH_KEYS: StatKey[] = ['might', 'speed', 'knowledge', 'sanity'];
 
 export const {
   createGame,
-  addCharacterFromTemplate,
+  addCharacter,
   removeCharacter,
   adjustStat,
   setCharacterLocation,

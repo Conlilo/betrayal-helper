@@ -3,7 +3,7 @@ export * from './characters';
 export { default as gameReducer } from './gameSlice';
 export {
   createGame,
-  addCharacterFromTemplate,
+  addCharacter,
   removeCharacter,
   adjustStat,
   setCharacterLocation,
