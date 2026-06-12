@@ -1,34 +1,6 @@
-import type { CardDef } from '../types';
+import type { CardDef } from '../../types';
 
-/**
- * A small starter set of card definitions. The full game has ~45 event,
- * 13 omen and 22 item cards — extend this list (or load from JSON) over time.
- */
-export const CARD_DEFS: CardDef[] = [
-  // --- Events --- (description = lời dẫn, effect = xử lý tác dụng)
-  {
-    defId: 'event-creepy-crawlies',
-    type: 'event',
-    name: 'Creepy Crawlies',
-    description: 'Something skitters in the dark and swarms over you.',
-    effect:
-      'Roll for Sanity. 4+: nothing. 2–3: lose 1 Sanity. 0–1: lose 2 Sanity.',
-  },
-  {
-    defId: 'event-the-voice',
-    type: 'event',
-    name: 'The Voice',
-    description: 'A whisper from nowhere offers forbidden knowledge.',
-    effect: 'Roll for Knowledge. 5+: gain 1 Knowledge. 0–2: lose 1 Sanity.',
-  },
-  {
-    defId: 'event-hidden-passage',
-    type: 'event',
-    name: 'Hidden Passage',
-    description: 'A draft reveals a seam in the wall — a secret way.',
-    effect: 'Move to any other room that has a matching door symbol.',
-  },
-
+export const OMEN_CARDS: CardDef[] = [
   // --- Omens ---
   {
     defId: 'omen-skull',
@@ -94,6 +66,18 @@ export const CARD_DEFS: CardDef[] = [
     description: 'Tiếng gầm gừ mùi của cái chết',
     effect:
       'Khi bạn rút được lá này một con gì đó sẽ cắn bạn. NGười chơi bên phải bạn sẽ đổ 4 xí ngầu Might tượng trưng cho đòn cắn của con thú đó(Trước khi nó bỏ chạy vào bóng tối). Bạn chông lại đòn tấn công bình thường, bằng cách đổ xí ngầu tương ứng với giá trị Might của bạn.\nLá Omen này không thể bị trao đổi , đưa cho ai khác hay bị trộm. \n Đổ xí ngầu cho ngôi nhà ma ngay lúc này.',
+    resolution: {
+      steps: [
+        {
+          kind: 'attackDefense',
+          prompt:
+            'Người chơi bên phải đổ 4 Might (đòn cắn). Bạn phòng thủ bằng Might. Chênh lệch = thiệt hại vật chất bạn nhận.',
+          attackerDice: 4,
+          defenseStat: 'might',
+          damage: 'physical',
+        },
+      ],
+    },
   },
   {
     defId: 'omen-dog',
@@ -115,7 +99,8 @@ export const CARD_DEFS: CardDef[] = [
     defId: 'omen-girl',
     type: 'omen',
     name: 'Girl',
-    description: 'Bạn đồng hành\nMột cô gái.\nBị mắc bẫy.\nMột mình.\nBạn giải thoát cho cô ta!',
+    description:
+      'Bạn đồng hành\nMột cô gái.\nBị mắc bẫy.\nMột mình.\nBạn giải thoát cho cô ta!',
     effect:
       'Nhận 1 Sanity và 1 Knowledge.\nMất 1 Sanity và 1 Knowledge nếu bạn mất Holy symbol.\nLá Omen này không thể trao đổi, đưa cho người khác hay trộm \n Đổ xí ngầu cho ngôi nhà ma ngay lúc này.',
   },
@@ -139,7 +124,8 @@ export const CARD_DEFS: CardDef[] = [
     defId: 'omen-book',
     type: 'omen',
     name: 'Book',
-    description: 'Một cuốn nhận ký hay ghi chú của 1 cuốn thí nghiệm khoa học?\nBản khảo cổ, hay kiên thức thời hiện đại?',
+    description:
+      'Một cuốn nhận ký hay ghi chú của 1 cuốn thí nghiệm khoa học?\nBản khảo cổ, hay kiên thức thời hiện đại?',
     effect:
       'Nhận 2 Knowledge.\nMất 2 Knowledge nếu bạn làm mất lá Book\n Đổ xí ngầu cho ngôi nhà ma ngay lúc này.',
   },
@@ -147,7 +133,8 @@ export const CARD_DEFS: CardDef[] = [
     defId: 'omen-box',
     type: 'omen',
     name: 'Box',
-    description: 'They were always telling you to think outside of it. Now you\'re worries you will end up inside it',
+    description:
+      "They were always telling you to think outside of it. Now you're worries you will end up inside it",
     effect:
       'When you draw this card draw an item card and put in on this card. That Item cannot be dropped or traded. If someone would steal that item, you can instead discard the Box. On your turn, you may remove that item from the Box and put a different item in your possession into the Box. If it is empty, you may put an item in the Box. The Box cannot be stolen\n Make a haunt roll now.',
   },
@@ -155,7 +142,8 @@ export const CARD_DEFS: CardDef[] = [
     defId: 'omen-bloodstone',
     type: 'omen',
     name: 'Bloodstone',
-    description: 'Smooth and the deep green of a midnghit forest, the stone is veinedwith crimson. They say you cannot  get blood from a stone.\nThey did not ask this one',
+    description:
+      'Smooth and the deep green of a midnghit forest, the stone is veinedwith crimson. They say you cannot  get blood from a stone.\nThey did not ask this one',
     effect:
       'Once per turn, you may lose 1 from any trait to add 2 dice (maximum of 8 dice) to your trait roll.\n Make a haunt roll now.',
   },
@@ -171,7 +159,8 @@ export const CARD_DEFS: CardDef[] = [
     defId: 'omen-key',
     type: 'omen',
     name: 'Key',
-    description: 'You heve been wondering how to open all the locks in the house. The question is, thy did they get locked in the first place?',
+    description:
+      'You heve been wondering how to open all the locks in the house. The question is, thy did they get locked in the first place?',
     effect:
       'Add 4 dice to trait rolls to open or take something from a card or room tile, such as the Locked Room, Safe or Vault.\nYou may pass through the Locked Room without removing a lock. At the start of each turn, you may choose to put a Lock token on  an unlocked door in the Locked Rom, if you are next to that door\n Make a haunt roll now.',
   },
@@ -179,7 +168,8 @@ export const CARD_DEFS: CardDef[] = [
     defId: 'omen-photograph',
     type: 'omen',
     name: 'Photograph',
-    description: 'It changes as you look at it, showing different rooms in this house. Probably this house',
+    description:
+      'It changes as you look at it, showing different rooms in this house. Probably this house',
     effect:
       'When discorvering a room, you may  discard the first drawn room tile and discover the next eligible room in the room stack instead\n Make a haunt roll now.',
   },
@@ -189,43 +179,16 @@ export const CARD_DEFS: CardDef[] = [
     name: 'Letter',
     description: 'Scrwled in ink, or whatever',
     effect:
-      'You may hand one of your explorer token to another explorer. On your turn , you may move to that explorer\'s room, then discard this omen and the explorer discards your explorer token\n Make a haunt roll now.',
+      "You may hand one of your explorer token to another explorer. On your turn , you may move to that explorer's room, then discard this omen and the explorer discards your explorer token\n Make a haunt roll now.",
   },
   {
     defId: 'omen-cat',
     type: 'omen',
     name: 'Cat',
-    description: 'Companion\nIt crossed you path, and you are supposed to have bad luck. But maybe you crossed its path, and it is the one that is not too happy about it. Now it accompanies you',
+    description:
+      'Companion\nIt crossed you path, and you are supposed to have bad luck. But maybe you crossed its path, and it is the one that is not too happy about it. Now it accompanies you',
     effect:
       'You may call on the Cat for luck before tour trait roll. Roll 1 dice:\n 0: Subtract 2 from the resukt of that trait roll\n 1+: Add 2 to the result of the trait roll.\n This Omen cannot be dropped, traded, or stolen\n Make a haunt roll now.',
   },
 
-  // --- Items ---
-  {
-    defId: 'item-revolver',
-    type: 'item',
-    name: 'Revolver',
-    description: 'A heavy six-shooter, cold in your hand.',
-    effect: 'Add 2 dice to an attack. Holds limited shots.',
-  },
-  {
-    defId: 'item-axe',
-    type: 'item',
-    name: 'Axe',
-    description: 'A rusted axe, still wickedly sharp.',
-    effect: 'Add 2 dice when you attack with Might.',
-  },
-  {
-    defId: 'item-medical-kit',
-    type: 'item',
-    name: 'Medical Kit',
-    description: 'Bandages and salves in a battered tin.',
-    effect: 'Spend an action to heal Might or Speed by 1.',
-  },
 ];
-
-export const CARD_DEFS_BY_TYPE = {
-  event: CARD_DEFS.filter(c => c.type === 'event'),
-  omen: CARD_DEFS.filter(c => c.type === 'omen'),
-  item: CARD_DEFS.filter(c => c.type === 'item'),
-};

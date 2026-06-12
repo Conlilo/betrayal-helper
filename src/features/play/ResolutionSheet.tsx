@@ -1,12 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, StatBadge, colors, radius, spacing, typography } from '@/modules/ui';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { adjustStat, currentStat, logAction } from '@/modules/game-engine';
-import { CARD_DEFS_BY_TYPE, drawCard, type CardDef, type CardType } from '@/modules/card-engine';
+import {
+  adjustStat,
+  currentStat,
+  incrementOmenCount,
+  logAction,
+} from '@/modules/game-engine';
+import {
+  CARD_DEFS_BY_TYPE,
+  drawCard,
+  type CardDef,
+  type CardType,
+  type ResolutionStep,
+} from '@/modules/card-engine';
 import { rollDice } from '@/modules/combat-engine';
-import { STAT_KEYS, type ID, type StatKey } from '@/types/shared';
+import { evaluateHauntRoll } from '@/modules/haunt-engine';
+import {
+  STAT_KEYS,
+  STATS_BY_CATEGORY,
+  type ID,
+  type StatCategory,
+  type StatKey,
+} from '@/types/shared';
+
+/** Impact options shown after the dice result is confirmed. */
+type Impact = StatCategory | 'other' | 'none';
+const IMPACTS: { key: Impact; label: string }[] = [
+  { key: 'physical', label: 'explore.impactPhysical' },
+  { key: 'mental', label: 'explore.impactMental' },
+  { key: 'other', label: 'explore.impactOther' },
+  { key: 'none', label: 'explore.impactNone' },
+];
+
+/** A single stage the player walks through, built from the card. */
+type Stage =
+  | ResolutionStep
+  | { kind: 'genericDice' }
+  | { kind: 'impact' }
+  | { kind: 'summary' }
+  | { kind: 'hauntRoll' };
 
 interface ResolutionSheetProps {
   visible: boolean;
@@ -17,8 +52,8 @@ interface ResolutionSheetProps {
 
 /**
  * Bottom-sheet that walks a player through resolving a room's card symbol:
- * pick the card you drew → read its effect → roll / enter dice → adjust the
- * explorer's stats manually → finish.
+ * pick the card you drew → follow its guided steps (rolls, attack/defense) →
+ * apply the impact on your stats → (omens) make a Haunt roll → finish.
  */
 export function ResolutionSheet({
   visible,
@@ -31,34 +66,117 @@ export function ResolutionSheet({
   const explorer = useAppSelector(s =>
     s.game.characters.find(c => c.id === explorerId),
   );
+  const omenCount = useAppSelector(s => s.game.omenCount ?? 0);
 
   const [card, setCard] = useState<CardDef | null>(null);
-  const [diceCount, setDiceCount] = useState(2);
-  const [diceTotal, setDiceTotal] = useState(0);
+  const [stageIndex, setStageIndex] = useState(0);
+
+  // Primary / attacker roll, defender roll, and the Haunt roll.
+  const [pCount, setPCount] = useState(2);
+  const [pTotal, setPTotal] = useState(0);
+  const [dCount, setDCount] = useState(2);
+  const [dTotal, setDTotal] = useState(0);
+  const [hTotal, setHTotal] = useState(0);
+
+  const [impact, setImpact] = useState<Impact | null>(null);
+  const [changed, setChanged] = useState(false);
+  // Stat values captured when the card is drawn, for the before → after summary.
+  const [baseline, setBaseline] = useState<Record<StatKey, number> | null>(null);
+
+  // The ordered stages: the card's own steps (or a generic roll), then the
+  // impact + summary, plus a Haunt roll for every omen.
+  const stages = useMemo<Stage[]>(() => {
+    if (!card) return [];
+    const out: Stage[] = card.resolution?.steps?.length
+      ? [...card.resolution.steps]
+      : [{ kind: 'genericDice' }];
+    out.push({ kind: 'impact' }, { kind: 'summary' });
+    if (card.type === 'omen') out.push({ kind: 'hauntRoll' });
+    return out;
+  }, [card]);
+
+  const stage = stages[stageIndex] ?? null;
+
+  // Initialise each stage's dice counts (and pre-select damage impact) on entry.
+  useEffect(() => {
+    if (!stage) return;
+    if (stage.kind === 'roll') {
+      setPCount(stage.dice ?? (stage.stat && explorer ? currentStat(explorer.stats[stage.stat]) : 2));
+      setPTotal(0);
+    } else if (stage.kind === 'attackDefense') {
+      setPCount(stage.attackerDice);
+      setPTotal(0);
+      setDCount(explorer ? currentStat(explorer.stats[stage.defenseStat]) : 2);
+      setDTotal(0);
+    } else if (stage.kind === 'impact') {
+      // Pre-select the damage category an attack/defense step implies.
+      const atk = card?.resolution?.steps.find(s => s.kind === 'attackDefense');
+      if (impact === null && atk && atk.kind === 'attackDefense') {
+        setImpact(atk.damage);
+      }
+    } else if (stage.kind === 'hauntRoll') {
+      setHTotal(0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stageIndex, stages]);
 
   const close = () => {
     setCard(null);
-    setDiceCount(2);
-    setDiceTotal(0);
+    setStageIndex(0);
+    setPCount(2);
+    setPTotal(0);
+    setDCount(2);
+    setDTotal(0);
+    setHTotal(0);
+    setImpact(null);
+    setChanged(false);
+    setBaseline(null);
     onClose();
   };
 
   const onPickCard = (def: CardDef) => {
-    setCard(def);
     dispatch(drawCard(def, def.type === 'item' ? explorerId : null));
-    if (explorer) dispatch(logAction(`${explorer.name} drew ${def.name}.`));
+    if (def.type === 'omen') dispatch(incrementOmenCount());
+    if (explorer) {
+      dispatch(logAction(`${explorer.name} drew ${def.name}.`));
+      const snap = {} as Record<StatKey, number>;
+      STAT_KEYS.forEach(s => {
+        snap[s] = currentStat(explorer.stats[s]);
+      });
+      setBaseline(snap);
+    }
+    setStageIndex(0);
+    setCard(def);
+  };
+
+  const advance = () => {
+    if (stageIndex < stages.length - 1) setStageIndex(i => i + 1);
+    else finish();
   };
 
   const finish = () => {
     if (explorer && card) {
-      dispatch(
-        logAction(`${explorer.name}: ${card.name} resolved (dice ${diceTotal}).`),
-      );
+      dispatch(logAction(`${explorer.name}: ${card.name} resolved.`));
     }
     close();
   };
 
   if (!symbol) return null;
+
+  const impactStats: StatKey[] =
+    impact === 'other'
+      ? STAT_KEYS
+      : impact === 'physical' || impact === 'mental'
+        ? STATS_BY_CATEGORY[impact]
+        : [];
+  const requireChange = impact === 'physical' || impact === 'mental';
+  const impactDone = impact !== null && !(requireChange && !changed);
+  const changedStats: StatKey[] =
+    baseline && explorer
+      ? STAT_KEYS.filter(s => currentStat(explorer.stats[s]) !== baseline[s])
+      : [];
+  const isLast = stageIndex >= stages.length - 1;
+  const nextLabel = isLast ? t('explore.finish') : t('explore.next');
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={close}>
@@ -92,56 +210,217 @@ export function ResolutionSheet({
                     <Text style={styles.effect}>{card.effect}</Text>
                   </>
                 ) : null}
-                <Text style={styles.muted}>{t('explore.doWhatItSays')}</Text>
               </Card>
 
-              <Card title={t('explore.dice')}>
-                <View style={styles.diceRow}>
-                  <Stepper label="−" onPress={() => setDiceCount(Math.max(0, diceCount - 1))} />
-                  <Text style={styles.diceCount}>{diceCount}</Text>
-                  <Stepper label="+" onPress={() => setDiceCount(Math.min(8, diceCount + 1))} />
-                  <Button
-                    label={t('explore.roll')}
-                    style={styles.flex}
-                    onPress={() => setDiceTotal(rollDice(diceCount).total)}
-                  />
-                </View>
-                <View style={styles.diceRow}>
-                  <Text style={styles.diceTotal}>
-                    {t('explore.rolled', { total: diceTotal })}
-                  </Text>
-                  <Stepper label="−" onPress={() => setDiceTotal(Math.max(0, diceTotal - 1))} />
-                  <Stepper label="+" onPress={() => setDiceTotal(diceTotal + 1)} />
-                </View>
-                <Text style={styles.muted}>{t('explore.manualNote')}</Text>
-              </Card>
-
-              {explorer ? (
-                <Card title={t('explore.adjust', { name: explorer.name })}>
-                  <View style={styles.statRow}>
-                    {STAT_KEYS.map((stat: StatKey) => (
-                      <StatBadge
-                        key={stat}
-                        stat={stat}
-                        value={currentStat(explorer.stats[stat])}
-                        onDecrement={() =>
-                          dispatch(adjustStat({ characterId: explorer.id, stat, delta: -1 }))
-                        }
-                        onIncrement={() =>
-                          dispatch(adjustStat({ characterId: explorer.id, stat, delta: 1 }))
-                        }
-                      />
-                    ))}
-                  </View>
+              {/* --- Current stage --- */}
+              {stage?.kind === 'note' ? (
+                <Card>
+                  <Text style={styles.effect}>{stage.prompt}</Text>
                 </Card>
               ) : null}
 
-              <Button label={t('explore.finish')} onPress={finish} />
+              {stage?.kind === 'genericDice' ? (
+                <Card title={t('explore.dice')}>
+                  <DiceRoller
+                    count={pCount}
+                    total={pTotal}
+                    editable
+                    onCount={setPCount}
+                    onTotal={setPTotal}
+                    rolled={t('explore.rolled', { total: pTotal })}
+                  />
+                  <Text style={styles.muted}>{t('explore.manualNote')}</Text>
+                </Card>
+              ) : null}
+
+              {stage?.kind === 'roll' ? (
+                <Card>
+                  <Text style={styles.effect}>{stage.prompt}</Text>
+                  <DiceRoller
+                    count={pCount}
+                    total={pTotal}
+                    editable
+                    onCount={setPCount}
+                    onTotal={setPTotal}
+                    rolled={t('explore.rolled', { total: pTotal })}
+                  />
+                  {stage.outcomes?.map(o => (
+                    <Text key={o} style={styles.muted}>
+                      • {o}
+                    </Text>
+                  ))}
+                </Card>
+              ) : null}
+
+              {stage?.kind === 'attackDefense' ? (
+                <Card>
+                  <Text style={styles.effect}>{stage.prompt}</Text>
+                  <Text style={styles.rollLabel}>{t('explore.attack')}</Text>
+                  <DiceRoller
+                    count={pCount}
+                    total={pTotal}
+                    editable
+                    onCount={setPCount}
+                    onTotal={setPTotal}
+                    rolled={t('explore.rolled', { total: pTotal })}
+                  />
+                  <Text style={styles.rollLabel}>
+                    {t('explore.defense', { stat: t(`stats.${stage.defenseStat}`) })}
+                  </Text>
+                  <DiceRoller
+                    count={dCount}
+                    total={dTotal}
+                    editable
+                    onCount={setDCount}
+                    onTotal={setDTotal}
+                    rolled={t('explore.rolled', { total: dTotal })}
+                  />
+                  {pTotal - dTotal > 0 ? (
+                    <Text style={styles.require}>
+                      {t('explore.netDamage', { net: pTotal - dTotal })}
+                    </Text>
+                  ) : (
+                    <Text style={styles.muted}>{t('explore.netSafe')}</Text>
+                  )}
+                </Card>
+              ) : null}
+
+              {stage?.kind === 'impact' && explorer ? (
+                <Card title={t('explore.impact', { name: explorer.name })}>
+                  <Text style={styles.muted}>{t('explore.impactPrompt')}</Text>
+                  <View style={styles.impactRow}>
+                    {IMPACTS.map(opt => (
+                      <Button
+                        key={opt.key}
+                        label={t(opt.label)}
+                        variant={impact === opt.key ? 'primary' : 'secondary'}
+                        style={styles.impactBtn}
+                        onPress={() => {
+                          setImpact(opt.key);
+                          setChanged(false);
+                        }}
+                      />
+                    ))}
+                  </View>
+                  {impactStats.length > 0 ? (
+                    <View style={styles.statRow}>
+                      {impactStats.map(stat => (
+                        <StatBadge
+                          key={stat}
+                          stat={stat}
+                          value={currentStat(explorer.stats[stat])}
+                          onDecrement={() => {
+                            dispatch(adjustStat({ characterId: explorer.id, stat, delta: -1 }));
+                            setChanged(true);
+                          }}
+                          onIncrement={() => {
+                            dispatch(adjustStat({ characterId: explorer.id, stat, delta: 1 }));
+                            setChanged(true);
+                          }}
+                        />
+                      ))}
+                    </View>
+                  ) : null}
+                  {requireChange && !changed ? (
+                    <Text style={styles.require}>{t('explore.requireChange')}</Text>
+                  ) : null}
+                </Card>
+              ) : null}
+
+              {stage?.kind === 'summary' && explorer && baseline ? (
+                <Card title={t('explore.summary')}>
+                  {changedStats.length > 0 ? (
+                    changedStats.map(stat => (
+                      <Text key={stat} style={styles.summaryLine}>
+                        {t(`stats.${stat}`)}: {baseline[stat]} →{' '}
+                        {currentStat(explorer.stats[stat])}
+                      </Text>
+                    ))
+                  ) : (
+                    <Text style={styles.muted}>{t('explore.noChange')}</Text>
+                  )}
+                </Card>
+              ) : null}
+
+              {stage?.kind === 'hauntRoll' ? (
+                <Card title={t('explore.haunt')}>
+                  <Text style={styles.muted}>
+                    {t('explore.hauntHint', { count: omenCount })}
+                  </Text>
+                  <DiceRoller
+                    count={6}
+                    total={hTotal}
+                    onTotal={setHTotal}
+                    onRoll={() => setHTotal(rollDice(6).total)}
+                    rolled={t('explore.rolled', { total: hTotal })}
+                  />
+                  <Text
+                    style={
+                      evaluateHauntRoll(hTotal, omenCount).triggered
+                        ? styles.require
+                        : styles.muted
+                    }>
+                    {evaluateHauntRoll(hTotal, omenCount).triggered
+                      ? t('explore.hauntTriggered')
+                      : t('explore.hauntSafe')}
+                  </Text>
+                </Card>
+              ) : null}
+
+              <Button
+                label={nextLabel}
+                disabled={stage?.kind === 'impact' && !impactDone}
+                onPress={advance}
+              />
             </ScrollView>
           )}
         </View>
       </View>
     </Modal>
+  );
+}
+
+/** A labelled dice roller: − count + · roll · result with manual ± . */
+function DiceRoller({
+  count,
+  total,
+  editable,
+  onCount,
+  onTotal,
+  onRoll,
+  rolled,
+}: {
+  count: number;
+  total: number;
+  editable?: boolean;
+  onCount?: (n: number) => void;
+  onTotal: (n: number) => void;
+  onRoll?: () => void;
+  rolled: string;
+}) {
+  const { t } = useTranslation();
+  return (
+    <>
+      <View style={styles.diceRow}>
+        {editable && onCount ? (
+          <Stepper label="−" onPress={() => onCount(Math.max(0, count - 1))} />
+        ) : null}
+        <Text style={styles.diceCount}>{count}</Text>
+        {editable && onCount ? (
+          <Stepper label="+" onPress={() => onCount(Math.min(8, count + 1))} />
+        ) : null}
+        <Button
+          label={t('explore.roll')}
+          style={styles.flex}
+          onPress={onRoll ?? (() => onTotal(rollDice(count).total))}
+        />
+      </View>
+      <View style={styles.diceRow}>
+        <Text style={styles.diceTotal}>{rolled}</Text>
+        <Stepper label="−" onPress={() => onTotal(Math.max(0, total - 1))} />
+        <Stepper label="+" onPress={() => onTotal(total + 1)} />
+      </View>
+    </>
   );
 }
 
@@ -218,6 +497,13 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     fontWeight: '600',
   },
+  rollLabel: {
+    color: colors.textMuted,
+    fontSize: typography.caption,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    marginTop: spacing.xs,
+  },
   muted: {
     color: colors.textMuted,
     fontSize: typography.caption,
@@ -261,5 +547,26 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing.sm,
     justifyContent: 'space-between',
+  },
+  impactRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.xs,
+  },
+  impactBtn: {
+    flexGrow: 1,
+    flexBasis: '47%',
+  },
+  require: {
+    color: colors.danger,
+    fontSize: typography.caption,
+    fontWeight: '700',
+    marginTop: spacing.xs,
+  },
+  summaryLine: {
+    color: colors.text,
+    fontSize: typography.body,
+    fontWeight: '600',
   },
 });

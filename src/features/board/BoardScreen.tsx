@@ -67,6 +67,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
   const characters = useAppSelector(s => s.game.characters);
   const turnCharId = useAppSelector(s => s.game.activeCharacterId);
   const round = useAppSelector(s => s.game.round ?? 1);
+  const omenCount = useAppSelector(s => s.game.omenCount ?? 0);
   const turnChar = characters.find(c => c.id === turnCharId) ?? null;
 
   const [selectedId, setSelectedId] = useState<ID | null>(null);
@@ -264,6 +265,13 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
 
   return (
     <View style={styles.container}>
+      {/* Omen tracker */}
+      <View style={styles.omenBar}>
+        <Text style={styles.omenText}>
+          {t('board.omenTracker', { count: omenCount })}
+        </Text>
+      </View>
+
       {/* Floor selector */}
       <View style={styles.floorBar}>
         {FLOORS.map((f: Floor) => {
@@ -623,6 +631,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  omenBar: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingTop: spacing.sm,
+    paddingHorizontal: spacing.sm,
+  },
+  omenText: {
+    color: colors.warning,
+    fontSize: typography.caption,
+    fontWeight: '700',
   },
   floorBar: {
     flexDirection: 'row',

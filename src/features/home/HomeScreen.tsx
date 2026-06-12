@@ -11,20 +11,7 @@ import {
   typography,
 } from '@/modules/ui';
 import { useAppSelector } from '@/app/hooks';
-import type { RootScreenProps, RootStackParamList } from '@/navigation/types';
-
-type NavTarget = keyof RootStackParamList;
-
-const MENU: { key: string; target: NavTarget }[] = [
-  { key: 'home.menu.characters', target: 'Characters' },
-  { key: 'home.menu.board', target: 'Board' },
-  { key: 'home.menu.events', target: 'Events' },
-  { key: 'home.menu.omens', target: 'Omens' },
-  { key: 'home.menu.items', target: 'Items' },
-  { key: 'home.menu.combat', target: 'Combat' },
-  { key: 'home.menu.hauntSetup', target: 'HauntSetup' },
-  { key: 'home.menu.saveHistory', target: 'GameState' },
-];
+import type { RootScreenProps } from '@/navigation/types';
 
 export function HomeScreen({ navigation }: RootScreenProps<'Home'>) {
   const { t } = useTranslation();
@@ -62,20 +49,16 @@ export function HomeScreen({ navigation }: RootScreenProps<'Home'>) {
       </Card>
 
       <Button
-        label={hasGame ? t('home.newGameRestart') : t('home.startNew')}
+        label={t('home.play')}
         onPress={() => navigation.navigate('GameSetup')}
       />
 
-      {hasGame
-        ? MENU.map(item => (
-            <Button
-              key={item.target}
-              label={t(item.key)}
-              variant="secondary"
-              onPress={() => navigation.navigate(item.target)}
-            />
-          ))
-        : null}
+      <Button
+        label={t('home.loadGame')}
+        variant="secondary"
+        disabled={!hasGame}
+        onPress={() => navigation.navigate('Board')}
+      />
     </Screen>
   );
 }

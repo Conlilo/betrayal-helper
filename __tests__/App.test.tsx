@@ -89,13 +89,17 @@ describe('game-engine slice', () => {
     let state = gameReducer(undefined, createGame('Test'));
     state = addNth(state, 0);
     const id = state.characters[0].id;
-    const before = currentStat(state.characters[0].stats.might);
+    const beforeIndex = state.characters[0].stats.might.index;
+    const beforeValue = currentStat(state.characters[0].stats.might);
 
     state = gameReducer(state, adjustStat({ characterId: id, stat: 'might', delta: -1 }));
-    const after = currentStat(state.characters[0].stats.might);
+    const afterTrack = state.characters[0].stats.might;
 
     expect(state.characters).toHaveLength(1);
-    expect(after).toBeLessThan(before);
+    // Damage always moves one step down the track (index is the source of truth);
+    // the printed value may repeat across adjacent boxes, so it can only be ≤.
+    expect(afterTrack.index).toBe(beforeIndex - 1);
+    expect(currentStat(afterTrack)).toBeLessThanOrEqual(beforeValue);
   });
 
   it('advances turns in choice order and counts rounds', () => {
