@@ -17,6 +17,31 @@ export interface HauntDef {
   traitorGoal: string;
 }
 
+/** One ALL-CAPS section of a haunt page in the Traitor's Tome. */
+export interface HauntSection {
+  heading: string;
+  body: string;
+}
+
+/** A monster stat block printed on a haunt page. */
+export interface HauntMonster {
+  name: string;
+  stats: string;
+}
+
+/**
+ * Full Traitor's Tome haunt entry (Betrayal at House on the Hill, 2010).
+ * `intro` is the italic opening story; each ALL-CAPS heading becomes a
+ * `sections` entry; monster stat blocks go in `monsters`.
+ */
+export interface HauntStory {
+  id: number;
+  title: string;
+  intro: string;
+  sections: HauntSection[];
+  monsters: HauntMonster[];
+}
+
 export interface HauntState {
   started: boolean;
   hauntId: number | null;
