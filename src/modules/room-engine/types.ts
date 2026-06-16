@@ -14,12 +14,14 @@ export const DIRECTIONS: Direction[] = ['N', 'E', 'S', 'W'];
 export type Rotation = 0 | 90 | 180 | 270;
 
 /**
- * The symbol printed on a room tile.
+ * A symbol printed on a room tile.
  * - `event` / `omen` / `item`: entering makes the explorer draw that card.
  * - `dumbwaiter`: a special feature (move between floors), not a card draw.
- * - `none`: nothing happens.
+ *
+ * A tile can carry several of these at once (see `RoomDef.symbols`); a tile
+ * with no symbols is simply an empty array.
  */
-export type RoomSymbol = 'event' | 'omen' | 'item' | 'dumbwaiter' | 'none';
+export type RoomSymbol = 'event' | 'omen' | 'item' | 'dumbwaiter';
 
 /** Symbols that trigger drawing a card (a subset of RoomSymbol). */
 export const CARD_SYMBOLS = ['event', 'omen', 'item'] as const;
@@ -31,6 +33,13 @@ export function isCardSymbol(
   return symbol === 'event' || symbol === 'omen' || symbol === 'item';
 }
 
+/** The card-drawing symbols on a tile, in print order (skips `dumbwaiter`). */
+export function cardSymbolsOf(
+  symbols: RoomSymbol[],
+): ('event' | 'omen' | 'item')[] {
+  return symbols.filter(isCardSymbol);
+}
+
 /** A printed room tile definition (independent of any match). */
 export interface RoomDef {
   defId: string;
@@ -39,8 +48,11 @@ export interface RoomDef {
   floors: Floor[];
   /** Edges that have a door, in the tile's un-rotated orientation. */
   doors: Direction[];
-  /** Card symbol that triggers on entering this room. */
-  symbol: RoomSymbol;
+  /**
+   * Symbols printed on this tile (a tile may have more than one). Entering
+   * triggers each card symbol in order. Empty array = no symbol.
+   */
+  symbols: RoomSymbol[];
   /** The room's printed special effect, if any (free text). */
   effect?: string;
 }

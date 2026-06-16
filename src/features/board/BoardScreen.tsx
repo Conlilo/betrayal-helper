@@ -32,9 +32,9 @@ import {
   roomAt,
   roomDefsForFloor,
   setFloor,
-  symbolOfDef,
+  symbolsOfDef,
   effectOfDef,
-  isCardSymbol,
+  cardSymbolsOf,
   type Direction,
   type Floor,
   type PlacedRoom,
@@ -83,8 +83,10 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
   const [justPlaced, setJustPlaced] = useState<
     { charId: ID; x: number; y: number; defId: string } | null
   >(null);
+  // A room may carry several card symbols; resolve them one at a time, with
+  // the remaining symbols held in a queue.
   const [resolve, setResolve] = useState<
-    { explorerId: ID; symbol: CardType } | null
+    { explorerId: ID; queue: CardType[] } | null
   >(null);
 
   const selected = rooms.find(r => r.id === selectedId) ?? null;
@@ -220,9 +222,9 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
         roomName: room.name,
       }),
     );
-    const sym = symbolOfDef(justPlaced.defId);
-    if (isCardSymbol(sym)) {
-      setResolve({ explorerId: justPlaced.charId, symbol: sym });
+    const cardSymbols = cardSymbolsOf(symbolsOfDef(justPlaced.defId));
+    if (cardSymbols.length > 0) {
+      setResolve({ explorerId: justPlaced.charId, queue: cardSymbols });
     }
     setActiveCharId(null);
     setJustPlaced(null);
@@ -473,7 +475,8 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
                   onPress={() => onPickRoom(def.defId)}>
                   <Text style={styles.defName}>{def.name}</Text>
                   <Text style={styles.defDoors}>
-                    {SYMBOL_ICON[def.symbol]} · {def.doors.join(' · ') || '—'}
+                    {(def.symbols.map(s => SYMBOL_ICON[s]).join(' ') || '·')} ·{' '}
+                    {def.doors.join(' · ') || '—'}
                   </Text>
                 </Pressable>
               ))}
@@ -487,12 +490,20 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
         </Pressable>
       </Modal>
 
-      {/* Card resolution for a freshly explored symbol room */}
+      {/* Card resolution for a freshly explored symbol room. Resolve each of
+          the room's card symbols in turn, advancing the queue on close. */}
       <ResolutionSheet
         visible={resolve !== null}
         explorerId={resolve?.explorerId ?? null}
-        symbol={resolve?.symbol ?? null}
-        onClose={() => setResolve(null)}
+        symbol={resolve?.queue[0] ?? null}
+        onClose={() =>
+          setResolve(prev => {
+            const rest = prev?.queue.slice(1) ?? [];
+            return rest.length > 0 && prev
+              ? { explorerId: prev.explorerId, queue: rest }
+              : null;
+          })
+        }
       />
     </View>
   );
