@@ -29,6 +29,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Cửa tủ mở ra… Chỉ một vết nứt. Chắc chắn phải có cái gì đó bên trong.',
     effect:
       'Đặt miếng Tủ quần áo (Closet) vào trong phòng.\nMỗi lượt của 1 nhà thám hiểm, người đó đổ 2 xúc xắc để mở tủ:\n4: Rút 1 lá Item.\n2-3: Rút 1 lá Event.\n0-1: Rút 1 lá Event và loại bỏ miếng Tủ khỏi phòng.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Đặt token Closet vào phòng (xử lý ở tính năng xem token). Không có chỉ số khi rút — chọn "· Không có". Mỗi lượt, người trong phòng đổ 2 xúc xắc: 4: rút Item · 2-3: rút Event · 0-1: rút Event và bỏ token.',
+        },
+      ],
+    },
   },
   {
     defId: 'event-burning-man',
@@ -75,6 +84,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Một phần của bức tường trượt đi. Phía sau nó là một đường hầm mốc meo, đầy rêu đang chờ bạn khám phá.',
     effect:
       'Đặt miếng Mật đạo (Secret Passage) vào phòng. Tung 3 xúc xắc và đặt miếng Mật đạo thứ 2 vào:\n6: Phòng nào cũng được.\n4-5: Chỉ các phòng tầng trên.\n2-3: Chỉ các phòng tầng trệt.\n0-1: Chỉ các phòng tầng hầm.\nBạn có thể di chuyển qua mật đạo dù không còn lượt di chuyển. Đi từ mật đạo này sang mật đạo khác tính là 1 lượt di chuyển. Ai cũng dùng được nhưng không thể dừng ở mật đạo.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Đặt token Mật đạo, đổ 3 xúc xắc đặt mật đạo thứ 2: 6: phòng bất kỳ · 4-5: tầng trên · 2-3: tầng trệt · 0-1: tầng hầm. Đi giữa 2 mật đạo = 1 lượt di chuyển. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-creepy-puppet',
@@ -104,6 +122,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Bạn quay đầu nhìn lại... không có gì cả. Chỉ còn sương mù và hơi nước, nơi trước đây từng là một căn phòng.',
     effect:
       'Lấy căn phòng bạn đang ở (đưa các token trong đó ra một bên). Đặt nó ở nơi khác trên cùng tầng sao cho cửa của nó kết nối với cửa của một phòng chưa được khám phá (rồi đặt lại các token vào).\nNếu không có phòng nào còn cửa chưa khám phá trên tầng đó, để nó qua tầng khác.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Lấy phòng bạn đang đứng (giữ token), đặt lại nơi khác cùng tầng sao cho cửa nối với một phòng chưa khám phá. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-something-slimy',
@@ -396,6 +423,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Tiếng giọt nước chầm chậm, đều đặn như những chiếc kim xuyên qua não bạn.',
     effect:
       'Đặt miếng Nước Nhiễu (Drip) vào căn phòng.\nMỗi nhà thám hiểm phải tung ít hơn 1 xúc xắc (thấp nhất là 1) cho tất cả các đặc điểm khi đang ở phòng này.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Đặt token Drip vào phòng. Ai ở phòng này đổ ít hơn 1 xúc xắc (tối thiểu 1) cho mọi đặc điểm. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-phone-call',
@@ -424,6 +460,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Một tiếng rít kinh khủng vang khắp căn phòng. Bạn đã khám phá được một cầu thang bí mật.',
     effect:
       'Đặt miếng Cầu thang ẩn (Secret Stairs) vào phòng này và một miếng khác vào một phòng đã mở ở tầng khác. Di chuyển giữa hai cầu thang tính là 1 (cầu thang không tính là 1 ô di chuyển).\nNếu muốn, bạn có thể đi theo cầu thang ngay bây giờ dù không còn lượt di chuyển. Nếu đi trong lượt này, rút 1 lá Event ở phòng mới.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Đặt token Cầu thang ẩn vào phòng này và một miếng vào phòng đã mở ở tầng khác. Có thể đi theo cầu thang ngay (dù hết lượt di chuyển); nếu đi, rút 1 lá Event ở phòng mới. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-revolving-wall',
@@ -432,6 +477,15 @@ export const EVENT_CARDS: CardDef[] = [
     description: 'Bức tường tự xoay làm lộ ra một con đường đến nơi khác.',
     effect:
       'Đặt miếng Cần Gạt Tường (Wall) vào bức tường không có lối ra hoặc ở góc phòng. Nếu không có phòng nào bên kia tường, rút phòng đến khi tìm được phòng cho tầng đó rồi đặt vào nhà (nếu không có phòng nào trên tầng này thì đặt nhân vật về phòng cũ). Đặt nhân vật vào phòng đó.\nMỗi lượt, nếu đứng ở 1 trong 2 phòng, đổ Knowledge để gạt cần:\n3+: Bạn đi qua (không tính là di chuyển).\n0-2: Không tìm được công tắc, không đi qua được.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Đặt token Cần Gạt Tường, đặt phòng bên kia & đặt nhân vật vào đó. Mỗi lượt đứng ở 1 trong 2 phòng, đổ Knowledge: 3+ đi qua (không tính di chuyển) · 0-2 không qua được. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-the-walls',
@@ -441,6 +495,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Những bức tường trở nên ấm áp lạ thường, như có da thịt, như đang sống và đập theo nhịp tim. Bạn bị mê hoặc… rồi bần thần tỉnh dậy ở một nơi khác.',
     effect:
       'Bạn phải rút căn phòng tiếp theo và đặt nó vào trong ngôi nhà. Đặt nhà thám hiểm của bạn vào trong đó.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Rút phòng kế tiếp, đặt vào nhà và đặt nhân vật của bạn vào đó. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-jonahs-turn',
@@ -450,6 +513,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Hai cậu nhóc đang chơi với cái đĩa gỗ. Jonah chộp lấy cái đĩa và tấn công cậu nhóc còn lại liên tục cho đến khi họ khuất khỏi tầm nhìn.',
     effect:
       'Nếu một nhà thám hiểm đang sở hữu Puzzle Box (Trò chơi ngàn năm), người đó phải hủy vật phẩm và rút một vật phẩm khác thay thế — khi đó bạn nhận 1 Sanity. Nếu không, bạn tung 1 xúc xắc sát thương Tinh thần.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Nếu có người giữ Puzzle Box: họ huỷ & rút vật phẩm khác → bạn +1 Sanity (ở bước Tác động chọn "✨ Khác / hồi phục"). Nếu không có ai giữ: đổ 1 xúc xắc sát thương Tinh thần (chọn "🧠 Thiệt hại tinh thần").',
+        },
+      ],
+    },
   },
   {
     defId: 'event-groundskeeper',
@@ -459,6 +531,24 @@ export const EVENT_CARDS: CardDef[] = [
       'Bạn quay lại và thấy một người đàn ông trong bộ đồ làm vườn giơ xẻng lao tới. Chỉ cách mặt bạn vài phân, hắn biến mất, chỉ còn lại những dấu chân dính bùn.',
     effect:
       'Đổ xúc xắc Knowledge (nhà thám hiểm ở Gardens — Sân Vườn đổ ít hơn 2 xúc xắc):\n4+: "Bạn tìm kiếm trong đống bùn." Rút 1 lá Item.\n0-3: Người chơi bên phải bạn hóa thành Người làm vườn và tung 4 xúc xắc Might. Bạn phòng thủ bằng Might như bình thường.',
+    resolution: {
+      steps: [
+        {
+          kind: 'roll',
+          prompt: 'Đổ Knowledge (ở Gardens đổ ít hơn 2 xúc xắc).',
+          stat: 'knowledge',
+          outcomes: ['4+: rút 1 lá Item (xong, chọn "· Không có" ở bước Tác động)', '0-3: làm tiếp bước tấn công bên dưới'],
+        },
+        {
+          kind: 'attackDefense',
+          prompt:
+            'CHỈ làm nếu bước trên đổ 0-3: người bên phải đổ 4 Might (Người làm vườn). Bạn phòng thủ bằng Might. Nếu đổ 4+ ở bước trên, bỏ qua bước này.',
+          attackerDice: 4,
+          defenseStat: 'might',
+          damage: 'physical',
+        },
+      ],
+    },
   },
   {
     defId: 'event-skeletons',
@@ -467,6 +557,15 @@ export const EVENT_CARDS: CardDef[] = [
     description: 'Người mẹ và đứa trẻ, vẫn còn đang ôm nhau.',
     effect:
       'Đặt miếng Bộ xương (Skeletons) vào phòng. Đổ 1 xúc xắc sát thương Tinh thần.\nMỗi lượt của 1 nhà thám hiểm, người đó đổ xúc xắc Sanity để tìm kiếm:\n5+: Rút 1 lá Item và hủy miếng Bộ xương.\n0-4: Đổ 1 xúc xắc sát thương Tinh thần.\nMỗi kết quả chỉ ảnh hưởng đến nhà thám hiểm tung xúc xắc.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Đặt token Skeletons vào phòng và đổ 1 xúc xắc sát thương Tinh thần ngay (ở bước Tác động chọn "🧠 Thiệt hại tinh thần"). Mỗi lượt sau, người trong phòng đổ Sanity: 5+ rút Item & bỏ token · 0-4 nhận 1 xúc xắc Tinh thần.',
+        },
+      ],
+    },
   },
   {
     defId: 'event-the-beckoning',
@@ -513,6 +612,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Một cái gương cũ trong phòng. Ảnh phản chiếu của bạn — chính bạn ở một thời điểm khác — đang hoảng loạn và cần giúp đỡ.',
     effect:
       'Đưa 1 món đồ qua gương: chọn một lá Item của bạn (không phải omen) và đặt nó vào bộ bài Item, sau đó xáo chồng bài lên. Nhận 1 Knowledge.\nNếu bạn không có vật phẩm, hiệu ứng tác động đến nhà thám hiểm kế tiếp phía bên trái có Item. Hủy lá này nếu không nhà thám hiểm nào có vật phẩm.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Chọn 1 lá Item (không phải omen) của bạn, đặt lại vào chồng Item rồi xáo. Nhận 1 Knowledge (ở bước Tác động chọn "✨ Khác / hồi phục"). Không có Item: tác động sang người kế bên trái có Item.',
+        },
+      ],
+    },
   },
   {
     defId: 'event-mystic-slide',
@@ -521,6 +629,16 @@ export const EVENT_CARDS: CardDef[] = [
     description: 'Cái sàn nhà bị sập xuống từ bên dưới bạn.',
     effect:
       'Đặt miếng Cầu trượt (Slide) vào phòng. Đổ xúc xắc Sanity để dùng cầu trượt:\n5+: Đặt nhân vật của bạn vào một phòng chưa khám phá bên dưới.\n0-4: Rút phòng đến khi được phòng tầng hầm, đặt nhân vật ở đó và tung 1 xúc xắc sát thương Vật lý.\nNếu bạn đang ở tầng hầm, hiệu ứng tác động đến nhà thám hiểm kế tiếp bên trái không ở tầng hầm. Hủy lá nếu tất cả nhà thám hiểm đều ở tầng hầm. Ở các lượt sau, ai cũng phải đổ xúc xắc để dùng slide.',
+    resolution: {
+      steps: [
+        {
+          kind: 'roll',
+          prompt: 'Đặt token Cầu trượt vào phòng, rồi đổ Sanity để dùng.',
+          stat: 'sanity',
+          outcomes: ['5+: vào 1 phòng chưa khám phá bên dưới', '0-4: rút đến phòng tầng hầm, vào đó & nhận 1 xúc xắc sát thương Vật lý'],
+        },
+      ],
+    },
   },
   {
     defId: 'event-smoke',
@@ -529,6 +647,15 @@ export const EVENT_CARDS: CardDef[] = [
     description: 'Làn khói xuất hiện xung quanh bạn, bạn ho chảy cả nước mắt.',
     effect:
       'Đặt miếng Khói (Smoke) vào phòng.\nMột nhà thám hiểm phải tung ít hơn 2 xúc xắc (nhỏ nhất là 1) cho tất cả đặc điểm khi tung trong phòng này.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Đặt token Khói vào phòng. Ai ở phòng này đổ ít hơn 2 xúc xắc (tối thiểu 1) cho mọi đặc điểm. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-hanged-men',
@@ -538,6 +665,34 @@ export const EVENT_CARDS: CardDef[] = [
       'Một cơn gió lạnh thổi vào phòng. Phía trước bạn là 3 người đàn ông treo lơ lửng, nhìn bạn với ánh mắt chết chóc rồi tan thành bụi. Bạn bắt đầu thấy nghẹt thở.',
     effect:
       'Đổ xúc xắc cho mỗi đặc điểm (4 lần):\n2+: Đặc điểm không sao.\n0-1: Giảm 1 điểm cho đặc điểm đó.\nNếu cả 4 lần đổ đều 2+, tăng thêm 1 điểm vào đặc điểm bạn chọn.',
+    resolution: {
+      steps: [
+        {
+          kind: 'roll',
+          prompt: 'Đổ Might.',
+          stat: 'might',
+          outcomes: ['2+: không sao', '0-1: mất 1 Might'],
+        },
+        {
+          kind: 'roll',
+          prompt: 'Đổ Speed.',
+          stat: 'speed',
+          outcomes: ['2+: không sao', '0-1: mất 1 Speed'],
+        },
+        {
+          kind: 'roll',
+          prompt: 'Đổ Knowledge.',
+          stat: 'knowledge',
+          outcomes: ['2+: không sao', '0-1: mất 1 Knowledge'],
+        },
+        {
+          kind: 'roll',
+          prompt: 'Đổ Sanity.',
+          stat: 'sanity',
+          outcomes: ['2+: không sao', '0-1: mất 1 Sanity', 'Nếu cả 4 lần đều 2+: +1 cho 1 đặc điểm tùy chọn'],
+        },
+      ],
+    },
   },
   {
     defId: 'event-disquieting-sounds',
@@ -566,6 +721,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Một cái gương cũ khác. Cũng như lần trước, ảnh phản chiếu cần bạn đưa cho nó một thứ.',
     effect:
       'Giống lá Image In The Mirror kia, nhưng bạn rút 1 lá Item.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Giống Image In The Mirror, nhưng thay vì +1 Knowledge thì bạn rút 1 lá Item. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-locked-safe',
@@ -574,6 +738,15 @@ export const EVENT_CARDS: CardDef[] = [
     description: 'Phía sau bức tranh có một cái két sắt trên tường. Nó chắc chắn đã bị gài bẫy.',
     effect:
       'Đặt miếng Két Sắt (Safe) vào phòng.\nMỗi lượt của 1 nhà thám hiểm, người đó đổ xúc xắc Knowledge để mở két:\n5+: Rút 2 lá Item và bỏ miếng Két sắt.\n2-4: Tung 1 xúc xắc sát thương Vật lý. Két không mở.\n0-1: Tung 2 xúc xắc sát thương Vật lý. Két không mở.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Đặt token Két Sắt vào phòng. Mỗi lượt, người trong phòng đổ Knowledge: 5+ rút 2 Item & bỏ token · 2-4 nhận 1 xúc xắc Vật lý (két không mở) · 0-1 nhận 2 xúc xắc Vật lý. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-lights-out',
@@ -582,6 +755,15 @@ export const EVENT_CARDS: CardDef[] = [
     description: 'Đèn pin của bạn bỗng dưng bị tắt. Đừng lo, ai đó sẽ có pin mà.',
     effect:
       'Giữ lá này. Bạn chỉ di chuyển được 1 ô mỗi lượt cho đến khi có một nhà thám hiểm khác ở chung phòng. Vào cuối lượt đó, bạn hủy lá này và di chuyển bình thường trở lại.\nNếu bạn có Candle (Cây Nến) hoặc kết thúc lượt ở Furnace Room (Lò Than), hủy lá này.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Giữ lá: chỉ di chuyển 1 ô/lượt đến khi có người khác vào chung phòng (cuối lượt đó bỏ lá). Có Candle hoặc kết thúc lượt ở Furnace Room: bỏ lá. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-a-moment-of-hope',
@@ -591,6 +773,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Có cái gì đó kỳ lạ trong căn phòng này. Có cái gì đó đang chống lại cái ác trong ngôi nhà này.',
     effect:
       'Đặt miếng Phước lành (Blessing) vào phòng.\nMỗi anh hùng đổ thêm 1 xúc xắc (tối đa 8) cho tất cả các đặc điểm khi đang ở phòng này.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Đặt token Phước lành vào phòng. Hero ở phòng này đổ thêm 1 xúc xắc (tối đa 8) cho mọi đặc điểm. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-whoops',
@@ -600,6 +791,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Bạn giẫm phải một cơ thể dưới chân. Trước khi bạn kịp nhảy ra, bạn bị đẩy ngã, một giọng cười khúc khích chạy vào màn đêm.',
     effect:
       'Lấy và úp tất cả các lá Item của bạn (không phải omen) rồi xáo lên. Người chơi bên phải bạn bóc ngẫu nhiên 1 lá và hủy nó. Sau đó lật bài lên như bình thường.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Úp & xáo các lá Item (không phải omen) của bạn; người bên phải bốc ngẫu nhiên 1 lá và huỷ. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-shrieking-wind',
@@ -647,6 +847,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Bạn té xuống sàn, bất chợt những sự kiện từ tương lai chạy thẳng vào trong đầu bạn.',
     effect:
       'Chọn 1 trong 2:\n• Nhìn 3 lá trên đầu của bất kỳ chồng bài nào (kể cả phòng). Sắp xếp lại 3 lá đó hoặc đặt lại lên đầu tùy ý, không cho ai biết.\n• Hoặc đổ 4 xúc xắc và ghi lại số điểm. Một lần trong tương lai, bạn được dùng lại số đó. Nếu số đó lớn hơn mức tối đa cần đạt, dùng số tối đa cho kết quả.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Chọn 1 trong 2: • Xem 3 lá đầu của 1 chồng bất kỳ (kể cả phòng), sắp xếp lại tùy ý. • Hoặc đổ 4 xúc xắc, ghi số để dùng lại 1 lần trong tương lai. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
 
   // --- Events (bản mở rộng / Widow's Walk) ---
@@ -658,6 +867,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Bàn tay bạn bắt đầu ngứa. Rồi bỏng rát. Cơn đau quá sức chịu đựng, bạn chỉ biết ôm chặt tay và hét lên. Tiếng hét tắt nghẹn khi bạn nhận ra mình không còn cảm giác gì ở bàn tay nữa. Bạn thử cử động ngón tay, và bàn tay tự ý đưa về phía cổ họng bạn.',
     effect:
       'Chọn một:\n• Chặt bỏ bàn tay. Mất 1 Might và nhận 1 Sanity.\n• Thay bàn tay. Mất 1 Might và rút 1 lá Item.\n• Giữ bàn tay. Mất 2 Sanity, nhận 1 Might, và di chuyển đến phòng gần nhất có symbol Omen rồi rút 1 lá Omen.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Chọn 1 nhánh rồi dùng "✨ Khác / hồi phục" để chỉnh: • Chặt tay: −1 Might, +1 Sanity. • Thay tay: −1 Might, rút 1 Item. • Giữ tay: −2 Sanity, +1 Might, đến phòng Omen gần nhất rút 1 Omen.',
+        },
+      ],
+    },
   },
   {
     defId: 'event-contract',
@@ -685,6 +903,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Bạn bước qua cánh cửa và khựng lại. Bạn đã từng ở đây. Nhiều năm trước, trước Sự Cố. Bạn bắt gặp hình phản chiếu của mình trong cửa sổ, gương mặt trông thật trẻ. Nhưng lần này, bạn sẽ không còn ngây thơ nữa.',
     effect:
       'Mất 1 Sanity, nhận 1 Might và 1 Knowledge.\nNếu ngôi nhà ma đã được tiết lộ, phe bên kia phải đọc to đoạn dẫn mở đầu và kết thúc (in nghiêng) của họ. Nếu chưa, đặt lá này trước mặt bạn cho đến khi ngôi nhà ma được tiết lộ.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Áp dụng ngay: −1 Sanity, +1 Might, +1 Knowledge (ở bước Tác động chọn "✨ Khác / hồi phục"). Nếu nhà ma đã tiết lộ: phe kia đọc to đoạn mở đầu & kết thúc của họ. Nếu chưa: để lá trước mặt đến khi tiết lộ.',
+        },
+      ],
+    },
   },
   {
     defId: 'event-the-walls-have-eyes',
@@ -732,6 +959,15 @@ export const EVENT_CARDS: CardDef[] = [
       'Một cây ngoại lai khổng lồ đứng dưới một dàn đèn và ống nước phức tạp. Lá của nó nâu héo, túi hoa khổng lồ hé mở chờ được nuôi dưỡng. Nó cần nước. Nó cần được nuôi bằng máu của bạn.',
     effect:
       'Nhận 1 sát thương Vật lý, đặt một Plant token (token Cây) vào phòng của bạn và giữ lá này. Sau khi ngôi nhà ma được tiết lộ, khi bất kỳ hero, traitor hay quái vật nào đi vào phòng đó, bạn có thể thực hiện đòn tấn công Might 7 nhắm vào đối thủ đó.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Nhận 1 sát thương Vật lý ngay (ở bước Tác động chọn "🩸 Thiệt hại vật chất"), đặt token Plant vào phòng và giữ lá. Sau khi nhà ma tiết lộ: ai vào phòng đó → bạn được tấn công Might 7.',
+        },
+      ],
+    },
   },
   {
     defId: 'event-burial-mound',
@@ -740,6 +976,15 @@ export const EVENT_CARDS: CardDef[] = [
     description: 'Một đống đá phủ lên một cái xác mới. Quá mới.',
     effect:
       'Đặt Burial Mound token (token Gò Chôn) vào phòng. Sau khi ngôi nhà ma được tiết lộ, khi một nhà thám hiểm rời khỏi phòng này, cái xác tấn công: người chơi bên phải nhà thám hiểm đó thực hiện đòn tấn công Might 4 nhắm vào họ. Nếu nhà thám hiểm thắng cách biệt 3 trở lên, bỏ token.',
+    resolution: {
+      steps: [
+        {
+          kind: 'note',
+          prompt:
+            'Đặt token Gò Chôn vào phòng. Sau khi nhà ma tiết lộ: khi ai rời phòng này, người bên phải họ đổ đòn Might 4 nhắm vào họ; thắng cách biệt 3+ thì bỏ token. Không có chỉ số khi rút — chọn "· Không có".',
+        },
+      ],
+    },
   },
   {
     defId: 'event-misty-arch',

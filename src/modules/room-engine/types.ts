@@ -53,6 +53,12 @@ export interface RoomDef {
    * triggers each card symbol in order. Empty array = no symbol.
    */
   symbols: RoomSymbol[];
+  /**
+   * True for rooms that count as "outdoor / has a window". Several events filter
+   * by this group (Shrieking Wind, The Beckoning, Lightning Strikes): explorers
+   * standing in an outdoor room — or on the roof — must roll.
+   */
+  outdoor?: boolean;
   /** The room's printed special effect, if any (free text). */
   effect?: string;
 }

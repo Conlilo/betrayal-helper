@@ -23,7 +23,23 @@ Ký hiệu: ✅ đã script · 🅣 chờ tính năng token · 🅐 chờ menu t
 
 ---
 
-## EVENTS (32/56 đã script)
+## EVENTS (56/56 đã script)
+
+Đợt mới đã script nốt 24 lá còn thiếu (thủ công, app chỉ hướng dẫn):
+- **2 bước**: groundskeeper (roll Knowledge → attackDefense, chỉ đánh khi 0-3).
+- **4 bước roll**: hanged-men (mỗi đặc điểm 1 lần đổ, 0-1 mất 1).
+- **roll**: mystic-slide (đổ Sanity dùng cầu trượt).
+- **note (token / di chuyển / chọn-nhánh)**: closet-door, secret-passage, what-the,
+  drip-drip-drip, secret-stairs, revolving-wall, the-walls, jonahs-turn, skeletons,
+  image-in-the-mirror (+ bản 2), smoke, locked-safe, lights-out, a-moment-of-hope,
+  whoops, it-is-meant-to-be, the-left-hand, what-year-is-it, flytrap, burial-mound.
+  → note ghi rõ phải chọn nút nào ở bước Tác động ("· Không có" / "✨ Khác / hồi phục"
+  / "🩸 Vật chất" / "🧠 Tinh thần") để áp đúng hiệu ứng.
+
+> Khả năng "đặt token / kéo dài nhiều lượt" vẫn chờ **tính năng xem token** để xử lý
+> đúng cơ chế — note hiện tại đã tóm tắt đủ luật để chơi tay.
+
+### (lịch sử) 32 lá đã script từ trước
 
 ✅ creepy-crawlies, burning-man, angry-being, something-slimy, the-voice, funeral, night-view,
 something-hidden, bloody-vision, rotten, grave-dirt, the-walls-have-eyes, mutant-housepet,
@@ -51,29 +67,44 @@ what-the, revolving-wall, the-walls, mystic-slide (có đổ Sanity 5+/0-4)
 
 ---
 
-## OMENS (1/21 đã script)
+## OMENS (21/21 đã script)
 
-✅ bite (attackDefense + haunt)
+Cách xử lý đã chốt (thủ công): app **không** tự áp chỉ số — bước `note` chỉ rõ phải làm gì,
+người chơi tự chỉnh ở bước Tác động. Mọi omen vẫn có bước Haunt roll tự động ở cuối.
 
-🅐 khả năng dùng mỗi lượt (chờ menu thao tác): vial, crystal-ball, mask, spear, ring, skull,
-medallion, spirit-board, box, bloodstone, rope, key, photograph, letter, cat
+✅ attackDefense: bite
 
-❓ nhận chỉ số ngay khi rút (madman +2 Might −1 Sanity, holy-symbol +2 Sanity, girl +1/+1,
-dog +1/+1, book +2 Knowledge): muốn tạo bước "note + áp chỉ số" lúc rút không?
+✅ cộng/trừ chỉ số NGAY khi rút (note "Áp dụng ngay" → chọn **✨ Khác / hồi phục** để chỉnh):
+madman (+2 Might −1 Sanity), dog (+1 Might +1 Sanity), holy-symbol (+2 Sanity),
+girl (+1 Sanity +1 Knowledge), book (+2 Knowledge)
 
-> Mọi omen đều đã có bước Haunt roll tự động ở cuối.
+✅ bị động / dùng mỗi lượt (note nhắc luật → chọn **· Không có**):
+skull, vial, crystal-ball, medallion, ring, spirit-board, mask, spear, box,
+bloodstone, rope, key, photograph, letter, cat
+
+> Khi làm **menu thao tác nhân vật**, các omen "dùng mỗi lượt" (vial, crystal-ball, mask,
+> spear, ring, spirit-board, bloodstone, cat…) sẽ chuyển khả năng kích hoạt sang menu đó.
 
 ---
 
-## ITEMS (0/33)
+## ITEMS (33/33 đã script — note)
 
-Đa số bị động / dùng sau → để cho **menu thao tác nhân vật**. Hiện chỉ hiển thị mô tả + effect.
-Sẽ rà khi làm menu thao tác.
+Mỗi item đã có bước `note` nhắc luật (bỏ được bước đổ xúc xắc chung vô nghĩa khi rút):
+- **Áp dụng ngay khi rút** (chọn ✨ Khác / hồi phục): bells (+1 Sanity), locket (+1 Sanity),
+  amulet-of-the-ages (+1 mỗi đặc điểm).
+- **Bị động / dùng mỗi lượt / dùng sau** (chọn · Không có): tất cả còn lại.
+
+> Item KHÔNG có bước Haunt roll. Khả năng kích hoạt thực sự (đổ xúc xắc, hồi máu, vũ khí…)
+> sẽ gắn vào **menu thao tác nhân vật** sau — note hiện tại đã tóm tắt đầy đủ luật từng lá.
 
 ---
 
-## Cần bạn quyết để chạy tiếp
-1. **groundskeeper / hanged-men**: làm nhiều bước roll như mô tả ở trên?
-2. **Omen nhận chỉ số ngay khi rút**: có tạo bước áp chỉ số lúc rút không, hay để menu thao tác?
-3. **Lá di chuyển/sắp xếp bàn**: dùng `note` nhắc thao tác là đủ chưa?
-4. Thứ tự ưu tiên build 2 tính năng lớn (xem token / menu thao tác) — cái nào trước?
+## Đã chốt (các quyết định trước đây)
+1. **groundskeeper** → 2 bước (roll Knowledge → attackDefense). **hanged-men** → 4 bước roll. ✅
+2. **Omen/Item nhận chỉ số khi rút** → giữ thủ công: note "Áp dụng ngay" + người chơi tự
+   chỉnh ở bước Tác động (KHÔNG auto-apply). ✅
+3. **Lá di chuyển / sắp xếp bàn / token** → dùng `note` nhắc thao tác. ✅
+
+## Còn lại
+- Build 2 tính năng lớn: **xem token phòng** & **menu thao tác nhân vật** — cái nào trước?
+- (Tùy chọn) Khi có auto-apply, nâng các note "Áp dụng ngay" thành bước áp chỉ số tự động.
