@@ -5,27 +5,43 @@ import { Screen, Button, Card, colors, radius, spacing, typography } from '@/mod
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { setPhase, setCharacterSide } from '@/modules/game-engine';
 import {
-  HAUNT_DEFS,
-  findHaunt,
+  getHauntDef,
+  getHauntDefs,
+  getHauntSetup,
   startHaunt,
   toggleObjective,
 } from '@/modules/haunt-engine';
 import type { ID } from '@/types/shared';
 import type { RootScreenProps } from '@/navigation/types';
+import { HauntStoryModal } from './HauntStoryModal';
+import { TriggerHauntCard } from './TriggerHauntCard';
+import { SetupGuideModal } from './SetupGuideModal';
 
 export function HauntSetupScreen({ navigation }: RootScreenProps<'HauntSetup'>) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language === 'vi' ? 'vi' : 'en';
   const dispatch = useAppDispatch();
   const characters = useAppSelector(s => s.game.characters);
   const haunt = useAppSelector(s => s.haunt);
   const [hauntId, setHauntId] = useState<number | null>(haunt.hauntId);
   const [traitorId, setTraitorId] = useState<ID | null>(haunt.traitorId);
+  const [storyOpen, setStoryOpen] = useState(false);
+  const [setupOpen, setSetupOpen] = useState(false);
 
-  const selectedDef = hauntId ? findHaunt(hauntId) : undefined;
+  const selectedDef = hauntId ? getHauntDef(hauntId, lang) : undefined;
 
   const begin = () => {
     if (!hauntId) return;
-    dispatch(startHaunt({ hauntId, traitorId }));
+    const setup = getHauntSetup(hauntId, lang);
+    dispatch(
+      startHaunt({
+        hauntId,
+        traitorId,
+        name: setup.name,
+        heroGoal: setup.heroGoal,
+        traitorGoal: setup.traitorGoal,
+      }),
+    );
     dispatch(setPhase('haunt'));
     // Assign sides: chosen traitor becomes the traitor, everyone else a hero.
     characters.forEach(c => {
@@ -37,8 +53,17 @@ export function HauntSetupScreen({ navigation }: RootScreenProps<'HauntSetup'>) 
 
   return (
     <Screen>
+      <TriggerHauntCard
+        lang={lang}
+        onPick={id => setHauntId(id)}
+        onViewStory={id => {
+          setHauntId(id);
+          setStoryOpen(true);
+        }}
+      />
+
       <Card title={t('hauntSetup.chooseHaunt')}>
-        {HAUNT_DEFS.map(h => {
+        {getHauntDefs(lang).map(h => {
           const active = h.hauntId === hauntId;
           return (
             <Pressable
@@ -76,13 +101,37 @@ export function HauntSetupScreen({ navigation }: RootScreenProps<'HauntSetup'>) 
           <Text style={styles.goalText}>{selectedDef.heroGoal}</Text>
           <Text style={styles.goalLabel}>{t('hauntSetup.traitor')}</Text>
           <Text style={styles.goalText}>{selectedDef.traitorGoal}</Text>
+          <Button
+            label={t('hauntSetup.viewStory')}
+            variant="secondary"
+            onPress={() => setStoryOpen(true)}
+          />
         </Card>
       ) : null}
+
+      <HauntStoryModal
+        visible={storyOpen}
+        hauntId={hauntId}
+        lang={lang}
+        onClose={() => setStoryOpen(false)}
+      />
+
+      <SetupGuideModal
+        visible={setupOpen}
+        hauntId={haunt.hauntId}
+        lang={lang}
+        onClose={() => setSetupOpen(false)}
+      />
 
       <Button label={t('hauntSetup.begin')} onPress={begin} disabled={!hauntId} />
 
       {haunt.started ? (
         <Card title={t('hauntSetup.progress')}>
+          <Button
+            label={t('hauntSetup.setupGuide')}
+            variant="secondary"
+            onPress={() => setSetupOpen(true)}
+          />
           <Text style={styles.goalLabel}>{t('hauntSetup.heroes')}</Text>
           {haunt.heroObjectives.map(o => (
             <ObjectiveRow

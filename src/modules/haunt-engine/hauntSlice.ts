@@ -30,18 +30,31 @@ const hauntSlice = createSlice({
       state.lastRoll = action.payload;
     },
 
-    /** Begin the Haunt: assign the haunt scenario and the traitor. */
+    /**
+     * Begin the Haunt: assign the haunt scenario and the traitor. The caller may
+     * pass a localized name / win conditions (from the story, see getHauntSetup);
+     * otherwise we fall back to HAUNT_DEFS.
+     */
     startHaunt(
       state,
-      action: PayloadAction<{ hauntId: number; traitorId: ID | null }>,
+      action: PayloadAction<{
+        hauntId: number;
+        traitorId: ID | null;
+        name?: string;
+        heroGoal?: string;
+        traitorGoal?: string;
+      }>,
     ) {
-      const def = findHaunt(action.payload.hauntId);
+      const { hauntId, traitorId, name, heroGoal, traitorGoal } = action.payload;
+      const def = findHaunt(hauntId);
       state.started = true;
-      state.hauntId = action.payload.hauntId;
-      state.hauntName = def?.name ?? `Haunt ${action.payload.hauntId}`;
-      state.traitorId = action.payload.traitorId;
-      state.heroObjectives = def ? [makeObjective(def.heroGoal)] : [];
-      state.traitorObjectives = def ? [makeObjective(def.traitorGoal)] : [];
+      state.hauntId = hauntId;
+      state.hauntName = name ?? def?.name ?? `Haunt ${hauntId}`;
+      state.traitorId = traitorId;
+      const hg = heroGoal ?? def?.heroGoal;
+      const tg = traitorGoal ?? def?.traitorGoal;
+      state.heroObjectives = hg ? [makeObjective(hg)] : [];
+      state.traitorObjectives = tg ? [makeObjective(tg)] : [];
     },
 
     addObjective(

@@ -8,6 +8,7 @@ import {
   currentStat,
   incrementOmenCount,
   logAction,
+  setPhase,
 } from '@/modules/game-engine';
 import {
   CARD_DEFS_BY_TYPE,
@@ -17,7 +18,13 @@ import {
   type ResolutionStep,
 } from '@/modules/card-engine';
 import { rollDice } from '@/modules/combat-engine';
-import { evaluateHauntRoll } from '@/modules/haunt-engine';
+import {
+  evaluateHauntRoll,
+  getHauntSetup,
+  getHauntStory,
+  getTriggeredHaunt,
+  startHaunt,
+} from '@/modules/haunt-engine';
 import {
   STAT_KEYS,
   STATS_BY_CATEGORY,
@@ -61,12 +68,14 @@ export function ResolutionSheet({
   symbol,
   onClose,
 }: ResolutionSheetProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language === 'vi' ? 'vi' : 'en';
   const dispatch = useAppDispatch();
   const explorer = useAppSelector(s =>
     s.game.characters.find(c => c.id === explorerId),
   );
   const omenCount = useAppSelector(s => s.game.omenCount ?? 0);
+  const placedRooms = useAppSelector(s => s.rooms.rooms);
 
   const [card, setCard] = useState<CardDef | null>(null);
   const [stageIndex, setStageIndex] = useState(0);
@@ -158,6 +167,34 @@ export function ResolutionSheet({
     if (explorer && card) {
       dispatch(logAction(`${explorer.name}: ${card.name} resolved.`));
     }
+    close();
+  };
+
+  // When the Haunt roll triggers, cross-reference the drawn omen with the room
+  // the explorer is standing in (the "Triggering the Haunt" chart) to find which
+  // haunt fires.
+  const roomDefId =
+    explorer?.roomId != null
+      ? placedRooms.find(r => r.id === explorer.roomId)?.defId
+      : undefined;
+  const triggeredHauntId =
+    card?.type === 'omen' && roomDefId
+      ? getTriggeredHaunt(roomDefId, card.defId)
+      : undefined;
+
+  const beginHaunt = (hauntId: number) => {
+    const setup = getHauntSetup(hauntId, lang);
+    dispatch(
+      startHaunt({
+        hauntId,
+        traitorId: null,
+        name: setup.name,
+        heroGoal: setup.heroGoal,
+        traitorGoal: setup.traitorGoal,
+      }),
+    );
+    dispatch(setPhase('haunt'));
+    dispatch(logAction(`Haunt #${hauntId} triggered: ${setup.name}.`));
     close();
   };
 
@@ -364,6 +401,22 @@ export function ResolutionSheet({
                       ? t('explore.hauntTriggered')
                       : t('explore.hauntSafe')}
                   </Text>
+
+                  {evaluateHauntRoll(hTotal, omenCount).triggered &&
+                  triggeredHauntId ? (
+                    <View style={styles.hauntResult}>
+                      <Text style={styles.hauntResultText}>
+                        → Haunt #{triggeredHauntId}
+                        {getHauntStory(triggeredHauntId, lang)?.title
+                          ? ` · ${getHauntStory(triggeredHauntId, lang)?.title}`
+                          : ''}
+                      </Text>
+                      <Button
+                        label={t('hauntSetup.begin')}
+                        onPress={() => beginHaunt(triggeredHauntId)}
+                      />
+                    </View>
+                  ) : null}
                 </Card>
               ) : null}
 
@@ -568,5 +621,14 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: typography.body,
     fontWeight: '600',
+  },
+  hauntResult: {
+    marginTop: spacing.sm,
+    gap: spacing.sm,
+  },
+  hauntResultText: {
+    color: colors.danger,
+    fontSize: typography.body,
+    fontWeight: '700',
   },
 });

@@ -41,3 +41,6 @@ export type Controller = 'human' | 'ai';
 
 /** High-level phase of a match. */
 export type GamePhase = 'setup' | 'exploration' | 'haunt' | 'ended';
+
+/** App display language for localized data lookups. */
+export type Lang = 'en' | 'vi';

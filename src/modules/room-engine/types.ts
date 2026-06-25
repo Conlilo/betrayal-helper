@@ -63,6 +63,20 @@ export interface RoomDef {
   effect?: string;
 }
 
+/**
+ * A token sitting in a room during play — monster/obstacle/item tokens, or
+ * named markers placed by a haunt setup (Statue, Blessing, Smoke, Safe…).
+ * Shown in the room's detail panel.
+ */
+export interface RoomToken {
+  id: ID;
+  label: string;
+  /** Optional display color (e.g. a monster token colour). */
+  color?: string;
+  /** Optional free-text note (what the token does / its number). */
+  note?: string;
+}
+
 /** A room tile placed on the board during a game. */
 export interface PlacedRoom {
   id: ID;
@@ -73,6 +87,8 @@ export interface PlacedRoom {
   x: number;
   y: number;
   rotation: Rotation;
+  /** Tokens currently sitting in this room (empty/undefined = none). */
+  tokens?: RoomToken[];
 }
 
 export interface RoomState {

@@ -1,3 +1,4 @@
+import type { Lang } from '@/types/shared';
 import type { Floor, RoomDef, RoomSymbol } from '../types';
 
 /**
@@ -596,7 +597,70 @@ export function symbolsOfDef(defId: string): RoomSymbol[] {
   return ROOM_DEFS_BY_ID[defId]?.symbols ?? [];
 }
 
-export function effectOfDef(defId: string): string | undefined {
+/**
+ * Vietnamese translations of room effects, keyed by defId. The data is authored
+ * in English (see ROOM_DEFS); `effectOfDef` returns the VI text when the app
+ * language is `vi`, falling back to the English `effect` when none exists here.
+ */
+export const ROOM_EFFECTS_VI: Record<string, string> = {
+  'stairs-from-basement': 'Dẫn đến và đi từ Foyer (Tiền sảnh).',
+  rookery:
+    'Khi khám phá, lục chồng phòng và chọn 1 thẻ phòng đặt vào nhà, rồi xáo lại chồng đó.',
+  graveyard:
+    'Khi rời phòng, phải đổ Sanity 4+. Thất bại: mất 1 Knowledge (vẫn đi tiếp).',
+  'panic-room':
+    'Khi rời phòng, có thể đổ Speed 3+. Thành công: di chuyển đến phòng bất kỳ có dumbwaiter.',
+  library: 'Một lần mỗi ván, nếu kết thúc lượt ở đây, nhận 1 Knowledge.',
+  laundry:
+    'Nếu kết thúc lượt ở đây, có thể bỏ 1 lá Item để rút 1 lá Item từ chồng bài bỏ.',
+  'mystic-elevator':
+    'Một lần mỗi lượt, đổ 2 xúc xắc và di chuyển phòng này cạnh cửa mở bất kỳ:\n4: tầng bất kỳ\n3: tầng trên\n2: tầng trệt\n1: tầng hầm\n0: tầng hầm, rồi nhận 1 xúc xắc sát thương vật chất.',
+  arsenal: 'Khi rút lá Item ở phòng này, rút 2 lá và giữ 1, bỏ lá còn lại.',
+  'coal-chute': 'Đường trượt 1 chiều xuống Basement Landing.',
+  'spiral-staircase': 'Có thể tốn 2 ô di chuyển để đến landing bất kỳ.',
+  vault:
+    'Có thể đổ Knowledge 6+ để mở và lấy hết đồ trong két (tối đa 2 lá Item).',
+  solarium: 'Nếu kết thúc lượt ở đây, có thể bỏ 1 lá Item để nhận 1 Sanity.',
+  'sewing-room':
+    'Nếu kết thúc lượt ở đây, có thể bỏ 1 lá Item để nâng 1 chỉ số vật chất lên mức bắt đầu nếu đang thấp hơn.',
+  chapel: 'Một lần mỗi ván, nếu kết thúc lượt ở đây, nhận 1 Sanity.',
+  study:
+    'Một lần mỗi ván, nếu kết thúc lượt ở đây, đặt explorer token vào đây và nhận 1 chỉ số tinh thần.',
+  'junk-room':
+    'Khi rời phòng, phải đổ Might 3+. Thất bại: mất 1 Speed (vẫn đi tiếp).',
+  'widows-walk':
+    'Cộng 1 vào kết quả đổ Knowledge ở đây, trừ 1 vào kết quả đổ Speed ở đây (tối thiểu 0).',
+  'drawing-room': 'Khi khám phá, rút 1 lá bất kỳ loại (event/omen/item tùy chọn).',
+  'collapsed-room':
+    'Phải đổ Speed 5+ để khỏi rơi. Thất bại: rút 1 phòng tầng hầm đặt vào nhà, rơi xuống đó và nhận 1 xúc xắc sát thương vật chất.',
+  gallery:
+    'Có thể chọn rơi xuống Ballroom nếu nó có trong nhà; nếu rơi, nhận 1 xúc xắc sát thương vật chất.',
+  nursery:
+    'Nếu kết thúc lượt ở đây: nhận 1 Sanity nếu đang dưới mức bắt đầu; mất 1 Sanity nếu đang trên mức bắt đầu.',
+  'pentagram-chamber':
+    'Khi rời phòng, phải đổ Knowledge 4+. Thất bại: mất 1 Sanity (vẫn đi tiếp).',
+  dungeon: 'Khi vào phòng, có thể đổ Sanity 3+. Thất bại: mất 1 Sanity.',
+  menagerie:
+    'Một lần mỗi ván, nếu kết thúc lượt ở đây, đặt explorer token vào đây và nhận 1 chỉ số vật chất.',
+  'furnace-room': 'Nếu kết thúc lượt ở đây, nhận 1 điểm sát thương vật chất.',
+  larder: 'Một lần mỗi ván, nếu kết thúc lượt ở đây, nhận 1 Might.',
+  'tree-house':
+    'Đặt 1 Plant token lên cửa mở bất kỳ ở tầng mái hoặc tầng trên kề với cửa đó. (Ngoài trời)',
+  catacombs: 'Có thể đổ Sanity 6+ để băng qua. Thất bại: dừng di chuyển.',
+  'locked-room':
+    'Đặt 1 Lock token lên mỗi cửa của phòng. Để vào/ra qua cửa khóa, đổ Knowledge 3+ để gỡ khóa.',
+  cave: 'Nếu bạn vào và ra phòng này trong cùng lượt, mất 1 xúc xắc từ một chỉ số vật chất.',
+  tower: 'Có thể đổ Might 3+ để băng qua. Thất bại: dừng di chuyển. (Ngoài trời)',
+  attic:
+    'Khi rời phòng, phải đổ Speed 3+. Thất bại: mất 1 Might (vẫn đi tiếp).',
+  gymnasium: 'Một lần mỗi ván, nếu kết thúc lượt ở đây, nhận 1 Speed.',
+  chasm: 'Có thể đổ Speed 3+ để băng qua. Thất bại: dừng di chuyển.',
+  crypt: 'Nếu kết thúc lượt ở đây, nhận 1 điểm sát thương tinh thần.',
+};
+
+/** A room's printed effect in the given language (falls back to English). */
+export function effectOfDef(defId: string, lang: Lang = 'en'): string | undefined {
+  if (lang === 'vi' && ROOM_EFFECTS_VI[defId]) return ROOM_EFFECTS_VI[defId];
   return ROOM_DEFS_BY_ID[defId]?.effect;
 }
 

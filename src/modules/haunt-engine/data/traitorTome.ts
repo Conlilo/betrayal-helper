@@ -1,4 +1,6 @@
+import type { Lang } from '@/types/shared';
 import type { HauntStory } from '../types';
+import { TRAITOR_TOME_VI } from './traitorTome.vi';
 
 /**
  * The 50 haunts of the Traitor's Tome (Betrayal at House on the Hill, 2010),
@@ -1675,9 +1677,1587 @@ export const TRAITOR_TOME: HauntStory[] = [
     ],
     monsters: [],
   },
+
+  // ===== Widow's Walk expansion (haunts 51–100 + Seasons of the Witch) =====
+  {
+    id: 51,
+    title: "Director's Cut",
+    intro:
+      '"Cut! Cut! Cut! For Kubrick\'s sake, you people are the WORST actors! At most one of you will be working on this movie come morning — and I don\'t care who!" If only one actor gets to star in this steaming pile of celluloid, it\'s gonna be you.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorers are still in the game but have turned traitor. Each explorer discards all weapon item cards and weapon omen cards and draws an equal number of non-weapon item cards.',
+      },
+      {
+        heading: 'What You Know About the Hero',
+        body: 'The hero is the Director of the film The Haunting of Hell Hotel. You are struggling actors, and each of you must kill all the other actors. The weapons you collected are useless props. The Director holds an omen card concealing the Vision (a face-down event card) — getting it might impress the Director and keep your job. The Director\'s Production Assistants are also opponents; if you attack the Director, a Production Assistant interposes, defending with Knowledge.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'One of you holds the Director\'s Vision in the Theater with no other actors present; the Director then gives instructions which may let you win. All the rest of you lose. If you kill the Director, you lose.',
+      },
+      {
+        heading: 'Special Item and Omen Rules',
+        body: 'If you draw a weapon from the item or omen stack, discard it and draw another card from the same stack.',
+      },
+      {
+        heading: 'How the Item Tokens Work',
+        body: 'Props (pentagonal item tokens) sit in some rooms. Entering a room with one, look at its number and keep it number-side-down (max one at a time; if you take a second, look at both, keep one, leave the other). Reveal a Prop\'s number to the other explorers when you use it.',
+      },
+      {
+        heading: 'Token Items (1–10)',
+        body: '1 Powerless Chainsaw: 2 dice physical to another explorer, 1 die to yourself, then end your turn. 2 Sawed-Off Shotgun: Speed attack; whoever wins deals the difference. 3 Flash Powder: Knowledge attack (no damage); on win, the target drops all item tokens and item cards and you pick one up. 4 Fog Machine: Knowledge attack (no damage); on win, move to an adjacent room and drop the Smoke token there (leaving needs Sanity 5+). 5 Hook for a Hand: Might attack, +1 die, and drop one item card, item token, or omen. 6 Plastic Skeleton: Might attack vs an explorer in an adjacent room; on their next turn they need Speed 5+ to exit. 7 Screechy Violin: 2 dice Sanity to another explorer, 1 die to yourself. 8 Clapperboard: draw an event, then keep it or give it away (once per turn). 9 Dove-Summoning Capguns: Speed attack (no damage); on win, move the target to a discovered room up to three rooms away. 10 The Plan: if in the Director\'s room, take the omen that started the haunt and the face-down card under it (don\'t look).',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Make a Knowledge attack vs a Production Assistant in your room. You can\'t attack the Director while a Production Assistant is in your room. Stun an Assistant → send it to any room on your floor without an explorer; if you lose, the Director may move your figure the same way. If an attack deals 2+ damage to an actor or the Director who holds an item token or the Vision omen, take it instead (drop any item token you have; don\'t look at the event card).',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 52,
+    title: 'Prism',
+    intro:
+      'The trap door snaps shut above you. The paperwork for Group 22B waits on the desk. You settle into your favorite swivel chair and click "Begin Experiment."',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor and is no longer in the house — remove your figure and discard your cards. You are the master of the prism, controlling its Traps. Roll 2 dice for a Mathematical Sequence (don\'t reveal it). Put the 24 Obstacle tokens (Traps) face-up, one per non-landing room (set extras aside). On paper, choose a room that holds a token in your sequence as the exit room, note it, and hide it. Move the rooms the heroes are in to new positions (don\'t move the exit room if a hero is in it; connect doors when able and keep a path from the exit room to its floor\'s landing). Set the Turn/Damage track to 6.',
+      },
+      {
+        heading: 'Mathematical Sequences',
+        body: '0 Threes: 3, 6, 9, 12, 15, 18, 21, 24. 1 Fibonaccis: 1, 2, 3, 5, 8, 13, 21. 2 Fours: 4, 8, 12, 16, 20, 24. 3 Primes: 2, 3, 5, 7, 11, 13, 17, 19, 23. 4 Powers of 2: 1, 2, 4, 8, 16.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They will try to discover which room is the exit and reach it before time runs out.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes have died, or time runs out before they find the exit room.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'Lower the Turn/Damage track; at 0 the haunt ends. After lowering, pick up the rooms the heroes are in and move them elsewhere (connect doors when able, keep a path from the exit room to its landing; don\'t move the exit room if a hero is in it).',
+      },
+      {
+        heading: 'Triggering the Traps',
+        body: 'When a hero enters a room with a Trap token, if its number is in your sequence the room is safe — flip the token to its blank side. Otherwise remove the token and roll a die: 0 the hero makes a Knowledge attack (you win → 1 mental damage and ends all movement); 1 a Speed attack (you win → 1 damage to a trait of the hero\'s choice and ends all movement); 2 a Might attack, no weapons (you win → 1 physical damage and ends all movement).',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'You cannot take damage.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'If you set aside any Obstacle tokens at the start, put one into each new room as it is discovered.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 53,
+    title: 'Till Morning Light',
+    intro:
+      '"Let us in! We only want to kill you!" the voices shout. On the Surge, it\'s legal for one night to kill anyone you want. If you let them in, surely they\'ll only kill the others. Time to open some doors...',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Set aside the small blue monster tokens (Surgers) numbered 1 to 9.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead.',
+      },
+      {
+        heading: 'How to Let the Surgers In',
+        body: 'During your turn, in any ground-floor room with a door not connected to a room, roll 3 dice (1 fewer die for each hero in the room). On 3+ put a Surger in the room. In the Entrance Hall with the Key, you place the token automatically.',
+      },
+      {
+        heading: "You Must Do This on the Monsters' Turn",
+        body: 'At the end of the monster turn, advance the Turn/Damage track. When it reaches 5, the haunt ends.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'Surgers cannot pass a Lock unless three or more Surgers are on either or both sides of it (then remove the Lock from the door). Surgers cannot use dumbwaiters.',
+      },
+    ],
+    monsters: [
+      {
+        name: 'Surgers',
+        stats: 'Speed 3 · Might 6* · Sanity 3 · Knowledge 3 (*+1 Might per other Surger in the same room, max 8 dice)',
+      },
+    ],
+  },
+
+  {
+    id: 54,
+    title: 'Monster Mash',
+    intro:
+      'You were working in the lab late one night... You\'ve been setting up this party for months — booking The Cryptkicker Five, filling the house with stranded bus passengers. But these victims are fighting back instead of cowering!',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. If the Ballroom isn\'t in play, search the room stack for it, place it, and shuffle. For each Guest List room in play, put the noted monster token there. If fewer than three monsters are in play, search the stack for enough monster starting rooms for three monsters, place them, and shuffle.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'The heroes think they can find things in the house to destroy your guests. Destroy them first.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead, or at least four monsters are in the Ballroom.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'When you would discover a room, draw the next five rooms for that floor, choose one, and put the other four on the bottom of the room stack in any order.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'You cannot be attacked.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'When a Guest List room is discovered by anyone, put its monster there. When you move a monster, if a hero is in line of sight you must move it toward a visible hero; otherwise move it by the shortest route toward the Ballroom (including Coal Chute, dumbwaiters, etc.). Once a monster enters the Ballroom it stays there.',
+      },
+      {
+        heading: 'Guest List',
+        body: 'Bloody Room → Crimson Jack (Speed 3 / Might 7 / Sanity 2; if stunned, moves to the Entrance Hall). Chasm → Banshee (4 / 7 / 5; always attacks using Sanity). Crypt → Dracula (3 / 6 / 4; heroes who begin a turn in his room spend an extra space to exit). Graveyard → Zombie Lord (2 / 6 / 4; heroes defeated but not killed turn traitor). Library → Mummy (2 / 6 / 5; deals 1 physical damage if damaged during an attack). Operating Laboratory → Frankenstein\'s Monster (2 / 8 / 3; immune to Speed attacks). Pentagram Chamber → Demon Lord (3 / 6 / 4; can\'t take damage during an attack; may attack from a connecting room). Widow\'s Walk → Witch (3 / 5 / 5; may attack using Might or Sanity).',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 55,
+    title: 'She Is Not Amused',
+    intro:
+      '"Awaken, Medusa! Awaken and end the rule of man!" You pull back your hood and, for the first time in millennia, the snakes sprout from your hair. You will turn the spawn of Perseus into your perpetual companions, frozen in stone.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. If the Statuary Corridor isn\'t in play, search the room stack for it, place it, and shuffle. Put your figure in the Statuary Corridor. Put a small orange monster token (Statue) face-down in each room with an item or omen symbol. If the Armor card isn\'t in play, search the item stack and discard pile, take it, then shuffle the discard pile into the stack. Gain 2 Might and 1 Speed. Set aside Might Roll tokens and Sanity Roll tokens, each equal to the number of heroes.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are the progeny of Perseus and must be petrified.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead or turned to stone.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'If you deal physical damage on an attack, give that explorer a Might Roll token (they lose 1 Might at the end of each of their turns, except while petrified). On your turn, if no explorer is in your room, you may gaze: pick an exit, and all heroes in line of sight must make a Sanity roll of 4+ or be turned to stone (give them a Sanity Roll token; they can\'t move or act until no longer petrified). You may not attack and gaze on the same turn.',
+      },
+      {
+        heading: 'How You Regenerate',
+        body: 'At the end of your turn, if your Might is below its starting value and you took no physical damage this turn from an explorer who has a mirror, gain 1 Might.',
+      },
+    ],
+    monsters: [],
+  },
+  {
+    id: 56,
+    title: 'Make America Disintegrate Again',
+    intro:
+      'His waxy face peeled to reveal maggots and gaping eye sockets, yet his cold words now make perfect sense to you. He is the one who will make this country great again — as soon as he completes the Rites of Ascension. Your friends have to see the truth. You\'ll make them see.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. You are a campaign manager for a Lich running for president. Set aside the Madman (the Lich) and put one Obstacle token (Power) on it. Put three pentagonal item tokens (Phylacteries) anywhere in the house. You must speak only in bombastic political talking points from now on.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are trying to stop the ritual.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead or traitors, or twenty Power tokens are stacked on the Madman card, completing the Rites of Ascension.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'At the end of each of the original traitor\'s turns, add a Power token to the Madman card for each traitor still living, including yourself.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Traitors now do all damage to Sanity. A hero reduced to 0 Sanity becomes a traitor (reset traits), speaking only in empty talking points. When attacking, a traitor can offer The Choice: deal the damage to the target, or split it among the other heroes (rounded up); if The Choice is accepted, gain 1 Sanity. Instead of damage, you can force the explorer to move that many tiles from their room (you choose where).',
+      },
+      {
+        heading: 'If You Would Be Reduced to Zero Sanity',
+        body: 'You stay at 1 point above your Sanity skull symbol.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 57,
+    title: 'The Gathering Storm',
+    intro:
+      'This haunt has no traitor — just heroes. You are all trying to escape the house. The rest of the rules are in Secrets of Survival.',
+    sections: [
+      {
+        heading: 'Where to Find the Rules',
+        body: 'This scenario has no traitor; all of the rules are in the Secrets of Survival booklet.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 58,
+    title: 'Olly Olly Oxen Free',
+    intro:
+      'A little girl\'s spirit giggles and jumps inside your body. Memories flash of a game of Hide and Seek where the only one who came to find you was death. In this new body, you can finish your game...',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Set aside pentagonal item tokens (Dolls) equal to the number of explorers — the only friends you\'ve been able to play with until now.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are playing your game whether they want to or not. They are trying to hide from you; if you find them they become "It".',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are found and become "It".',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Heroes are always hiding while in a room; to find them you must make Knowledge attacks. Defeat a hero this way and they are found, become "It", turn traitor, and start seeking other heroes. A hero who becomes "It" drops a Doll if carrying one and reads the Traitor\'s Tome. Heroes cannot deal damage to traitors.',
+      },
+      {
+        heading: 'Seeking',
+        body: 'Heroes are always seeking. When a hero finds a Doll, give that hero an item token. You cannot pick up or steal a Doll; that would be cheating.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 59,
+    title: "The Fleshchild's Alchemical Mandate",
+    intro:
+      'You recognize the Philosopher\'s Stone your master pressed into your sternum when he brought you to life. The venerable Zosimus Alchemista built you to gather samples. You are his Fleshchild, and you can return to your work now that you remember what you are.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is not still in the game, but someone much like you is. Flip your character card, setting your traits to the starting values on the new side, then raise each trait by the number of heroes.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They know what you are. You must collect samples (Flesh) from each of them for your master.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You have all the Flesh on your character card, or all the heroes are dead.',
+      },
+      {
+        heading: 'How to Harvest Flesh',
+        body: 'Each hero starts with an orange monster token (a pound of Flesh) on their card. When you start your turn in a room with one or more Flesh, pick up one and put it on your card. Flesh counts as an item and can be dropped or stolen, but not traded.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'When you defeat a hero with Flesh on their card, increase the damage you deal to that hero by 1.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'When you add Flesh to your card, you may immediately move up to your Speed. When you start your turn in a room with an orange monster token, pick up one Flesh.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 60,
+    title: "Cat O'Clock",
+    intro:
+      'You look deep into the cat\'s soulful eyes and realize you would do anything for The Cat. The Cat has awoken but is locked inside the house. It requires you to let all the kittens in — then it can take over the world.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Raise both physical traits by 2 and lower both mental traits by 2 (no lower than the lowest value above the skull). Set aside six Sanity Roll tokens. Put a large circular Cat token in the reveal room. Put red monster tokens (Kittens): two if 2–3 heroes, three if 4–5 heroes. Roll 2 dice twice on the Cat Name table to name The Cat; always use this name.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'The heroes are trying to soothe the Kittens and make them forget world domination.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead, or The Cat exits the house through the front door in the Entrance Hall.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'You may spend 1 space of movement to attempt a Might roll of 3+ to open a window or drawer in your room. On success, put a Sanity Roll token in the room (you\'ve opened it) and put a Kitten in the room. If all six Sanity Roll tokens are in the house, choose one and move it to your current room.',
+      },
+      {
+        heading: 'Your New Feline Friends',
+        body: 'Kittens don\'t impede movement, but deal 1 physical damage to any hero who enters their room (a soothed Kitten does not). On the monsters\' turn, each Kitten moves 4 spaces (never sharing a room); entering a room with heroes, it deals 1 physical to one hero. At the start of The Cat\'s turn, count unsoothed Kittens and divide by two (rounded down); The Cat\'s Speed and Might increase by that for the turn. To escape, The Cat must succeed at a Might roll of 6+, once per turn.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'If you are attacked, you may put a Kitten in any room that does not contain a Kitten.',
+      },
+    ],
+    monsters: [{ name: 'The Cat', stats: 'Speed 0 · Might 3 · Sanity 6 · Knowledge 6' }],
+  },
+
+  {
+    id: 61,
+    title: "Captain Sting's Revenge",
+    intro:
+      'The sea parts into a portal and you find yourself in the Underground Sea. "Prepare t\' conquer this here land and take all the loot ye can find!" The first thing you do is slaughter the person who opened your long-sought treasure chest.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is dead — remove your figure and discard your cards. Put the large circular Pirate Queen token (Captain Sting) in the room you were in. If the Underground Lake isn\'t in play, search the room stack for it, place it in the basement, and shuffle. Put the Box (the Treasure Chest) in the Underground Lake. Put magenta monster tokens (Pirates) equal to the number of heroes in the Underground Lake.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are landlubbers; they win if the Treasure Chest is destroyed in the Underground Lake.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead, or you have secured Pieces of Loot equal to the number of heroes and returned them to the Treasure Chest.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'If you or a Pirate brings a Piece of Loot to the Treasure Chest, roll 1 die; on 1 or higher, put the Piece of Loot in the Chest.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Captain Sting can steal an item card during any attack, win or lose, attacking or attacked. Pirates only need to deal 1 point of damage to steal.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'Captain Sting moves using her Speed and does not roll to move. Pirates (including Sting) carry only one Piece of Loot at a time; while carrying one, they move 1 fewer space.',
+      },
+    ],
+    monsters: [
+      { name: 'Captain Sting', stats: 'Speed 5 · Might 8 · Sanity 5 · Knowledge 4' },
+      { name: 'Pirates', stats: 'Speed 4 · Might 3 · Sanity 4 · Knowledge 2' },
+    ],
+  },
+
+  {
+    id: 62,
+    title: 'Rosencrantz and All of You Are Dead',
+    intro:
+      'A wave of mystic energy washes over you. You are dressed in Elizabethan costume with a crown upon your head. Your name is now Hamlet and you like to talk out loud to yourself a lot.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Raise any of your traits that are lower than your Speed up to your Speed value.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'Those jerks killed your dad, the King of Denmark. You\'ll get your revenge and then die with an amazing death scene — if they don\'t rush through the five acts first.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You say your lines and die at the end of a duel, or all the heroes are dead.',
+      },
+      {
+        heading: 'How to Die',
+        body: 'Get the explorers to kill you, but first say your lines in order. 1. Go to the room with item token 1 (the Mirror): "O, that this too solid flesh would melt!" 2. Go to the room with item token 2 (the Dagger): "To be, or not to be: That is the question." 3. Get yourself killed: "O, I die, Horatio! ... The rest is silence." Say this as you die and you win.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'After you attack a hero, if the hero is still alive they immediately attack you. You can only die from attacking or being attacked; in all other cases, if you would die, lower the trait to the lowest value above the skull symbol.',
+      },
+      {
+        heading: 'Special Rhyming Rules',
+        body: 'When you take an action, if you describe it with a rhyme you get +2 to your roll or +2 to the relevant trait. Once per turn.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 63,
+    title: 'Shush',
+    intro:
+      'You pull off your human mask, revealing your true form — an evil fairy that feeds on the hearts of man. You set the Voicebox down and start your task. Now nobody can hear them scream.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Put the Box card (the Voicebox) next to your room. Choose a number 1–6: that\'s how many uncursed Spellbooks the heroes must collect to be able to hurt you and destroy the Box. For every step from your number to 6, add 1 to one of your traits (not always the same trait). Put six pentagonal item tokens (Spellbooks) face-down in different rooms. On paper, note which represent the cursed Spellbooks.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They must win but don\'t know how. You hold the keys to their victory; they have to earn them.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead.',
+      },
+      {
+        heading: 'The Restrictions on Explorers',
+        body: 'The heroes cannot talk to each other until they regain their voices. Once you resume the game, each time a hero speaks aloud they take 1 die of damage to a trait of their choice (chuckling or giggling doesn\'t count).',
+      },
+      {
+        heading: 'When a Hero Collects a Spellbook',
+        body: 'Check the token\'s number. If it matches a cursed Spellbook, it explodes — the hero takes 1 die of physical damage and removes the token. If it matches an uncursed Spellbook, the hero takes the token.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'If a hero attacks you before the group has collected the right number of Spellbooks, go through the motions but take no damage (you can still damage the hero).',
+      },
+      {
+        heading: 'Interacting With the Voicebox',
+        body: 'Until the heroes collect the right number of Spellbooks, no one (including you) can pick up or destroy the Voicebox. After they do, a hero in the room can pick up or destroy it; if destroyed, remove the Box, the heroes regain their voices, you take 1 die of damage to each trait, and the heroes can now damage you (you don\'t have to tell them that).',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 64,
+    title: 'Chairman of the Board',
+    intro:
+      'Your newest guest thought you were just curious citizens. Little did they know you were already poltergeists, permanent residents bound to swell your ranks. What kind of hosts would you be if you let your guest leave before their residency is secured?',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorers are still in the game but have all turned traitor — your figures remain, but you are Poltergeists. Put the hero\'s figure in any basement or roof room not separated from the house by a barrier (if a Poltergeist is there, swap places). Get some paper. Look closely at the details of every room tile.',
+      },
+      {
+        heading: 'What You Know About the Hero',
+        body: 'The hero is trying to escape through the front door of the Entrance Hall. If they make it, you lose your chance to add them as a ghostly resident.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'The hero dies.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'You move through walls as if they were doorways (not through floors/ceilings), and freely up/down the Coal Chute, Collapsed Room, and Gallery. You ignore room text about physical traits or physical damage. You can\'t discover new rooms or use the Mystic Elevator or dumbwaiters. You may use your item/omen cards but can\'t trade or acquire them.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'You can\'t make normal attacks. Instead, end your movement in the hero\'s room and throw something: write the name of a thing depicted on the room tile (one or two words, 6+ letters, not tricky), then make a Sanity attack (the hero defends per Secrets of Survival). Answer questions truthfully. If you deal damage, you may instead move the hero that many rooms (a legal move). When you defend, use only Sanity or Knowledge; physical damage to you becomes mental.',
+      },
+      {
+        heading: 'Special Death Rules',
+        body: 'You can\'t be truly killed. If you die, remove your figure and lose all item cards; at the start of your next turn place yourself in the Dungeon, Rookery, Study, or Theater, reset your traits, and don\'t move that turn.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 65,
+    title: 'Sushi Night',
+    intro:
+      'Water flows from the walls and a searing pain shoots through your legs. Whether you like it or not, your fins have returned. You are a Merperson now.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor (a generally peace-loving Merperson). Raise your Speed to its maximum value. Set aside three of your explorer tokens. Put the Fountain token in any basement room and put your figure there. Starting in the Fountain room, put face-down small monster tokens (Flood) equal to the number of explorers on rooms, one per room. Once every room on a floor is flooded, put extra Flood tokens on the next floor up.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are hunting you. They look hungry.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'The entire house is flooded and you escape to the ocean — or you transform back into a human, so they no longer have reason to hunt you.',
+      },
+      {
+        heading: "You Must Do This After Each Explorer's Turn",
+        body: 'Put a Flood token on an unflooded room. After the turn of the explorer to your right, flood three rooms instead. Flood the lowest floor not yet fully flooded; overflow to the next floor up.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'If you move into a room without a Flood token, you must stop moving. If you end your turn without having been in a Flood room, put an explorer token on your card; at three tokens your fins dry and you become human. Once a floor is fully flooded, rooms discovered there are also flooded.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 66,
+    title: 'The Cardinal Sins',
+    intro:
+      '"Today, if all goes as planned, I shall be elected Pope! To ensure my uncontested election, I shall bathe this house in the blood of sinners!" No other cardinal is as worthy of Popehood as the legendary Cardinal Sinn.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Raise your traits by a total of 5 points. Put your figure in any landing.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are trying to stop your ascension to Popehood. Electors (small monster tokens) are around the house, each with a vote; plead your case by punishing the heroes for their sins.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead, or you are on the roof to send up the white smoke and you have four or more Electors on your character card.',
+      },
+      {
+        heading: 'How to Denounce a Sin',
+        body: 'Once per turn, in a room with an Elector, instead of attacking you may denounce the sin of that Elector\'s color. Denounce the closest hero ("I excommunicate you because of your sin of [name]"), then attack as shown on the Electors table. If you deal damage, steal a random item card and put the Elector on your card. With the Ceremonial Robe, attack the two closest heroes the same way, gaining only one Elector even if you damage both.',
+      },
+      {
+        heading: 'Electors',
+        body: 'Red (Wrath) attack with Might. Orange (Gluttony) with Sanity. Yellow (Sloth) with Speed. Green (Envy) with the hero\'s lowest trait. Blue (Greed) with the hero\'s highest trait. Purple (Pride) with Knowledge. Magenta (Lust) with your highest trait.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Unless you have four or more Electors, you can\'t take mental or physical damage. However, a hero can steal an item card from you when they would otherwise deal you 2 or more physical damage with an attack.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 67,
+    title: 'Murderball',
+    intro:
+      'A spectral boy with a slingshot cries, "Got you! No tag backs!" Then the slingshot and bloodstone appear in your hands. You\'ve got several targets, and they bleed pretty when you hit them.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. If a hero has the Bloodstone card, take it. If the Nursery isn\'t in play, search the room stack for it, place it, and shuffle. Set aside small red monster tokens (Kills) equal to twice the number of heroes.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You have three Kills, or collectively Kills equal to twice the number of heroes have been awarded. In the latter case, every explorer with a Kill wins; the one with the most Kills is the most-awesomest-winner.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Attack with the Bloodstone: a Speed attack vs anyone in line of sight (you don\'t lower traits, so use it every time). If you\'re defeated, no damage from the failed attack, but the Bully deals you 1 mental for being a "Loser!". If you kill your target, keep the Bloodstone and remain traitor another turn. If not, give the Bloodstone and the Traitor\'s Tome to your target (they become traitor, may not attack you next turn). If you didn\'t attack, take 2 mental, roll a die, and pass the Bloodstone that many heroes to your left. If killed by a hero or you lose the Bloodstone to one, that hero becomes the traitor. When any explorer kills another, that explorer gets a Kill.',
+      },
+      {
+        heading: 'Special Item and Omen Rules',
+        body: 'You may not pick up or use weapons while you are the traitor. You don\'t take damage from using the Bloodstone, and you may not drop it.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 68,
+    title: 'He Who Must Not Be Read',
+    intro:
+      'As you open the book — a children\'s story about an evil necromancer named Maldovo — its illustrations glow. "At last, my summoning is complete. I am Maldovo, and I have arrived back into this world!"',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Raise all traits that are not at least 2 above their starting values to that value. Set aside item tokens 1–5 (Soulcruxes). Put item 1 (the Chest) in a room of your choice; keep the others nearby.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'You cannot take damage; you can still attack heroes and they can steal from you. If a hero dies, they drop all cards, become a Wraith, and join your side (a Wraith can\'t draw, carry, or use cards; a stunned Wraith is removed). If a hero had companions (Cat, Dog, Girl, or Madman) when turned, turn those face-down; each adds 1 die per companion to the Wraith\'s rolls. After all instructions are read, if any hero mentions your name — Maldovo — you may make a Sanity attack against them.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'You can move through but not end your turn in a Soulcrux room (Wraiths can). You, the Wraiths, and the special items can discover rooms, operate the Mystic Elevator, and don\'t need special rolls to enter or exit rooms.',
+      },
+      {
+        heading: 'Special Item Rules',
+        body: 'When a hero enters the Chest room, announce the contents: the Chest is locked (Might 4+ to break, or auto-open with the Key). Opened → a Rabbit runs out (replace #1 with #2; it acts after the opener, flees at Speed 4; Speed 3+ to kill). Rabbit killed → a Duck (replace #2 with #3, Speed 5; Might 4+ to kill). Duck killed → an Egg (replace #3 with #4, Speed 1; Knowledge 5+ to break). Egg broken → your soul as a Pen (replace #4 with #5; Sanity 6+ to destroy).',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 69,
+    title: 'No Noose Is Good News',
+    intro:
+      'You awaken with a noose in your hand, flooded with someone else\'s memories and an urge to carry out execution orders. The names on your list fill in like an old game of Hangman. So that\'s how you\'ll decide who gets the gallows...',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Get pieces of paper equal to the number of heroes and draw a Hangman gallows on each. Decide a theme (titles, names, or common words/phrases), specified to all players. In secret, write a word or phrase per hero (max four words, twelve letters). Under each gallows, write the blanks. Speak in a Wild West voice for the rest of the game.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are all on your execution list and will be playing Hangman to win back their lives.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Instead of attacking, attempt to hang a hero: a Might attack vs a hero in your room (no damage); on a win, place a noose around their neck (until they break free, they can\'t guess letters and roll 2 fewer dice against attacks). If you\'re in the Roof Landing, Upper Landing, or Foyer, instead make a Speed attack vs a hero on the floor below — trace a path using both landings, rolling 1 fewer die per room between you (not counting your rooms), with an uninterrupted string of unlocked doors.',
+      },
+      {
+        heading: 'How to Play the Gallows Game',
+        body: 'Once per turn a hero may guess a letter. Correct → write it in. Incorrect → draw a body part (head, body, left arm, right arm, left leg, right leg), and that hero takes 1 die of physical damage. If a hero\'s Hangman card completes with a full person (six wrong guesses) while you\'re in line of sight, that hero is killed.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 70,
+    title: 'To Reach the Cosmos',
+    intro:
+      'A ringing in your ear keeps climbing. Every thought reverberates like a drum. You almost don\'t notice the pale blue tentacle entering the room, standing upright like a bendy straw pointing at your head.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Set aside the small green monster tokens (Brainstraws). Put one Brainstraw in your room and one in an adjacent room up to three rooms away without a hero in it (if there are no empty rooms, put them in your room). Get paper equal to the number of heroes; write a "Thought" for each and fold it. On the outside of each, write a trait (no trait more than twice) and raise that Thought\'s trait by 1.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They don\'t want you to ascend; they\'ll cut your straws and try to take your Thoughts.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You end your turn holding each living hero\'s Thought.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Instead of a physical attack, make a Sanity attack vs a hero in your room. A Brainstraw may steal a random Thought via a Knowledge attack, then ends its movement and spawns another Brainstraw in its room. If a Brainstraw is defeated during a hero\'s turn, it is stunned and retreats to your room. When a hero defeats you to steal your Thought, if you hold another explorer\'s Thought you may give that one instead.',
+      },
+      {
+        heading: 'Losing and Gaining Thoughts',
+        body: 'If you lose a Thought, lose 1 in the trait listed on the paper. If you gain a Thought, gain 1 in its trait and read it aloud.',
+      },
+    ],
+    monsters: [
+      {
+        name: 'Brainstraws',
+        stats: 'Speed 3 · Might 5 · Sanity 5 · Knowledge 5 (a Brainstraw in the Mystic Elevator disables it until it leaves)',
+      },
+    ],
+  },
+
+  {
+    id: 71,
+    title: 'The Other Side',
+    intro:
+      'You\'ve finally contacted the spirits of the house, and they are not friendly. You\'re standing in a locked house full of manifested ghosts. The only way out alive is to appease the Ghosts of the dead that control the house.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Set aside matching explorer tokens: one per hero with 4–5 heroes, two each with 3, three each with 2. Raise your Sanity and Knowledge to their maximum values. Ghosthunting equipment: for each hero, search the item stack and discard pile in this order — Chalk, Device, Ceremonial Robes, Locket, Blueprint — and take any a hero holds, then shuffle the discard pile into the stack.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You manage to put all the Ghosts to rest.',
+      },
+      {
+        heading: 'How to Put a Ghost to Rest',
+        body: 'Take something precious from each Ghost and deliver it to a room with an omen symbol; do this at least four times and at least once per Ghost. When you steal an item belonging to a Ghost, put that hero\'s explorer token on the item; take it to a room and put the explorer token there to mark it rested, after which that Ghost lowers its traits to their lowest values. You may not reuse a room already holding an explorer token.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Attack Ghosts only with Sanity or Knowledge, once per turn per Ghost in your room; regardless of the trait, a Ghost can only lose Sanity. When you defeat a Ghost, gain 1 Sanity or Knowledge and take one of its items (even items that can\'t normally be lost). If a Ghost attacks you with Speed, Might, or Knowledge and wins, you take no damage unless your Sanity is at its minimum value.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 72,
+    title: "Man's Worst Enemy",
+    intro:
+      'You scooped up a poor trapped puppy, never noticing the pentagram around it. Now its soulful eyes have reshaped your mind. What a good boy he is — and you need to protect your friend from your former allies.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Discard the Dog card and put a red monster token (the Beast) in your room. If you have the Girl, Cat, or Madman, set aside their cards and adjust your traits accordingly (not below the skull); represent companions with different-colored monster tokens placed in different rooms up to 4 spaces away. Set the Turn/Damage track to 6.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are trying to destroy the Beast.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are either dead or controlled by the Beast.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'At the end of each turn, lower the Turn/Damage track. When it reaches 0, you may possess a hero, then reset the track to 6.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'The Beast makes Sanity attacks (mental damage); reducing a victim\'s mental trait to the skull possesses them. The Beast can\'t be attacked through normal means. You and other possession victims attack and use cards normally; if any of your traits drop to the skull you\'re removed. If a hero has the Cat card, the Beast must attack that hero if it can. When the Turn/Damage track reaches 0, the Beast may automatically possess the hero with the lowest Sanity.',
+      },
+    ],
+    monsters: [{ name: 'The Beast', stats: 'Speed 4 · Might 4 · Sanity 6' }],
+  },
+
+  {
+    id: 73,
+    title: 'Existence Precedes Essence',
+    intro:
+      'You plunge a skull into glowing star-filled tar and it sprouts flesh, becoming a living Head. "What... Am... I?" it says. "Buddy, you\'re my new best friend, and together we will never be bummed again." "Hooray! Also, I\'m hungry," says the Head.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Lower your Sanity to the lowest value above the skull. Put the Fountain token and the large circular Head token in the reveal room. Set aside a matching explorer token per hero. Get three pieces of paper and write: "Attack the closest hero", "Join the traitor", "Rejoin the heroes".',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes have either been fed to your Head or turned into more new friends.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Instead of attacking, hurl the Head: toss it any number of rooms away in a straight line (including up/down stairs, the Balcony, or the Coal Chute), then make a Might attack vs a hero in that room. If a hero is killed, replace their figure with the matching explorer token. If the Head kills a hero or crosses an explorer token, put that token on the Head (tokens move with it and can be stolen). While the Head has any explorer tokens, it can\'t attack but may defend.',
+      },
+      {
+        heading: 'More New Friends',
+        body: 'If a hero\'s explorer token is brought into the Fountain, that hero reanimates as a monster (reset traits, give the "Attack" note, place in the closest hero\'s room). If the attacked hero attacks it back next turn, give the "Join" note (now on your side); if not, the "Rejoin" note (back to the heroes). Recover the paper each time.',
+      },
+    ],
+    monsters: [{ name: 'The Head', stats: 'Speed 5 · Might 5' }],
+  },
+
+  {
+    id: 74,
+    title: 'Coulrophobia',
+    intro:
+      'You look in the mirror and realize this house isn\'t scary — it\'s hilarious! The funniest thing of all would be to murder everyone in really funny ways. Let\'s put on this big red nose first.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor — you are Knick-Knack the Clown and you tell knock-knock jokes. Put your figure in the Entrance Hall. You may reset any traits to 1 above their starting values. Set aside five pentagonal item tokens (Gags). Get five papers numbered 1–5 with words (1. Acid-blasting seltzer bottle, 2. Exploding whoopee cushion, 3. Neck-breaking banana peel, 4. Toxic cream pie, 5. Strangulating rubber chicken). Eyes closed, have each hero secretly pick one paper (hide unchosen ones).',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You kill two heroes, or all but one hero is out of the house and you kill that hero.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Once per turn, make a knock-knock joke or a killing joke. Knock-Knock: pick a Gag and tell a joke; each hero on your floor makes a Sanity roll. If your Gag matches that hero\'s paper, you laugh maniacally and they need 5+; others need 2+. Failures take 1 mental damage. Killing Joke: if you or the Dog are in a hero\'s room, use a Gag (destroyed); the hero needs Might or Speed 5+ or takes 1 physical and 1 mental. If the Gag matches their paper, put it face-up before them; on their next turn they begin laughing to death (1 physical and 1 mental at the end of each turn, no attacks). When you would take damage, destroy a Gag instead to take none. Noodles the Dog can attack and carry one Gag.',
+      },
+    ],
+    monsters: [{ name: 'Noodles the Dog', stats: 'Speed 6 · Might 3' }],
+  },
+
+  {
+    id: 75,
+    title: 'Let It Glow',
+    intro:
+      'A snowglobe floods your brain with dark memories of freezing snow, and an icy power flows through you. Now everyone will feel as cold as your heart has been all these years...',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Set the Turn/Damage track to 1 (temperature; each number is 10°F below zero). Set aside ten orange monster tokens (Snow Monsters). Gain 2 Might and 2 Knowledge.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'At the end of each turn, advance the Turn/Damage track (the temperature drops) and announce it. If the track reaches 0, you take 1 die of physical damage at the start of your turn unless you\'re in the Balcony.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are killed or freeze to death. When the track reaches 9 minus the number of heroes at the start of the haunt, the house is completely frozen and all heroes freeze.',
+      },
+      {
+        heading: 'How to Create Snow Monsters',
+        body: 'Once per turn, create a Snow Monster in any room with an omen symbol by succeeding at a Knowledge roll of 5+ (max ten in play). A Snow Monster\'s Speed and Might equal the number on the track (minimum 1). If you\'re attacked in a room containing a Snow Monster, you can make the hero attack the Snow Monster instead.',
+      },
+      {
+        heading: "You Must Do This on the Monsters' Turn",
+        body: 'For each face-up Snow Monster in a room with an unlocked Thermostat, you may roll a die; for each blank result, advance the Turn/Damage track.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 76,
+    title: 'Back to the Past',
+    intro:
+      'You clean blood off your dagger and get a strange sense of deja vu. Someone has changed the past — or the future. No matter; all you have to do is remain hidden, and the power will be yours.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Set aside nine Obstacle tokens (Pentagrams) and six small monster tokens (Flipped Landings). Remove your figure from the house. Choose a room in play to hide in; write its name on paper and keep it secret.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are reversing time to stop you from killing them. Slow them down by masking your location.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You complete the ritual by being unrevealed when the Turn/Damage track reaches 0.',
+      },
+      {
+        heading: 'Special Turn Order Rules',
+        body: 'You don\'t take turns; you act on the heroes\' turns.',
+      },
+      {
+        heading: "You Must Do This on Each Hero's Turn",
+        body: 'A hero asks one yes/no question about your room (you must answer truthfully; questions are limited to the room\'s name or characteristics — not its floor, position, symbols, or text). After answering, roll 2 dice and flip face-down up to that many rooms the players now know aren\'t yours (never flip your room). When you flip a room, remove figures/tokens, flip it, put it back, then replace them. A flipped landing gets a small monster token reminder and is still treated as the landing.',
+      },
+      {
+        heading: 'How to Slow the Heroes',
+        body: 'At the start of each hero\'s turn, you may put one of the nine Pentagrams in any room (it costs an extra space of movement to enter). Each time a hero enters a flipped room, they take 1 die of mental damage.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 77,
+    title: "They're Always After Me",
+    intro:
+      'You open a cereal box and are engulfed in colorful lights — rainbows, moons, horseshoes. When they fade, your friend is a twisted little gnome. "Ye will not get me pot o\' gold!" the Leprechaun cackles, and takes off running.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Raise your Speed to its highest value. Shuffle the Medallion (your Lucky Charm) into the omen stack. Adopt a bone-chillingly bad Irish accent for the rest of the game.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They seek your Pot of Gold at the end of a hidden Rainbow. Don\'t let them get your Lucky Charm, or they\'ll find the Rainbow.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead.',
+      },
+      {
+        heading: 'Special Turn Order Rules',
+        body: 'You take a turn after each hero takes a turn. You\'re speedy.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'If you end your turn in a room with an omen symbol, look at the top omen card then put it back. If you then succeed at a Knowledge roll of 4+, you may shuffle the stack.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'You can\'t attack with Might except on the Rainbow. Elsewhere, make Speed attacks rolling dice equal to your Speed or the number of room tiles you entered on this floor before attacking, whichever is fewer. You can\'t attack anyone in the room you start in (except on the Rainbow), nor enter a room you previously left this turn. If defeated when you attack or defend, cry "Dear boy, release me!" and the hero tells you what happens.',
+      },
+      {
+        heading: 'Special Item and Omen Rules',
+        body: 'If you would draw an item card, you may draw an omen instead. If you draw the Medallion, place the seven Colors of the Rainbow out from an open roof door (red, orange, yellow, green, blue, purple, magenta), then put the Pot of Gold at the end.',
+      },
+      {
+        heading: 'The Rainbow',
+        body: 'Each Color of the Rainbow is 1 space of movement. If you stop on a Color with a hero, or a hero ends on your Color, you may make a Might attack to push them off; on success they fall to their death.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 78,
+    title: "The Devil's Name",
+    intro:
+      'You lift a stone capstone and a name that threatens to consume tries to force its way into your mind. You are the Fiend. The Brimstone Square holds the secret of your true name — the only thing that might drive you back into your prison.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Gain 5 Knowledge. Put six pentagonal item tokens 1–6 (Tomes of Lore) in different rooms; at least one on each floor, and only one on your current floor. If you have the Chalk card, give it to a hero. Pick a number 1–20 for a 5-letter name on the Fiend\'s Name table; write it down secretly.',
+      },
+      {
+        heading: 'How Your True Name Works',
+        body: 'Each Tome of Lore can reveal one letter of your true name (after a hero spends all movement and successfully researches it; each instance of a letter is a different letter). If a hero in your room speaks your true name, you\'re banished and they win. If they speak the wrong name, you possess that hero. A hero may also speak a name to a possessed hero: correct ends the possession (can\'t be regained); incorrect deals mental damage equal to the number of unguessed letters.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Make a Knowledge attack vs a hero in your room. If you reduce the hero\'s trait to the skull, a portion of your essence possesses them (reset traits, become a traitor). If any of your traits would drop to the skull, lower it to the lowest value above instead.',
+      },
+      {
+        heading: 'Special Item Rules',
+        body: 'You cannot pick up Tomes of Lore or the Chalk; possessed heroes can do both.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are possessed or dead.',
+      },
+      {
+        heading: "The Fiend's Name",
+        body: 'Roll/pick 1–20 for a 5-letter name: 1 BALAM, 2 MATIR, 3 LILIM, 4 ORMIS, 5 VOTHR, 6 LOLTH, 7 BOTIS, 8 MIMUM, 9 VECUR, 10 ORPAK, 11 MECUH, 12 BAPHM, 13 VICTH, 14 ORCUS, 15 LETHK, 16 OICAK, 17 BELTH, 18 MOLAK, 19 LAMAS, 20 VEPAR.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 79,
+    title: 'The Twins',
+    intro:
+      'A red cord erupts between your two friends, binding them — a black whip filled with pinprick stars. They are two poles of a magnet, the space between crackling with force.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorers are still in the game but have turned Twin traitors. For each trait, you may lower one Twin\'s trait to raise the other\'s by the same amount. Set aside Obstacle tokens (Nodes) equal to six minus the number of heroes.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are trying to stop you from making a Seam — an energy wave that extends between you and your Twin when you\'re far enough apart.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You get out all the Nodes and can trace a path between you and your Twin that touches all the Nodes and includes at least twenty rooms.',
+      },
+      {
+        heading: 'How to Weave the Seam',
+        body: 'On your turn, drop a Node (like dropping an item) on a doorway or other route between rooms or floors; that route can no longer be moved or seen through by anyone, including you. If all Nodes are placed, remove one before dropping a new one. You may not put a Node in a room that already has one, nor one that would seal off rooms from the rest of the house. If you don\'t move on a turn you start in a Node room, you may tap the Node to raise a trait to its starting value.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'If you take damage, you may split it between you and your Twin, as long as both lose at least 1 point in a trait.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 80,
+    title: 'I, Mutant',
+    intro:
+      'You wake on the floor hours later, your skin a strange shade of periwinkle. The fine people at Humane Research Supplies delivered a fresh batch of monkeys for your experiments... and the monkeys have escaped their cages.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Refer to the heroes as "Monkeys" the rest of the game. If the Research Laboratory isn\'t in play, search the room stack for it, place it, and shuffle. For each Monkey, put a round monster token (Assistant) of a different color in the Research Laboratory. Put Obstacle tokens (Electronets) equal to the number of explorers in different rooms.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You successfully capture all your Monkeys.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'You may put one Electronet in a room you occupied this turn; each Assistant may do the same on the monsters\' turn.',
+      },
+      {
+        heading: 'How to Capture a Monkey',
+        body: 'When a Monkey enters a room with an Electronet, they must roll Might, Speed, or Knowledge 5+ for each Electronet there. Any failed roll captures the Monkey (tip their figure); each success removes an Electronet.',
+      },
+      {
+        heading: 'Assistants',
+        body: 'Assistants move their full Speed (no roll) and may move captured Monkeys (spend 2 movement). A defeated Assistant is stunned; when no longer stunned, replace it with a different color. Red (3/5/2/2): may move a defeated Monkey to an adjacent room. Orange (5/3/2/2): moves through false doors. Yellow (2/2/2/5): attacks/defends with Knowledge — on success, place an Electronet and capture instead of dealing damage. Green (1/3/5/3): may teleport instead of moving. Blue (3/4/2/3): when defeated during an attack, the Monkey takes the excess as damage. Purple (3/4/2/3): +2 attack dice and steals an item instead of damage (you gain it). Magenta (3/4/4/1): cannot be stunned.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'You accidentally made the Monkeys unkillable. If you would kill a Monkey, any trait that would drop to the skull drops to the lowest value above, and the Monkey is captured instead (put an Electronet in its room).',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 81,
+    title: 'The Canopic Curse',
+    intro:
+      'You\'ve discovered the canopic jar holding Khasekhemui\'s power upon the pharaoh\'s death. But even you don\'t know which jar in this house holds the essence. You\'ll have to get them all before the others figure it out.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Before leaving the room, collect Obstacle tokens (Curses) 1–6 and bring them, face-down and random. Call each hero out individually to get a Curse. Bring the Curse tokens back. Put the large circular Mummy token in the Pentagram Chamber; put one random Curse face-down under it, and the rest in the box.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You bring the correct Jar to the Pentagram Chamber, uniting the Mummy with his essence.',
+      },
+      {
+        heading: 'Assigning Curses and Traitorships',
+        body: 'Randomly assign each hero a Curse (no two the same; Curses 2 and 5 count as the same for this). Curse 2 or 5 makes that hero a secret traitor — they read this page, pretend to have another Curse, and act under it until they reveal the ruse (which must happen when the last Jar is picked up).',
+      },
+      {
+        heading: 'How to Acquire a Jar',
+        body: 'Take a Jar from a room at the end of your turn (you can\'t move after, but may give it away). Only one Jar per turn; you may drop a Jar anytime but can\'t repick it the same turn.',
+      },
+      {
+        heading: 'How to Know Who Has the Correct Jar',
+        body: 'When all six Jars are collected, reveal the Curse under the Mummy; the explorer with the matching Jar token holds the correct Jar, and it becomes their turn. If a traitor, they head to the Pentagram Chamber. Explorers may not attack a Jar-holder until the correct Jar is revealed; after, a damaged holder must roll Might 4+ to keep the Jar.',
+      },
+      {
+        heading: 'Curses',
+        body: '1 You can\'t pick up an even-numbered Jar. 2 You\'re also a traitor (take the correct jar to the Pentagram Chamber). 3 Unless you end your turn in an item or omen room, take 1 die of mental damage. 4 You can\'t pick up a Jar from the floor you were on when cursed. 5 You\'re also a traitor (as Curse 2). 6 You can only pick up the highest-numbered Jar not being held.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 82,
+    title: 'Get a Clue',
+    intro:
+      'A scream echoes through the house — the host has been found dead. No need to solve this mystery: the butler did it! The only question is how to get out before you become his next victim.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Gain 2 Might. Set the Turn/Damage track to the number of heroes.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'The heroes know you\'re the killer and are ready to tell the police; they\'ll need alibis.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead, or the Rope is dropped in the Dining Room and the police arrive before those left alive have their alibis.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'At the start of your turn, advance the Turn/Damage track. When it reaches 12, the police arrive.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'If any of your traits would drop to the skull, lower it to the lowest value above. In a hero\'s alibi room, you can\'t damage or steal from them.',
+      },
+      {
+        heading: 'Special Item and Omen Rules',
+        body: 'You may not pick up item cards, item tokens, or omens — but you may steal weapons and the Rope from heroes using physical attacks.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 83,
+    title: 'In the Details',
+    intro:
+      'This scenario has no traitor — only heroes. You are all trying to be the one to get out of the contract. The rest of the rules are in Secrets of Survival.',
+    sections: [
+      {
+        heading: 'Where to Find the Rules',
+        body: 'This scenario has no traitor; all of the rules are in the Secrets of Survival booklet.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 84,
+    title: 'Forget to Remember',
+    intro:
+      'The portraits all depict Richard Smith — a killer this town never forgot. Your friend stares at you just like the portraits, and the house creaks and groans. The serial killer\'s mind is too powerful for any brain to hold, and he\'s scheming inside yours.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. If your Sanity and/or Knowledge are below their starting values, raise them to starting. Secretly roll 1 die per hero and add the results. Ask each hero to roll 1 die. If the sum is less than your roll, you are disloyal and Richard Smith dwells within you. If the sum equals or exceeds your roll, you are loyal — but still count as a traitor and may use traitor powers.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'If disloyal, when all the heroes are dead or are monsters serving the Psychic Spirit. If loyal, you and the living heroes win when each living hero\'s Knowledge is lowered to its lowest value or skull, after which the heroes destroy the Crystal Ball and you lower your Knowledge to 1 to forget Richard Smith.',
+      },
+      {
+        heading: "You Must Do This on the Monsters' Turn",
+        body: 'Whether or not you\'re loyal, make the Psychic Spirit\'s mental attacks against the heroes (the Crystal Ball holder, otherwise the highest-Knowledge hero). On a loss, damage splits evenly between Sanity and Knowledge (excess to the hero\'s preference). The Psychic Spirit never attacks you.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'You can make mental attacks using Knowledge or Sanity on any explorer in your room (targets decide how to apply damage, so persuade them). The Psychic Spirit never takes mental damage. If you\'re loyal, convince the heroes to turn their efforts on the Crystal Ball. If you\'re loyal and a hero kills you, they see your innocence and lose 2 Sanity.',
+      },
+    ],
+    monsters: [{ name: 'Psychic Spirit of Richard Smith', stats: 'Sanity 6 · Knowledge 6' }],
+  },
+
+  {
+    id: 85,
+    title: 'The Murderer in the Machine',
+    intro:
+      'Your phone buzzes with a Flitter notification — a photo of your best friend, brutally murdered. Then another. And another. This is a great way to clean out your friend list.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Discard the Ring. Take a pentagonal item token (a Smartphone). Remove the Sanity clip from your character card — you no longer have a Sanity value (you can\'t be attacked with Sanity, lose Sanity, or make Sanity rolls). Set the Turn/Damage track to 1.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'Every hero has been driven mad and joined your side, or been killed.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'At the start of your turn, advance the Turn/Damage track. Do this only when your traitor character\'s turn comes (even if dead), and not on the turns of former heroes who\'ve joined you.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'You can Share social media killings at any time on your traitor turn (even if dead). Once per turn, for each Smartphone (including dropped ones): choose a hero; if no reception is established, have them look for it (stop if the room has a Dead Zone or is in the basement); inform them of grisly photos of slain Flitter friends; then make a Sanity attack with dice equal to the track number plus the number of Bars in the room (max 8). The hero defends with Sanity.',
+      },
+      {
+        heading: 'How to Add Friends to Your Network',
+        body: 'Once a hero\'s Sanity drops to the skull, they become your friend (remove their Sanity clip; they keep taking turns, but their goal is to prevent the heroes from escaping).',
+      },
+      {
+        heading: 'Special Dropped Smartphone Rules',
+        body: 'If a hero ends their turn in a room with no Smartphone, you may attempt a Knowledge roll of 5+ to move a dropped Smartphone to that hero\'s room.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 86,
+    title: 'The Woods in the Cabin',
+    intro:
+      'You are a tree. You\'ve lived here a hundred years, reaching toward the sky, your roots deep in the earth. Pity these hairless apes have mistaken you for a house.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Remove your figure from the house — you are now the living Tree. Write down how many rooms are in the house. Discard every card you carry (shuffle any weapons into their stacks). Place the Tree House on top of the Foyer (move anything in it along with it; if not in play, find it, place it on the Foyer, shuffle). If there are fewer than five basement rooms, place basement rooms until there are five. Put a Plant token (Rootstalk) in four basement rooms and a green monster token (Roots) in each other basement room. Put an orange monster token (Acorn) in each upper-floor room. Put red monster tokens (Squirrels) equal to the number of heroes in the room with the Plant token connected to the Tree House.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead, or you become ten undestroyed rooms larger than at the start of the haunt.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'Put one Root in a basement room without a Rootstalk. Put one Acorn in an upper-floor room. Put Squirrels equal to the number of heroes in the room with the Plant token connected to the Tree House. Discover a room through any open door in the basement.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'On the monsters\' turn, your Squirrels may attack any hero with an explorer token on their card (one who attacked you or your Squirrels). A hero attacking one of your rooms treats it as Might 4. Squirrels in the same room may combine their Might into one attack, but if it fails, each point of damage removes 1 Squirrel.',
+      },
+    ],
+    monsters: [
+      {
+        name: 'Squirrels',
+        stats: 'Speed 8 · Might 1 · Sanity 6 · Knowledge 1 (move full Speed, no roll)',
+      },
+    ],
+  },
+
+  {
+    id: 87,
+    title: 'Sibling Rivalry',
+    intro:
+      'Your brain talks to itself in near-identical voices. "Marbles on the stairs! She\'ll never make it out of THIS one!" As you realize these voices are now your own, your body splits into two versions of yourself. This should be... fun.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. You have a Sibling on the other side of your character card (trait clips in the same place). Your values can\'t change until the Headmistress is found. Put your explorer token (your Sibling) as far from your figure as possible. Put the large circular Doctor token (the Headmistress) in any basement room. Set aside Obstacle tokens (Pranks) equal to twice the number of explorers.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'You\'ve locked the Headmistress in the basement; the heroes will try to let her out.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'Your pranks bring about the deaths of all the heroes.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'Alternate which Sibling you move. At the start of each turn after the first, flip your character card.',
+      },
+      {
+        heading: 'How to Pull a Prank',
+        body: 'Move to any room and succeed at a Sanity roll of 3+ to put a Prank there (max twice the number of heroes at a time). When a Prank is triggered, return it to your pile; later you may reset it elsewhere.',
+      },
+      {
+        heading: 'Triggering Pranks',
+        body: 'When a hero enters a Prank room, roll 2 dice: 0 they make a Speed roll 3+ or take 1 physical; 1 a Might roll 4+ or take 1 physical; 2 a Sanity roll 3+ or stop moving; 3 a Knowledge roll 4+ or drop a random item/omen (can\'t repick this turn); 4 any trait 5+ or take 1 mental.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 88,
+    title: 'Cry, Babylon!',
+    intro:
+      '"All bow down to me, the mighty emperor Nebuchadnezzar! Prepare yourselves as sacrifices for the death god Marduk. Tonight I will escape this place and take my revenge."',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Reset your traits to their starting values, then raise each trait by the number of heroes.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'They are trying to stop you, the reincarnated Nebuchadnezzar, from fully manifesting as the Babylonian god Marduk.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Instead of taking damage when defeated, you may reduce one of your physical traits by 1. When you kill a hero, gain 1 in each trait.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'If you enter the room with the Lammasu, you immediately lose 1 from each trait; the Lammasu is destroyed but materializes on another floor (you choose which; the heroes place it at least 3 spaces from any hero, a landing if possible).',
+      },
+      {
+        heading: 'Special Omen Rules',
+        body: 'You cannot possess the Cat card.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 89,
+    title: "One of the Master's Affairs",
+    intro:
+      'You throw off your cloak — you are Rough Ralph, hunchbacked servant of Doctor Frank N. Sense! Little does the Doctor know that this house is a spaceship, and you plan to blast it all the way back to your home planet of Tinselvania.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Set the Turn/Damage track to 10 (your spaceship\'s countdown). Gain 1 in each trait. If the Theater, Tower, and Underground Lake aren\'t in play, find them, place them, and shuffle. Put the monsters in rooms per the Denizens table.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'The Turn/Damage track reaches 0 and you blast off with at least one hero in the house.',
+      },
+      {
+        heading: "You Must Do This on Each Hero's Turn",
+        body: 'At the end of each hero\'s turn, if that hero didn\'t score a victory in one of their tasks or attack a monster, lower the Turn/Damage track.',
+      },
+      {
+        heading: "How the House's Denizens Function",
+        body: 'Each monster\'s four traits equal the value of one of your traits (per the table); it attacks with that trait. Monsters don\'t roll to move. A stunned monster returns to its starting room and isn\'t normal until you enter that room. Add 1 die to your rolls per unstunned monster in your room. You can\'t be damaged in a room with an unstunned monster.',
+      },
+      {
+        heading: 'Denizens',
+        body: 'Doctor Frank N. Sense (Operating Laboratory, uses your Knowledge). Monty / Frankenstein\'s Monster (Gymnasium, Might). Cornucopia / Pirate Queen (Master Bedroom, Sanity). Hedley / Head (Larder, your lowest trait). Fuchsia / magenta token (Dusty Hallway, Speed).',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 90,
+    title: 'Internal Conflict',
+    intro:
+      'The boss makes you Chief Intern, handing you a shiny pentagonal badge. "One last thing," he says as you leave. "If I were you, I\'d think about getting rid of the competition."',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Take a pentagonal item token (your Badge). You can order the other Interns around as long as you have the Badge.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You are the last intern alive.',
+      },
+      {
+        heading: 'You Must Do This on Your Turn',
+        body: 'If you discover a room with an event symbol, put an Employee in that room before you draw your event.',
+      },
+      {
+        heading: 'How to Deliver Coffee',
+        body: 'To deliver a Coffee, end your turn in the same room as an Employee and remove it to your card. If you deliver a Coffee this turn, raise your Speed by 1; if you don\'t, lower your Sanity by 1.',
+      },
+      {
+        heading: 'Commanding the Competition',
+        body: 'At the end of your turn, you may move any number of competing Interns. For each, roll 1 die: 0 draw the next room, place it, and put the Intern there; 1 move the Intern to any room a floor above or below; 2 move the Intern up to their Speed, ignoring room effects.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 91,
+    title: 'Burn out the Darkness',
+    intro:
+      'The darkness is everywhere, enveloping you. Such beautiful darkness; surely you must share it with the world, starting with those pernicious fires and the fools trying to spread them.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'This haunt can have multiple traitors. You are now Darkness, and there\'s no point attacking it. Remove the clips from your character cards; if you ever need a trait roll, your result is 5. Discard all your cards. Darkness is quiet — you may only speak in a whisper.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'The Fires are all extinguished on your turn and there are still at least a number of face-up rooms equal to the number of traitors, or all the heroes are Darkness.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Once per turn, attack a hero in your line of sight using the inkiness of their soul (Sanity attack, result 5). On a win they take mental damage; if not, your turn ends. When a hero would die for any reason, that hero joins the Darkness and turns traitor. Monster tokens represent Fire and don\'t take turns.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'You can no longer discover rooms. Your movement each turn is dice equal to your highest Speed number minus the Fire tokens in your room. Face-up Fire tokens count as opponents. In any room, you may try to suppress its Fires (roll 1 die per Fire; a non-blank removes a face-down token or flips a face-up one). Treat face-down tiles as having doors on each side (no blocked line of sight); spend 1 movement to pass through a wall into an adjacent room.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 92,
+    title: 'Ghost at the Finish Line',
+    intro:
+      'This haunt has no traitor — just heroes. You are all trying to be the one to find the last room in the house. The rest of the rules are in Secrets of Survival.',
+    sections: [
+      {
+        heading: 'Where to Find the Rules',
+        body: 'This scenario has no traitor; all of the rules are in the Secrets of Survival booklet.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 93,
+    title: "Owl's Moving Castle",
+    intro:
+      'Your house is on the move to a magical land filled with owls — never mind that it might be off the edge of a cliff. You\'re an Owl, and soon everyone else will be too.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. If any floor is more than two tile lengths from every table edge, move the floor so at least one tile is exactly two lengths from an edge. Put your figure in any room on your floor. Make every "oo" sound a very long "oooo" — you are an Owl.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'Like you, they\'re all Owls — but for some reason they don\'t want to be, and they don\'t want you to be one either.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All heroes are dead, or all living heroes have no explorer tokens and are stuck as Owls forever.',
+      },
+      {
+        heading: "How to Act Now That You're an Owl",
+        body: 'You can fly: move on flipped tiles and across non-existent tiles between sections if you enter/exit through a window or outside room (each empty space = 2 movement; stay on the same floor; end inside the house). Your Speed is double your card value (max 8 dice on Speed rolls); you take no falling damage. You can\'t use item or omen cards.',
+      },
+      {
+        heading: 'How to Move the House',
+        body: 'At the end of your turn, roll dice equal to the number of heroes and move up to that many room tiles toward the table edge (the Grand Staircase/Foyer/Entrance Hall counts as three tiles, moved at once). Tiles pushed off the table cease to exist. You can\'t move a tile surrounded on four sides, nor one that would cut off a floor (unless both parts have windows/outside rooms). Moving a hero\'s tile turns them into an Owl (no Sanity loss, but if the tile falls off they drop Sanity to lowest and become an Owl in the placement room). Landings move only if at least half their doorways are unconnected; a room alone on its floor can\'t move.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Once per turn as an Owl, hoot at the heroes in your room: against each, make a Might or Sanity attack. On a win they split the damage; if it would drop a trait to the skull, they transform into an Owl (Sanity to the lowest value above the skull).',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 94,
+    title: 'Last Will and Tournament',
+    intro:
+      'Your eccentric Aunt Edwina has passed, and you were called for the reading of her will. Squabbling over her collection turned to greed, until the traitor spoke with her voice: "You ungrateful wretches! Put down my things, and get out of my house!"',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor, possessed by the greedy spirit of Aunt Edwina. Count your item and omen cards that can be traded or stolen (these are your Bequests). When the heroes are ready, if your Bequest total isn\'t higher than the highest single hero\'s, draw item cards until it is. If your traits are below starting, raise them, then increase one trait by 1.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'You end your turn with all the Bequest cards, or all other explorers are dead.',
+      },
+      {
+        heading: 'You Must Do This After Every Turn',
+        body: 'If your Bequest total is equal to or less than another explorer\'s, all explorers roll dice equal to their Bequest total (max 8, min 1), +1 if in an item room. The highest result becomes the traitor (tie → closest to your left). When you stop being the traitor, give one random Bequest and the Traitor\'s Tome to the new traitor; you become a hero. If you die as the traitor, the heroes roll to see who is possessed.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Once per turn, attempt to retake a Bequest from an explorer in your room by making an attack with any trait (+1 die in an item room). On a win, roll the Bequest Disposition table; the attack deals no damage.',
+      },
+      {
+        heading: 'Special Item and Omen Rules',
+        body: 'You may not willingly trade or drop cards, and must pick up any dropped cards in your room. When you die, drop all Bequests in an item pile; for each, roll 1 die — a blank discards it.',
+      },
+      {
+        heading: 'Bequest Disposition',
+        body: '0 the attacked explorer discards a random Bequest. 1 steal a random Bequest from them. 2 steal a Bequest of your choice from them.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 95,
+    title: 'Nanny, Interrupted',
+    intro:
+      '"I know you\'re excited to grow up, but if I had my way, you\'d stay the same age forever." The ceilings rise higher — until you realize you\'re actually getting shorter.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. If any of your traits are below their starting values, raise them to starting.',
+      },
+      {
+        heading: 'What You Know About the Heroes',
+        body: 'The naughty children must be rounded up and returned to the Nursery for a good night\'s sleep.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are in the Nursery and turned back into the babies they once were.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'You can\'t make normal physical attacks; once per turn you may make one of each of these (none can hurt you). Reminisce: Knowledge attack vs a non-baby hero on your floor → mental damage; a trait dropping to the skull makes them a baby. Throw the baby over your shoulder: when a baby is in or exiting your room, Speed attack (no damage); on a win, pick them up onto your card (carry multiple). Use the baby\'s middle name: in sight of or carrying a baby, say their full name and "Go to your room!", then a Sanity attack (+1 die per baby held); on a win, place the baby in the Nursery.',
+      },
+      {
+        heading: 'Special Damage Rules',
+        body: 'When you take damage, you must drop item cards, omen cards, and/or heroes equal to the amount, if possible.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'Add 1 die to your Speed for movement. You have the front-door key (enter/exit the Entrance Hall). You can leave by jumping out a window or outside room: roof (5 dice physical), upper floor (3 dice), or ground floor (1 die); no damage with the Rope. Once outside, walk the ground-floor perimeter (each outside tile edge is its own room).',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 96,
+    title: 'House of Leavings',
+    intro:
+      'You\'ve been pulled into an alternate dimension — a house like the one you left, arranged differently. Your friend cackles madly and scurries off, and an eerie snorting sound follows. There\'s a minotaur. You don\'t want to imagine a minotaur.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game but has turned traitor. Put your figure and the large circular Demon Lord token (the Minotaur) in the Grand Staircase. Set aside small yellow monster tokens (Claw Marks) equal to the number of explorers. Reduce your Speed to the lowest value above the skull.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the heroes are dead.',
+      },
+      {
+        heading: "You Must Do This on Each Hero's Turn",
+        body: 'At the end of each hero\'s turn, if that hero isn\'t in the Minotaur\'s line of sight, they take 1 die of mental damage. After the hero checks line of sight, you may move the Minotaur to any room in your line of sight, and may put a Claw Mark in the room it left (once placed, it can\'t move). The Minotaur doesn\'t get a monster turn.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'You and the Minotaur can\'t attack the heroes. Heroes can make Sanity attacks against the Minotaur (it defends with your Sanity); if it defeats a hero, deal mental damage and move that hero to any room within their line of sight. Your traits can\'t drop below the lowest value above the skull; if you would be killed, drop the trait to the lowest value above and move to the Upper Landing.',
+      },
+      {
+        heading: 'Special Movement Rules',
+        body: 'All rooms you discover are considered "new" and must be discovered normally. If an explorer draws the Abandoned Room and it would be placed adjacent to a Claw Mark, shuffle it back; if drawn again immediately, place it regardless.',
+      },
+      {
+        heading: 'Special Omen Rules',
+        body: 'You can\'t pick up, steal, or carry the omen that started the haunt.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 97,
+    title: 'Lambs to the Slaughter',
+    intro:
+      'Ominous howling and banging at the doors. Red eyes flash as Wolves prowl the windows. "Owwwwwooo." Wait... did that come from inside the house? Did it come from you?',
+    sections: [
+      {
+        heading: 'Where to Find the Rules',
+        body: 'This haunt uses the hidden traitor rules described on page 17 of the base game rulebook. The rest of the rules are in the Secrets of Survival booklet.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 98,
+    title: 'Plastic Fantastic',
+    intro:
+      'You came to a quiet lodge in Uncanny Valley for some peace, but someone has arrayed a million blank-eyed mannequins around it. Wait — one of them moved.',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Your explorer is still in the game and has not turned traitor, but has been absorbed into the Mannequins. Remove your figure and discard your cards. Put a small monster token (Mannequin) of any color into each room, on the stunned side, placed randomly.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'All the Mannequins have left the house and at least one hero is still alive — that is, you win when the heroes do.',
+      },
+      {
+        heading: "You Must Do This on Every Hero's Turn",
+        body: 'At the end of every hero\'s turn, check for provocations. For each action the hero didn\'t do, state the provocation, roll 2 dice, and flip that many stunned Mannequins of the listed color face-up. If there aren\'t enough to flip, move a token of that color toward the hero for each one you couldn\'t flip.',
+      },
+      {
+        heading: "You Must Do This on the Monsters' Turn",
+        body: 'Move all stunned Mannequins toward the Entrance Hall (their Speed); a stunned one in the Entrance Hall with movement left leaves the house. Pick a color not to check provocations for until the next monsters\' turn. Move face-up Mannequins toward the nearest hero (luring face-up Mannequins of any color along the way). After moving, face-up Mannequins in a room attack each hero there.',
+      },
+      {
+        heading: 'Special Attack Rules',
+        body: 'Face-up Mannequins make a collective Might attack vs each hero in their room (dice equal to the face-up Mannequins, max 8). They\'re plastic and can\'t be damaged by physical attacks. If a hero makes a mental attack vs a Mannequin, roll dice equal to the face-up Mannequins; if you lose, turn all Mannequins in that room face-down.',
+      },
+      {
+        heading: 'Provocations',
+        body: 'If a hero does not... Discover a room → roll for Red tokens. Move to a new floor → Orange. Use an item or omen → Yellow. Attack → Green. Use all of their movement → Blue. Leave a room with a monster → Purple and Magenta.',
+      },
+    ],
+    monsters: [{ name: 'Mannequins', stats: 'Speed 3 · Might 1 · Sanity 1 · Knowledge 1' }],
+  },
+
+  {
+    id: 99,
+    title: 'The Manor of Your Demise',
+    intro:
+      'A box opens and smolders. You lean in and are sucked head-first into a tiny creepy house. This haunt has no traitor — just heroes. You\'re all trying to find the Box. The rest of the rules are in Secrets of Survival.',
+    sections: [
+      {
+        heading: 'Where to Find the Rules',
+        body: 'This scenario has no traitor; all of the rules are in the Secrets of Survival booklet.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 100,
+    title: "Let's Play a Game",
+    intro:
+      'A beat-up cassette croaks, "I think we would all enjoy a little game. This house is filled with challenges of my design, set to burn with you inside it. Each of you must now make a choice: do you trust your friends? Do you need them?"',
+    sections: [
+      {
+        heading: 'About This Haunt',
+        body: 'This haunt has no traitor — just heroes. Setup, voting, and victory rules are in the Secrets of Survival booklet; the 24 Challenges below are read from here as explorers reveal them. If an instruction says to flip the token or leave it face-up, the Challenge isn\'t vanquished; otherwise it is vanquished (token onto your card).',
+      },
+      {
+        heading: 'Challenges (1–12)',
+        body: '1 Javelin: Speed 4+ or take 1 physical and flip; on success, take the Spear if not in play. 2 Voice: reset a physical trait to lowest above skull, else flip and (if on a team) teammates lose 1 Sanity. 3 Reflection: Sanity 4+ or lose 2 Sanity and flip (teammates take 1 physical); on success, take the Idol. 4 Mechanical arm: Might 6+ → gain 1 Might and move to an adjacent room; fail → trapped until a Might 6+. 5 Axe: Speed or Might 3+ or take 2 physical and flip; on success, take the Axe. 6 Gun: take the Revolver and attack an explorer in range (may target yourself). 7 Hurt: loner takes 3 damage split as chosen; team Knowledge 4+ or each teammate takes 2 mental and flip — on success deal 5 physical or 5 mental split among teammates. 8 Dew: Sanity or Knowledge 5+ → gain 2 in that trait; fail → lose 1 in the other mental trait and flip. 9 Empty box: set your items aside (can\'t be picked up); loner loses 1 Sanity, team loses 2 Sanity split. 10 Numbers: Knowledge 5+; fail → 1 mental and flip; on success, take the Puzzle Box. 11 Tested: everyone rolls 8 dice — highest takes the token, lowest reduces a physical trait, any tie flips it. 12 Give and take: Knowledge 5+; fail → 2 physical and flip; loner success reduces an explorer\'s physical trait, team success revives a dead teammate by reducing your own.',
+      },
+      {
+        heading: 'Challenges (13–24)',
+        body: '13 Nothing here: return the token; it doesn\'t count. 14 Floor drops: move each explorer here to the Basement Landing (or Roof Landing) and end your turn; a later visitor may complete it. 15 Smoke: lower the Turn/Damage track; a team without its victory flips it. 16 Alarm: choose an explorer to attack you, then attack them; or mix the token into the new-room placement pile to gain 1 Sanity. 17 Full box: subtract 2 from Knowledge rolls here while face-up; Knowledge 4+ — on success with Challenge 9 face-up, take both and any items by that room. 18 Blood for blood: Knowledge 6+; fail → flip; on success take the Sacrificial Dagger (its holder must attack another explorer). 19 Awaken: put the token and your figure in the Entrance Hall (team: a teammate too); in the Entrance Hall at the start of your turn, reset Knowledge to lowest to vanquish. 20 Crumple: leave face-up and end your turn; a later starter can vanquish it. 21 Crime pays: steal any number of an explorer\'s items (min one), taking 1 mental per item. 22 Unfortunate events: draw three events and follow them (team may give them to teammates); if anyone loses a trait point, flip. 23 Allegiances: a loner may join the team (else flip); a team member may become a loner (else flip). 24 Profit: Speed attacks vs any number of explorers (no damage); each winner takes a Challenge from the loser; lose any or don\'t attack → flip.',
+      },
+    ],
+    monsters: [],
+  },
+
+  {
+    id: 101,
+    title: 'Seasons of the Witch',
+    intro:
+      '"What comes after December?" your friend asks, flipping past the last page and polymorphing into a grizzled witch. "NO. THERE ARE NO MORE MONTHS." The witch Magdalena Gunchester will hold you in this house for one full year. (The finale; read each Month aloud in order at the start of the haunt revealer\'s turns.)',
+    sections: [
+      {
+        heading: 'Right Now',
+        body: 'Set the Turn/Damage track to 0 in front of the haunt revealer (it tracks Months). If any traits are below starting, raise them. Note each hero\'s birthday on the Calendar. Place all room tiles in the house. Put the large circular Witch token (Magdalena) in the Widow\'s Walk. Put a Plant token (Food) in the Dining Room, Gardens, Kitchen, Larder, Tree House, and Wine Cellar; the Fountain (Water) in the Underground Lake; the Smoke token (Coal) in the Furnace Room. Set aside the Cat token, the colored monster/Obstacle/Trait Roll tokens, and each hero\'s explorer tokens. Read January and take the first turn; don\'t read ahead.',
+      },
+      {
+        heading: 'What You Know About the Bad Guys',
+        body: 'Magdalena, the mad witch heir to the Gunchester fortune, has enchanted this house to trap you for a year and sworn that humanity\'s violent ways will be its end.',
+      },
+      {
+        heading: 'You Win When',
+        body: 'At least one of you survives twelve Months in the house and defeats Magdalena.',
+      },
+      {
+        heading: "You Must Do This on the Haunt Revealer's Turn",
+        body: 'At the start of the haunt revealer\'s turn, advance the Turn/Damage track and read only that Month\'s section. Past 12, read the final section. Magdalena doesn\'t move from the Widow\'s Walk, but attacks any hero who exits it.',
+      },
+      {
+        heading: 'The Twelve Months',
+        body: 'Jan: a storm brews — you may board up windows/outside rooms (Boards token in your room). [Vivian Lopez: +3 movement.] Feb: blizzard — at the start of your turn, take 1 physical per window/outside room within 4 spaces that lacks Boards. [Missy Dubourde: each hero +2 Might.] Mar: enlarged cats — Lioness in the Upper Landing, Cubs in each other landing, each attacks the nearest hero, then remove them. [Jenny LeClerc: +2 dice to all defense this turn.] Apr: flooding snakes — for each room connected to the Underground Lake, roll 3 dice and place that many green Snakes; Snakes move 4 toward the nearest hero; a hero in a Snake room rolls Speed 5+ or takes 1 physical and a token; leave the Snakes. [Father Rhinehardt: set aside all explorer tokens at end of turn.] May: serpents press on — Snakes move and attack as in April; each hero with a token takes 1 physical, then remove the Snakes. [Brandon Jaspers: each hero +2 Knowledge.] Jun: rats — a hero with a token takes 1 physical then sets aside tokens; at the Month\'s end, a hero in a Food room rolls Speed 5+ or sets aside that Food. [Darrin "Flash" Williams: each hero +2 Speed.] Jul: heat — spend 3 movement in the Gardens, Kitchen, or Tree House and roll Knowledge 5+ to plant Food; at the end of each turn, roll Might — if it doesn\'t exceed your spaces moved, take the difference as physical. [Professor Longfellow: plant Food in the Wine Cellar for free.] Aug: smoke fills the Coal Chute, Furnace Room, and event rooms — heroes in or connected to such a room take 1 physical; at the Month\'s end, a hero in the Furnace Room rolls Knowledge 5+ to fix it or the Coal is set aside. [Heather Granville: if the Coal is set aside, put it back.] Sep: locusts — at the Month\'s end, each hero in a Food room rolls Sanity 5+ or sets aside that Food. [Peter Akimoto: each hero +2 Sanity.] Oct: quake — at the Month\'s end, for each non-landing basement room roll 2 dice; a blank removes the room and its tokens; a hero there rolls Speed 4+ to reach the Basement Landing or dies. [Ox Bellows: choose one room not to roll for.] Nov: provisions low — at the Month\'s end, remove a Food per hero plus the Water and Coal; for each you can\'t remove, each hero takes 1 mental. [Zoe Ingstrom: remove 2 fewer Food.] Dec: vampire bats — put a Bat in each room; in a window/outside room you occupy without an Obstacle token, remove the Bats there and in connected rooms (spend 3 movement to clear an Obstacle); at the Month\'s end, Bats deal 1 die per Bat on a floor to each hero on that floor, then remove them. [Madame Zostra: remove six extra Bats.]',
+      },
+      {
+        heading: 'After Month 12: No More Months',
+        body: 'Hypnotized, all heroes move to the Widow\'s Walk. Starting with the haunt revealer, each hero takes a turn attacking Magdalena with any trait; defeating her places that trait\'s Trait Roll token by the Witch (you can\'t reuse a trait already placed until all four types are down). Keep attacking until you\'re all dead or you place Trait Roll tokens equal to the number of heroes who started the haunt — then you win.',
+      },
+      {
+        heading: 'Calendar (Birthdays)',
+        body: '1 January Vivian Lopez · 2 February Missy Dubourde · 3 March Jenny LeClerc · 4 April Father Rhinehardt · 5 May Brandon Jaspers · 6 June Darrin "Flash" Williams · 7 July Professor Longfellow · 8 August Heather Granville · 9 September Peter Akimoto · 10 October Ox Bellows · 11 November Zoe Ingstrom · 12 December Madame Zostra.',
+      },
+    ],
+    monsters: [
+      { name: 'Magdalena Gunchester', stats: 'Speed 8 · Might 8 · Sanity 8 · Knowledge 8' },
+      { name: 'Lioness', stats: 'Speed 6 · Might 5' },
+      { name: 'Cubs', stats: 'Speed 4 · Might 3' },
+    ],
+  },
+
 ];
 
-/** Look up a haunt story by its number (1–50). */
+/** Look up an English haunt story by its number (1–101; 51+ are the Widow's Walk expansion, 101 = Seasons of the Witch finale). */
 export function findHauntStory(id: number): HauntStory | undefined {
   return TRAITOR_TOME.find(h => h.id === id);
+}
+
+/**
+ * Look up a haunt story in the given language, falling back to English when no
+ * Vietnamese translation exists yet (see `traitorTome.vi.ts`).
+ */
+export function getHauntStory(id: number, lang: Lang = 'en'): HauntStory | undefined {
+  if (lang === 'vi' && TRAITOR_TOME_VI[id]) return TRAITOR_TOME_VI[id];
+  return findHauntStory(id);
 }

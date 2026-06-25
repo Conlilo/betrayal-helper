@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +28,8 @@ import {
   placeRoom,
   moveRoom,
   removeRoom,
+  addRoomToken,
+  removeRoomToken,
   resetRooms,
   rotateRoom,
   roomAt,
@@ -59,7 +62,8 @@ const SYMBOL_ICON: Record<string, string> = {
 };
 
 export function BoardScreen(_props: RootScreenProps<'Board'>) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language === 'vi' ? 'vi' : 'en';
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const rooms = useAppSelector(s => s.rooms.rooms);
@@ -77,6 +81,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
   );
   // Character selected from the tray, waiting to be placed onto a room.
   const [activeCharId, setActiveCharId] = useState<ID | null>(null);
+  const [tokenInput, setTokenInput] = useState('');
   // When an explorer places a NEW room, this remembers them so we can move
   // their token in and trigger the card resolution once the room exists.
   const [pendingExplore, setPendingExplore] = useState<ID | null>(null);
@@ -405,9 +410,51 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
               <Text style={styles.selectedLabel}>
                 {t('board.selected', { name: selected.name })}
               </Text>
-              {effectOfDef(selected.defId) ? (
-                <Text style={styles.effectText}>{effectOfDef(selected.defId)}</Text>
+              {effectOfDef(selected.defId, lang) ? (
+                <Text style={styles.effectText}>{effectOfDef(selected.defId, lang)}</Text>
               ) : null}
+
+              <Text style={styles.tokenLabel}>{t('board.tokens')}</Text>
+              {selected.tokens && selected.tokens.length > 0 ? (
+                <View style={styles.tokenWrap}>
+                  {selected.tokens.map(tk => (
+                    <Pressable
+                      key={tk.id}
+                      onPress={() =>
+                        dispatch(
+                          removeRoomToken({ roomId: selected.id, tokenId: tk.id }),
+                        )
+                      }
+                      style={[
+                        styles.roomToken,
+                        tk.color ? { borderColor: tk.color } : null,
+                      ]}>
+                      <Text style={styles.roomTokenText}>{tk.label} ✕</Text>
+                    </Pressable>
+                  ))}
+                </View>
+              ) : (
+                <Text style={styles.tokenEmpty}>{t('board.noTokens')}</Text>
+              )}
+              <View style={styles.tokenAddRow}>
+                <TextInput
+                  value={tokenInput}
+                  onChangeText={setTokenInput}
+                  placeholder={t('board.tokenPlaceholder')}
+                  placeholderTextColor={colors.textMuted}
+                  style={styles.tokenInput}
+                />
+                <Button
+                  label={t('board.addToken')}
+                  onPress={() => {
+                    const label = tokenInput.trim();
+                    if (!label) return;
+                    dispatch(addRoomToken(selected.id, label));
+                    setTokenInput('');
+                  }}
+                />
+              </View>
+
               <View style={styles.actionRow}>
                 <Button
                   label={t('board.rotate')}
@@ -874,6 +921,49 @@ const styles = StyleSheet.create({
   effectText: {
     color: colors.textMuted,
     fontSize: typography.caption,
+  },
+  tokenLabel: {
+    color: colors.warning,
+    fontSize: typography.caption,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    marginTop: spacing.xs,
+  },
+  tokenWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.xs,
+  },
+  roomToken: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: radius.sm,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  roomTokenText: {
+    color: colors.text,
+    fontSize: typography.caption,
+    fontWeight: '600',
+  },
+  tokenEmpty: {
+    color: colors.textMuted,
+    fontSize: typography.caption,
+  },
+  tokenAddRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    alignItems: 'center',
+  },
+  tokenInput: {
+    flex: 1,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: radius.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    color: colors.text,
+    fontSize: typography.body,
   },
   actionRow: {
     flexDirection: 'row',

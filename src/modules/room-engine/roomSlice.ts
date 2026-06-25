@@ -1,6 +1,6 @@
 import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
 import type { ID } from '@/types/shared';
-import type { Floor, PlacedRoom, RoomState } from './types';
+import type { Floor, PlacedRoom, RoomState, RoomToken } from './types';
 import { BOARD_CENTER, FLOORS } from './types';
 import { nextRotation } from './geometry';
 import { ROOM_DEFS_BY_ID, FLOOR_SEED } from './data/rooms';
@@ -94,6 +94,38 @@ const roomSlice = createSlice({
       state.rooms = state.rooms.filter(r => r.id !== action.payload);
     },
 
+    /** Add a token to a room (by placed-room id). */
+    addRoomToken: {
+      reducer(state, action: PayloadAction<{ roomId: ID; token: RoomToken }>) {
+        const room = state.rooms.find(r => r.id === action.payload.roomId);
+        if (!room) return;
+        if (!room.tokens) room.tokens = [];
+        room.tokens.push(action.payload.token);
+      },
+      prepare(
+        roomId: ID,
+        label: string,
+        opts?: { color?: string; note?: string },
+      ) {
+        return {
+          payload: {
+            roomId,
+            token: { id: nanoid(), label, ...opts } as RoomToken,
+          },
+        };
+      },
+    },
+
+    removeRoomToken(
+      state,
+      action: PayloadAction<{ roomId: ID; tokenId: ID }>,
+    ) {
+      const room = state.rooms.find(r => r.id === action.payload.roomId);
+      if (room?.tokens) {
+        room.tokens = room.tokens.filter(tk => tk.id !== action.payload.tokenId);
+      }
+    },
+
     loadRooms(_state, action: PayloadAction<RoomState>) {
       return action.payload;
     },
@@ -111,6 +143,8 @@ export const {
   moveRoom,
   rotateRoom,
   removeRoom,
+  addRoomToken,
+  removeRoomToken,
   loadRooms,
   resetRooms,
 } = roomSlice.actions;

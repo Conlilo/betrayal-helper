@@ -9,6 +9,8 @@ export {
   moveRoom,
   rotateRoom,
   removeRoom,
+  addRoomToken,
+  removeRoomToken,
   loadRooms,
   resetRooms,
 } from './roomSlice';
