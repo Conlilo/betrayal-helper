@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, StatTrackSlider, colors, radius, spacing, typography } from '@/modules/ui';
@@ -91,6 +91,10 @@ export function ResolutionSheet({
   const [changed, setChanged] = useState(false);
   // Stat values captured when the card is drawn, for the before → after summary.
   const [baseline, setBaseline] = useState<Record<StatKey, number> | null>(null);
+  // Last index this component dispatched per stat, so StatTrackSlider deltas
+  // are computed against our own last-sent value rather than a possibly-stale
+  // Redux render snapshot when several drags land in the same React batch.
+  const lastIndexRef = useRef<Partial<Record<StatKey, number>>>({});
 
   // The ordered stages: the card's own steps (or a generic roll), then the
   // impact + summary, plus a Haunt roll for every omen.
@@ -140,6 +144,7 @@ export function ResolutionSheet({
     setImpact(null);
     setChanged(false);
     setBaseline(null);
+    lastIndexRef.current = {};
     onClose();
   };
 
@@ -154,6 +159,7 @@ export function ResolutionSheet({
       });
       setBaseline(snap);
     }
+    lastIndexRef.current = {};
     setStageIndex(0);
     setCard(def);
   };
@@ -335,6 +341,7 @@ export function ResolutionSheet({
                         onPress={() => {
                           setImpact(opt.key);
                           setChanged(false);
+                          lastIndexRef.current = {};
                         }}
                       />
                     ))}
@@ -347,13 +354,16 @@ export function ResolutionSheet({
                           stat={stat}
                           track={explorer.stats[stat]}
                           onChangeIndex={i => {
+                            const from =
+                              lastIndexRef.current[stat] ?? explorer.stats[stat].index;
                             dispatch(
                               adjustStat({
                                 characterId: explorer.id,
                                 stat,
-                                delta: i - explorer.stats[stat].index,
+                                delta: i - from,
                               }),
                             );
+                            lastIndexRef.current[stat] = i;
                             setChanged(true);
                           }}
                         />

@@ -34,13 +34,13 @@ export function StatTrackSlider({ stat, track, onChangeIndex }: StatTrackSliderP
 
   const indexFromX = (x: number) => {
     if (trackWidth <= 0) return index;
-    const ratio = x / trackWidth;
-    return Math.round(ratio * (count - 1));
+    return Math.floor((x / trackWidth) * count);
   };
 
   const pan = Gesture.Pan()
     .runOnJS(true)
-    .onBegin(e => emit(indexFromX(e.x)))
+    .activeOffsetX([-8, 8])
+    .failOffsetY([-8, 8])
     .onUpdate(e => emit(indexFromX(e.x)));
 
   return (
