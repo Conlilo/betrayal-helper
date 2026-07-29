@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, StatBadge, colors, radius, spacing, typography } from '@/modules/ui';
+import { Button, Card, StatTrackSlider, colors, radius, spacing, typography } from '@/modules/ui';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import {
   adjustStat,
@@ -342,16 +342,18 @@ export function ResolutionSheet({
                   {impactStats.length > 0 ? (
                     <View style={styles.statRow}>
                       {impactStats.map(stat => (
-                        <StatBadge
+                        <StatTrackSlider
                           key={stat}
                           stat={stat}
-                          value={currentStat(explorer.stats[stat])}
-                          onDecrement={() => {
-                            dispatch(adjustStat({ characterId: explorer.id, stat, delta: -1 }));
-                            setChanged(true);
-                          }}
-                          onIncrement={() => {
-                            dispatch(adjustStat({ characterId: explorer.id, stat, delta: 1 }));
+                          track={explorer.stats[stat]}
+                          onChangeIndex={i => {
+                            dispatch(
+                              adjustStat({
+                                characterId: explorer.id,
+                                stat,
+                                delta: i - explorer.stats[stat].index,
+                              }),
+                            );
                             setChanged(true);
                           }}
                         />
@@ -596,10 +598,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   statRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
     gap: spacing.sm,
-    justifyContent: 'space-between',
   },
   impactRow: {
     flexDirection: 'row',
