@@ -10,6 +10,7 @@ import { evaluateHauntRoll } from '@/modules/haunt-engine';
 import {
   effectiveDoors,
   connectedDirections,
+  isPlaceable,
   type PlacedRoom,
 } from '@/modules/room-engine';
 import {
@@ -74,6 +75,37 @@ describe('room-engine geometry', () => {
     // B's door faces away (E, not W) → no connection.
     const doorsOf2 = (r: PlacedRoom) => (r.id === 'a' ? ['E'] : ['E']) as any;
     expect(connectedDirections(a, ['E'], [a, b], doorsOf2)).toEqual([]);
+  });
+
+  it('only marks a cell placeable when a neighbor has a door facing it', () => {
+    const withDoorSouth: PlacedRoom = {
+      id: 'a', defId: 'a', name: 'A', floor: 'ground', x: 0, y: 0, rotation: 0,
+    };
+    const doorsOf = (r: PlacedRoom) => (r.id === 'a' ? ['S'] : []) as any;
+
+    // South of A: A has a door facing south → placeable.
+    expect(isPlaceable([withDoorSouth], 'ground', 0, 1, doorsOf)).toBe(true);
+    // North of A: A has no door facing north → not placeable.
+    expect(isPlaceable([withDoorSouth], 'ground', 0, -1, doorsOf)).toBe(false);
+    // East of A: A has no door facing east → not placeable.
+    expect(isPlaceable([withDoorSouth], 'ground', 1, 0, doorsOf)).toBe(false);
+    // A cell with no adjacent room at all is never placeable.
+    expect(isPlaceable([withDoorSouth], 'ground', 5, 5, doorsOf)).toBe(false);
+    // An already-occupied cell is never placeable, door or not.
+    expect(isPlaceable([withDoorSouth], 'ground', 0, 0, doorsOf)).toBe(false);
+
+    // A cell adjacent to two rooms is placeable if EITHER has a matching
+    // door — "some", not "every".
+    const noDoorNeighbor: PlacedRoom = {
+      id: 'b', defId: 'b', name: 'B', floor: 'ground', x: 1, y: 1, rotation: 0,
+    };
+    const doorsOfEither = (r: PlacedRoom) =>
+      (r.id === 'a' ? ['S'] : []) as any;
+    // (0,1) is south of A (has a door there) and west of B (no door) —
+    // still placeable because A's door alone is enough.
+    expect(
+      isPlaceable([withDoorSouth, noDoorNeighbor], 'ground', 0, 1, doorsOfEither),
+    ).toBe(true);
   });
 });
 

@@ -151,7 +151,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
 
   // ----- cell tap handling -----
   const canPlace = (x: number, y: number) =>
-    isPlaceable(rooms, floor, x, y) ||
+    isPlaceable(rooms, floor, x, y, r => doorsOfDef(r.defId)) ||
     (roomsOnFloor.length === 0 && x === BOARD_CENTER && y === BOARD_CENTER);
 
   const onCellPress = (x: number, y: number) => {

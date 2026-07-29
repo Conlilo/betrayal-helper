@@ -71,16 +71,23 @@ export function connectedDirections(
   });
 }
 
-/** True if the cell is empty and orthogonally adjacent to ≥1 placed room. */
+/**
+ * True if the cell is empty and at least one orthogonally adjacent room has
+ * a door (after rotation) facing this cell.
+ */
 export function isPlaceable(
   rooms: PlacedRoom[],
   floor: string,
   x: number,
   y: number,
+  doorsOf: (r: PlacedRoom) => Direction[],
 ): boolean {
   if (roomAt(rooms, floor, x, y)) return false;
   return (Object.keys(OFFSET) as Direction[]).some(dir => {
     const { dx, dy } = OFFSET[dir];
-    return Boolean(roomAt(rooms, floor, x + dx, y + dy));
+    const neighbor = roomAt(rooms, floor, x + dx, y + dy);
+    if (!neighbor) return false;
+    const theirs = effectiveDoors(doorsOf(neighbor), neighbor.rotation);
+    return theirs.includes(OPPOSITE[dir]);
   });
 }
