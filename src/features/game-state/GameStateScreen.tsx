@@ -14,12 +14,16 @@ export function GameStateScreen({ navigation }: RootScreenProps<'GameState'>) {
   const dispatch = useAppDispatch();
   const game = useAppSelector(s => s.game);
 
+  const closeGame = () => {
+    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+  };
+
   const clearGame = () => {
     dispatch(resetCards());
     dispatch(resetHaunt());
     dispatch(resetRooms());
     dispatch(resetGame());
-    navigation.navigate('Home');
+    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
   };
 
   return (
@@ -55,6 +59,7 @@ export function GameStateScreen({ navigation }: RootScreenProps<'GameState'>) {
         )}
       </Card>
 
+      <Button label={t('gameState.closeGame')} variant="secondary" onPress={closeGame} />
       <Button label={t('gameState.clearGame')} variant="danger" onPress={clearGame} />
     </Screen>
   );

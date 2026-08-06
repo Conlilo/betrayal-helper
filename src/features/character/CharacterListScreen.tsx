@@ -55,7 +55,7 @@ export function CharacterListScreen({
         ),
       );
     }
-    navigation.navigate('Board');
+    navigation.reset({ index: 0, routes: [{ name: 'Board' }] });
   };
 
   return (

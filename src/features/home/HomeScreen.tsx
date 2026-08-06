@@ -57,7 +57,7 @@ export function HomeScreen({ navigation }: RootScreenProps<'Home'>) {
         label={t('home.loadGame')}
         variant="secondary"
         disabled={!hasGame}
-        onPress={() => navigation.navigate('Board')}
+        onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Board' }] })}
       />
 
       <Button
