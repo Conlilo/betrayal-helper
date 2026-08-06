@@ -126,6 +126,7 @@ export const vi: TranslationSchema = {
     endTurn: 'Kết thúc lượt →',
     nextUp: 'Tiếp theo: {{name}}',
     flowDone: 'Đã xử lý lượt. Khám phá tiếp hoặc kết thúc lượt.',
+    noCardsLeft: 'Đã hết lá {{type}} để rút.',
   },
   board: {
     title: 'Bàn nhà',

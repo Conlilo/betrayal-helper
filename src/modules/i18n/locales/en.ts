@@ -125,6 +125,7 @@ export const en = {
     endTurn: 'End turn →',
     nextUp: 'Next: {{name}}',
     flowDone: 'Turn resolved. Explore again or end the turn.',
+    noCardsLeft: 'No more {{type}} cards left to draw.',
   },
   board: {
     title: 'House Board',

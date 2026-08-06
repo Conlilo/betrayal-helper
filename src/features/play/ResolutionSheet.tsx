@@ -76,6 +76,7 @@ export function ResolutionSheet({
   );
   const omenCount = useAppSelector(s => s.game.omenCount ?? 0);
   const placedRooms = useAppSelector(s => s.rooms.rooms);
+  const drawnDefIds = useAppSelector(s => s.cards.drawnDefIds);
 
   const [card, setCard] = useState<CardDef | null>(null);
   const [stageIndex, setStageIndex] = useState(0);
@@ -220,6 +221,9 @@ export function ResolutionSheet({
       : [];
   const isLast = stageIndex >= stages.length - 1;
   const nextLabel = isLast ? t('explore.finish') : t('explore.next');
+  const availableDefs = CARD_DEFS_BY_TYPE[symbol].filter(
+    def => !drawnDefIds.includes(def.defId),
+  );
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={close}>
@@ -231,16 +235,22 @@ export function ResolutionSheet({
               <Text style={styles.title}>
                 {t('explore.pickCard', { type: capitalize(symbol) })}
               </Text>
-              <ScrollView style={styles.list}>
-                {CARD_DEFS_BY_TYPE[symbol].map(def => (
-                  <Pressable
-                    key={def.defId}
-                    style={styles.row}
-                    onPress={() => onPickCard(def)}>
-                    <Text style={styles.rowName}>{def.name}</Text>
-                  </Pressable>
-                ))}
-              </ScrollView>
+              {availableDefs.length === 0 ? (
+                <Text style={styles.desc}>
+                  {t('explore.noCardsLeft', { type: capitalize(symbol) })}
+                </Text>
+              ) : (
+                <ScrollView style={styles.list}>
+                  {availableDefs.map(def => (
+                    <Pressable
+                      key={def.defId}
+                      style={styles.row}
+                      onPress={() => onPickCard(def)}>
+                      <Text style={styles.rowName}>{def.name}</Text>
+                    </Pressable>
+                  ))}
+                </ScrollView>
+              )}
               <Button label={t('board.cancel')} variant="secondary" onPress={close} />
             </>
           ) : (
