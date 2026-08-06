@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { colors } from '@/modules/ui';
+import { colors, ToolboxMenu } from '@/modules/ui';
 import type { RootStackParamList } from './types';
 
 import { HomeScreen } from '@/features/home/HomeScreen';
@@ -30,12 +30,36 @@ export function RootNavigator() {
       <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'HauntKeeper' }} />
       <Stack.Screen name="GameSetup" component={GameSetupScreen} options={{ title: t('gameSetup.title') }} />
       <Stack.Screen name="Characters" component={CharacterListScreen} options={{ title: t('characters.title') }} />
-      <Stack.Screen name="Board" component={BoardScreen} options={{ title: t('board.title') }} />
-      <Stack.Screen name="Events" component={EventScreen} options={{ title: t('events.title') }} />
-      <Stack.Screen name="Omens" component={OmenScreen} options={{ title: t('omens.title') }} />
-      <Stack.Screen name="Items" component={ItemScreen} options={{ title: t('items.title') }} />
-      <Stack.Screen name="Combat" component={CombatScreen} options={{ title: t('combat.title') }} />
-      <Stack.Screen name="HauntSetup" component={HauntSetupScreen} options={{ title: t('hauntSetup.title') }} />
+      <Stack.Screen
+        name="Board"
+        component={BoardScreen}
+        options={{ title: t('board.title'), headerRight: () => <ToolboxMenu /> }}
+      />
+      <Stack.Screen
+        name="Events"
+        component={EventScreen}
+        options={{ title: t('events.title'), headerRight: () => <ToolboxMenu /> }}
+      />
+      <Stack.Screen
+        name="Omens"
+        component={OmenScreen}
+        options={{ title: t('omens.title'), headerRight: () => <ToolboxMenu /> }}
+      />
+      <Stack.Screen
+        name="Items"
+        component={ItemScreen}
+        options={{ title: t('items.title'), headerRight: () => <ToolboxMenu /> }}
+      />
+      <Stack.Screen
+        name="Combat"
+        component={CombatScreen}
+        options={{ title: t('combat.title'), headerRight: () => <ToolboxMenu /> }}
+      />
+      <Stack.Screen
+        name="HauntSetup"
+        component={HauntSetupScreen}
+        options={{ title: t('hauntSetup.title'), headerRight: () => <ToolboxMenu /> }}
+      />
       <Stack.Screen name="GameState" component={GameStateScreen} options={{ title: t('gameState.title') }} />
     </Stack.Navigator>
   );
