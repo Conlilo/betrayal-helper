@@ -589,6 +589,7 @@ git commit -m "feat(navigation): reset stack when entering/leaving gameplay, add
 
 Per the Global Constraints, do not run `react-native run-ios`/`run-android` for this batch. Instead, produce a short written verification checklist (in your final report) covering:
 
+- **First and most important:** the toolbox modal actually opens when the header icon is tapped, on a real device/simulator. `ToolboxMenu` renders a `<Modal>` from inside `headerRight`, i.e. from a view nested in the native navigation bar (`react-native-screens`) rather than from a screen body like every other `Modal` in this codebase (`ResolutionSheet`, etc.) — this is the one architectural assumption nothing has validated yet. If it doesn't open correctly, the fix is structural (keep only the trigger `Pressable` in the header; move the `<Modal>` itself into each screen's body or a root-level portal), not a tweak — flag this loudly rather than working around it quietly.
 - Toolbox icon visible on Board/Events/Omens/Items/Combat/HauntSetup, absent on Home/GameSetup/Characters/GameState.
 - Toolbox modal: menu shows 2 rows; "Lưu / Lịch sử" navigates to `GameState`; "Đổ xúc xắc" switches to the dice view.
 - Dice view: stepper clamps to [1, 8]; rolling shows exactly `count` dice, each a valid `0|1|2`, and a matching total; "Đổ lại" re-rolls; "← Quay lại" returns to the menu.
