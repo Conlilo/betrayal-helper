@@ -961,7 +961,7 @@ Toolbox → "🃏 Rút bài" → pick a type (Event/Omen/Item). Confirm the tool
 
 - [ ] **Step 6: Batch 2 — player info, cancel path**
 
-Toolbox → "🧑 Thông tin nhà thám hiểm" → pick an explorer → drag one or two `StatTrackSlider` rows to different values → tap "✕ Hủy". Back out of the toolbox entirely and confirm that explorer's stats are **unchanged** from before you opened the view.
+Toolbox → "🧑 Thông tin nhà thám hiểm" → pick an explorer → **actually drag** (not just tap the ± steppers — this is the first time a `StatTrackSlider`'s pan gesture runs inside a `Modal` rendered from `headerRight`, an assumption nothing has validated yet) one or two `StatTrackSlider` rows to different values → tap "✕ Hủy". Back out of the toolbox entirely and confirm that explorer's stats are **unchanged** from before you opened the view. Also: after tapping "✓ Xác nhận" once, use "✕" to close the toolbox and reopen it — confirm the draft doesn't reappear (i.e. re-entering shows fresh, already-applied values, not stale pre-confirm ones).
 
 - [ ] **Step 7: Batch 2 — player info, confirm path**
 
