@@ -19,6 +19,7 @@ export const vi: TranslationSchema = {
     haunt: 'Haunt: {{name}}',
     play: '▶ Chơi game',
     loadGame: '💾 Tải game',
+    manageGame: '🗂️ Lưu / Lịch sử',
   },
   gameSetup: {
     title: 'Trận mới',

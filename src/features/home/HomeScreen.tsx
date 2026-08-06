@@ -59,6 +59,13 @@ export function HomeScreen({ navigation }: RootScreenProps<'Home'>) {
         disabled={!hasGame}
         onPress={() => navigation.navigate('Board')}
       />
+
+      <Button
+        label={t('home.manageGame')}
+        variant="secondary"
+        disabled={!hasGame}
+        onPress={() => navigation.navigate('GameState')}
+      />
     </Screen>
   );
 }

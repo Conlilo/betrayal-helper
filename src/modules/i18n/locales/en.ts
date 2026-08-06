@@ -18,6 +18,7 @@ export const en = {
     haunt: 'Haunt: {{name}}',
     play: '▶ Play Game',
     loadGame: '💾 Load Game',
+    manageGame: '🗂️ Save / History',
   },
   gameSetup: {
     title: 'New Game',
