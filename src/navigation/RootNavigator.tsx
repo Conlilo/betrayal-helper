@@ -17,6 +17,8 @@ import { GameStateScreen } from '@/features/game-state/GameStateScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const renderToolbox = () => <ToolboxMenu />;
+
 export function RootNavigator() {
   const { t } = useTranslation();
   return (
@@ -33,32 +35,32 @@ export function RootNavigator() {
       <Stack.Screen
         name="Board"
         component={BoardScreen}
-        options={{ title: t('board.title'), headerRight: () => <ToolboxMenu /> }}
+        options={{ title: t('board.title'), headerRight: renderToolbox }}
       />
       <Stack.Screen
         name="Events"
         component={EventScreen}
-        options={{ title: t('events.title'), headerRight: () => <ToolboxMenu /> }}
+        options={{ title: t('events.title'), headerRight: renderToolbox }}
       />
       <Stack.Screen
         name="Omens"
         component={OmenScreen}
-        options={{ title: t('omens.title'), headerRight: () => <ToolboxMenu /> }}
+        options={{ title: t('omens.title'), headerRight: renderToolbox }}
       />
       <Stack.Screen
         name="Items"
         component={ItemScreen}
-        options={{ title: t('items.title'), headerRight: () => <ToolboxMenu /> }}
+        options={{ title: t('items.title'), headerRight: renderToolbox }}
       />
       <Stack.Screen
         name="Combat"
         component={CombatScreen}
-        options={{ title: t('combat.title'), headerRight: () => <ToolboxMenu /> }}
+        options={{ title: t('combat.title'), headerRight: renderToolbox }}
       />
       <Stack.Screen
         name="HauntSetup"
         component={HauntSetupScreen}
-        options={{ title: t('hauntSetup.title'), headerRight: () => <ToolboxMenu /> }}
+        options={{ title: t('hauntSetup.title'), headerRight: renderToolbox }}
       />
       <Stack.Screen name="GameState" component={GameStateScreen} options={{ title: t('gameState.title') }} />
     </Stack.Navigator>

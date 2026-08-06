@@ -48,7 +48,7 @@ export function HauntSetupScreen({ navigation }: RootScreenProps<'HauntSetup'>) 
       const side = c.id === traitorId ? 'traitor' : 'hero';
       dispatch(setCharacterSide({ characterId: c.id, side }));
     });
-    navigation.navigate('Home');
+    navigation.reset({ index: 0, routes: [{ name: 'Board' }] });
   };
 
   return (
