@@ -6,7 +6,13 @@ import { useAppSelector } from '@/app/hooks';
 import { toolboxStyles } from './styles';
 
 /** Toolbox view: pick which explorer to view/edit. */
-export function ToolboxPlayersView({ onPick }: { onPick: (characterId: ID) => void }) {
+export function ToolboxPlayersView({
+  onPick,
+  onBack,
+}: {
+  onPick: (characterId: ID) => void;
+  onBack: () => void;
+}) {
   const { t } = useTranslation();
   const characters = useAppSelector(s => s.game.characters);
 
@@ -14,6 +20,9 @@ export function ToolboxPlayersView({ onPick }: { onPick: (characterId: ID) => vo
     return (
       <View style={toolboxStyles.menu}>
         <Text style={toolboxStyles.label}>{t('toolbox.noCharacters')}</Text>
+        <Pressable onPress={onBack} style={toolboxStyles.backBtn}>
+          <Text style={toolboxStyles.backText}>{t('toolbox.back')}</Text>
+        </Pressable>
       </View>
     );
   }
@@ -29,6 +38,9 @@ export function ToolboxPlayersView({ onPick }: { onPick: (characterId: ID) => vo
           <Text style={toolboxStyles.menuRowText}>{c.name}</Text>
         </Pressable>
       ))}
+      <Pressable onPress={onBack} style={toolboxStyles.backBtn}>
+        <Text style={toolboxStyles.backText}>{t('toolbox.back')}</Text>
+      </Pressable>
     </View>
   );
 }

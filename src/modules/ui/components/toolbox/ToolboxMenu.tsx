@@ -61,7 +61,9 @@ export function ToolboxMenu() {
               />
             ) : null}
 
-            {view === 'drawType' ? <ToolboxDrawView onDraw={close} /> : null}
+            {view === 'drawType' ? (
+              <ToolboxDrawView onDraw={close} onBack={() => setView('menu')} />
+            ) : null}
 
             {view === 'players' ? (
               <ToolboxPlayersView
@@ -69,6 +71,7 @@ export function ToolboxMenu() {
                   setSelectedPlayerId(id);
                   setView('playerDetail');
                 }}
+                onBack={() => setView('menu')}
               />
             ) : null}
 

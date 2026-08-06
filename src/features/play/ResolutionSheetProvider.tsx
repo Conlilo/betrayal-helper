@@ -1,19 +1,16 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { useState } from 'react';
 import type { ID } from '@/types/shared';
 import type { CardType } from '@/modules/card-engine';
 import { useAppSelector } from '@/app/hooks';
 import { ResolutionSheet } from './ResolutionSheet';
+import { ResolutionContext } from './resolutionContext';
 
 interface DrawRequest {
   explorerId: ID;
   symbol: CardType;
 }
 
-interface ResolutionContextValue {
-  requestDraw: (symbol: CardType) => void;
-}
-
-const ResolutionContext = createContext<ResolutionContextValue | null>(null);
+export { useRequestCardDraw } from './resolutionContext';
 
 /**
  * Mounts the single, app-wide ResolutionSheet and exposes `requestDraw` so
@@ -39,13 +36,4 @@ export function ResolutionSheetProvider({ children }: { children: React.ReactNod
       />
     </ResolutionContext.Provider>
   );
-}
-
-/** Trigger a manual card draw of `symbol` for the current turn's explorer. */
-export function useRequestCardDraw() {
-  const ctx = useContext(ResolutionContext);
-  if (!ctx) {
-    throw new Error('useRequestCardDraw must be used within ResolutionSheetProvider');
-  }
-  return ctx.requestDraw;
 }

@@ -82,7 +82,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
   // their token in and trigger the card resolution once the room exists.
   const [pendingExplore, setPendingExplore] = useState<ID | null>(null);
   const [justPlaced, setJustPlaced] = useState<
-    { charId: ID; x: number; y: number; defId: string } | null
+    { charId: ID; x: number; y: number } | null
   >(null);
 
   const selected = rooms.find(r => r.id === selectedId) ?? null;
@@ -194,7 +194,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
     const { x, y } = placingAt;
     dispatch(placeRoom({ defId, floor, x, y }));
     if (pendingExplore) {
-      setJustPlaced({ charId: pendingExplore, x, y, defId });
+      setJustPlaced({ charId: pendingExplore, x, y });
       setPendingExplore(null);
     }
     setPlacingAt(null);
