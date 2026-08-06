@@ -223,8 +223,11 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
   }, [rooms, justPlaced, floor, dispatch]);
 
   const floorDefs = roomDefsForFloor(floor);
+  const availableDefs = floorDefs.filter(
+    def => !rooms.some(r => r.defId === def.defId),
+  );
   const randomDef = () =>
-    floorDefs[Math.floor(Math.random() * floorDefs.length)];
+    availableDefs[Math.floor(Math.random() * availableDefs.length)];
 
   const selectChar = (id: ID) => {
     setActiveCharId(prev => (prev === id ? null : id));
@@ -501,20 +504,24 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
                 if (def) onPickRoom(def.defId);
               }}
             />
-            <ScrollView style={styles.sheetList}>
-              {floorDefs.map(def => (
-                <Pressable
-                  key={def.defId}
-                  style={styles.defRow}
-                  onPress={() => onPickRoom(def.defId)}>
-                  <Text style={styles.defName}>{def.name}</Text>
-                  <Text style={styles.defDoors}>
-                    {(def.symbols.map(s => SYMBOL_ICON[s]).join(' ') || '·')} ·{' '}
-                    {def.doors.join(' · ') || '—'}
-                  </Text>
-                </Pressable>
-              ))}
-            </ScrollView>
+            {availableDefs.length === 0 ? (
+              <Text style={styles.defDoors}>{t('board.noRoomsLeft')}</Text>
+            ) : (
+              <ScrollView style={styles.sheetList}>
+                {availableDefs.map(def => (
+                  <Pressable
+                    key={def.defId}
+                    style={styles.defRow}
+                    onPress={() => onPickRoom(def.defId)}>
+                    <Text style={styles.defName}>{def.name}</Text>
+                    <Text style={styles.defDoors}>
+                      {(def.symbols.map(s => SYMBOL_ICON[s]).join(' ') || '·')} ·{' '}
+                      {def.doors.join(' · ') || '—'}
+                    </Text>
+                  </Pressable>
+                ))}
+              </ScrollView>
+            )}
             <Button
               label={t('board.cancel')}
               variant="secondary"

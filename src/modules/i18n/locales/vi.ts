@@ -139,6 +139,7 @@ export const vi: TranslationSchema = {
     },
     empty: 'Chạm ô đang sáng để đặt phòng.',
     pickRoom: 'Đặt một phòng',
+    noRoomsLeft: 'Đã hết phòng để đặt.',
     exploreRoom: 'Bạn vừa bốc phòng nào?',
     exploreHint: 'Chạm ô trống để khám phá, hoặc chạm phòng để chuyển {{name}} tới đó.',
     random: '🎲 Ngẫu nhiên',

@@ -138,6 +138,7 @@ export const en = {
     },
     empty: 'Tap a glowing cell to place a room.',
     pickRoom: 'Place a room',
+    noRoomsLeft: 'No more rooms left to place.',
     exploreRoom: 'Which room did you draw?',
     exploreHint: 'Tap an empty cell to explore, or a room to move {{name}} there.',
     random: '🎲 Random',
