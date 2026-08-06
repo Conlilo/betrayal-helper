@@ -203,6 +203,16 @@ export const vi: TranslationSchema = {
     actionHistory: 'Lịch sử hành động',
     noActions: 'Chưa có hành động nào.',
     clearGame: 'Xóa trận đấu',
+    closeGame: 'Đóng trò chơi',
+  },
+  toolbox: {
+    gameState: '🗂️ Lưu / Lịch sử',
+    rollDice: '🎲 Đổ xúc xắc',
+    diceCount: 'Số lượng xúc xắc',
+    roll: 'Đổ xúc xắc',
+    rollAgain: 'Đổ lại',
+    total: 'Tổng: {{total}}',
+    back: '← Quay lại',
   },
   stats: {
     might: 'Might',

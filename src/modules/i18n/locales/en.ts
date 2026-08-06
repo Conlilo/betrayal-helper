@@ -202,6 +202,16 @@ export const en = {
     actionHistory: 'Action history',
     noActions: 'No actions yet.',
     clearGame: 'Clear game',
+    closeGame: 'Close game',
+  },
+  toolbox: {
+    gameState: '🗂️ Save / History',
+    rollDice: '🎲 Roll Dice',
+    diceCount: 'Number of dice',
+    roll: 'Roll',
+    rollAgain: 'Roll again',
+    total: 'Total: {{total}}',
+    back: '← Back',
   },
   stats: {
     might: 'Might',
