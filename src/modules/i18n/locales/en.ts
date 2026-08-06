@@ -214,6 +214,10 @@ export const en = {
     back: '← Back',
     drawCard: '🃏 Draw Card',
     pickCardType: 'Which card type?',
+    players: '🧑 Explorer Info',
+    confirm: '✓ Confirm',
+    cancel: '✕ Cancel',
+    noCharacters: 'No explorers yet.',
   },
   stats: {
     might: 'Might',

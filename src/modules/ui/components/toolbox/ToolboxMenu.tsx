@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import type { ID } from '@/types/shared';
 import { toolboxStyles } from './styles';
 import { ToolboxDiceView } from './ToolboxDiceView';
 import { ToolboxDrawView } from './ToolboxDrawView';
+import { ToolboxPlayersView } from './ToolboxPlayersView';
+import { ToolboxPlayerDetailView } from './ToolboxPlayerDetailView';
 
-type ToolboxView = 'menu' | 'dice' | 'drawType';
+type ToolboxView = 'menu' | 'dice' | 'drawType' | 'players' | 'playerDetail';
 
 /** Header toolbox button + modal, shown on in-game screens only. */
 export function ToolboxMenu() {
@@ -15,6 +18,7 @@ export function ToolboxMenu() {
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<ToolboxView>('menu');
   const [diceCount, setDiceCount] = useState(1);
+  const [selectedPlayerId, setSelectedPlayerId] = useState<ID | null>(null);
 
   const close = () => {
     setOpen(false);
@@ -45,6 +49,7 @@ export function ToolboxMenu() {
                 <MenuRow label={t('toolbox.gameState')} onPress={openGameState} />
                 <MenuRow label={t('toolbox.rollDice')} onPress={() => setView('dice')} />
                 <MenuRow label={t('toolbox.drawCard')} onPress={() => setView('drawType')} />
+                <MenuRow label={t('toolbox.players')} onPress={() => setView('players')} />
               </View>
             ) : null}
 
@@ -57,6 +62,22 @@ export function ToolboxMenu() {
             ) : null}
 
             {view === 'drawType' ? <ToolboxDrawView onDraw={close} /> : null}
+
+            {view === 'players' ? (
+              <ToolboxPlayersView
+                onPick={id => {
+                  setSelectedPlayerId(id);
+                  setView('playerDetail');
+                }}
+              />
+            ) : null}
+
+            {view === 'playerDetail' && selectedPlayerId ? (
+              <ToolboxPlayerDetailView
+                characterId={selectedPlayerId}
+                onDone={() => setView('players')}
+              />
+            ) : null}
           </View>
         </View>
       </Modal>

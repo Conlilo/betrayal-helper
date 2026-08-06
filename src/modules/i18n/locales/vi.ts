@@ -215,6 +215,10 @@ export const vi: TranslationSchema = {
     back: '← Quay lại',
     drawCard: '🃏 Rút bài',
     pickCardType: 'Chọn loại bài muốn rút',
+    players: '🧑 Thông tin nhà thám hiểm',
+    confirm: '✓ Xác nhận',
+    cancel: '✕ Hủy',
+    noCharacters: 'Chưa có nhà thám hiểm nào.',
   },
   stats: {
     might: 'Might',
