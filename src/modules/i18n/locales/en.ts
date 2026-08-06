@@ -212,6 +212,8 @@ export const en = {
     rollAgain: 'Roll again',
     total: 'Total: {{total}}',
     back: '← Back',
+    drawCard: '🃏 Draw Card',
+    pickCardType: 'Which card type?',
   },
   stats: {
     might: 'Might',

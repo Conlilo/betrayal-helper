@@ -213,6 +213,8 @@ export const vi: TranslationSchema = {
     rollAgain: 'Đổ lại',
     total: 'Tổng: {{total}}',
     back: '← Quay lại',
+    drawCard: '🃏 Rút bài',
+    pickCardType: 'Chọn loại bài muốn rút',
   },
   stats: {
     might: 'Might',

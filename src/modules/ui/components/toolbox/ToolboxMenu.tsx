@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { toolboxStyles } from './styles';
 import { ToolboxDiceView } from './ToolboxDiceView';
+import { ToolboxDrawView } from './ToolboxDrawView';
 
-type ToolboxView = 'menu' | 'dice';
+type ToolboxView = 'menu' | 'dice' | 'drawType';
 
 /** Header toolbox button + modal, shown on in-game screens only. */
 export function ToolboxMenu() {
@@ -43,6 +44,7 @@ export function ToolboxMenu() {
               <View style={toolboxStyles.menu}>
                 <MenuRow label={t('toolbox.gameState')} onPress={openGameState} />
                 <MenuRow label={t('toolbox.rollDice')} onPress={() => setView('dice')} />
+                <MenuRow label={t('toolbox.drawCard')} onPress={() => setView('drawType')} />
               </View>
             ) : null}
 
@@ -53,6 +55,8 @@ export function ToolboxMenu() {
                 onBack={() => setView('menu')}
               />
             ) : null}
+
+            {view === 'drawType' ? <ToolboxDrawView onDraw={close} /> : null}
           </View>
         </View>
       </Modal>
