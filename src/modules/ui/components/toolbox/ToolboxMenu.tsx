@@ -13,6 +13,7 @@ export function ToolboxMenu() {
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<ToolboxView>('menu');
+  const [diceCount, setDiceCount] = useState(1);
 
   const close = () => {
     setOpen(false);
@@ -45,7 +46,13 @@ export function ToolboxMenu() {
               </View>
             ) : null}
 
-            {view === 'dice' ? <ToolboxDiceView onBack={() => setView('menu')} /> : null}
+            {view === 'dice' ? (
+              <ToolboxDiceView
+                count={diceCount}
+                onChangeCount={setDiceCount}
+                onBack={() => setView('menu')}
+              />
+            ) : null}
           </View>
         </View>
       </Modal>

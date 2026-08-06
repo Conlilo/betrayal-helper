@@ -6,9 +6,16 @@ import { colors, radius, spacing, typography } from '../../theme';
 import { toolboxStyles } from './styles';
 
 /** Toolbox view: pick a dice count [1,8], roll, show each die's face + total. */
-export function ToolboxDiceView({ onBack }: { onBack: () => void }) {
+export function ToolboxDiceView({
+  count,
+  onChangeCount,
+  onBack,
+}: {
+  count: number;
+  onChangeCount: (count: number) => void;
+  onBack: () => void;
+}) {
   const { t } = useTranslation();
-  const [count, setCount] = useState(1);
   const [result, setResult] = useState<DiceResult | null>(null);
 
   const roll = () => setResult(rollDice(count));
@@ -20,13 +27,13 @@ export function ToolboxDiceView({ onBack }: { onBack: () => void }) {
         <Stepper
           symbol="−"
           disabled={count <= 1}
-          onPress={() => setCount(c => Math.max(1, c - 1))}
+          onPress={() => onChangeCount(Math.max(1, count - 1))}
         />
         <Text style={styles.count}>{count}</Text>
         <Stepper
           symbol="+"
           disabled={count >= 8}
-          onPress={() => setCount(c => Math.min(8, c + 1))}
+          onPress={() => onChangeCount(Math.min(8, count + 1))}
         />
       </View>
 
