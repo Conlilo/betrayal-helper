@@ -22,6 +22,12 @@ import {
   CHARACTER_TEMPLATES,
   currentStat,
 } from '@/modules/game-engine';
+import {
+  cardReducer,
+  drawCard,
+  discardCard,
+  type CardDef,
+} from '@/modules/card-engine';
 
 /** Helper: add the Nth explorer option (flattened across colour groups). */
 const addNth = (state: ReturnType<typeof gameReducer>, n: number) => {
@@ -152,5 +158,24 @@ describe('game-engine slice', () => {
     state = gameReducer(state, nextTurn());
     expect(state.activeCharacterId).toBe(a);
     expect(state.round).toBe(2);
+  });
+});
+
+describe('card-engine slice', () => {
+  it('keeps a defId in drawnDefIds after the card is discarded', () => {
+    const def: CardDef = {
+      defId: 'test-event-1',
+      type: 'event',
+      name: 'Test Event',
+      description: 'A test card.',
+    };
+    let state = cardReducer(undefined, drawCard(def));
+    expect(state.drawnDefIds).toContain('test-event-1');
+    expect(state.drawn).toHaveLength(1);
+
+    const instanceId = state.drawn[0].id;
+    state = cardReducer(state, discardCard(instanceId));
+    expect(state.drawn).toHaveLength(0);
+    expect(state.drawnDefIds).toContain('test-event-1');
   });
 });

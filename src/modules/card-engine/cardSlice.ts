@@ -4,6 +4,7 @@ import type { CardDef, CardInstance, CardState } from './types';
 
 const initialState: CardState = {
   drawn: [],
+  drawnDefIds: [],
 };
 
 const cardSlice = createSlice({
@@ -14,6 +15,9 @@ const cardSlice = createSlice({
     drawCard: {
       reducer(state, action: PayloadAction<CardInstance>) {
         state.drawn.unshift(action.payload);
+        if (!state.drawnDefIds.includes(action.payload.defId)) {
+          state.drawnDefIds.push(action.payload.defId);
+        }
       },
       prepare(def: CardDef, ownerId: ID | null = null) {
         const instance: CardInstance = {

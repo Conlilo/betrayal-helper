@@ -68,4 +68,7 @@ export interface CardInstance {
 export interface CardState {
   /** All cards that have been drawn this game, newest first. */
   drawn: CardInstance[];
+  /** defIds ever drawn this game — persists even after discard, so a
+   *  discarded card never re-enters the draw pool. */
+  drawnDefIds: string[];
 }
