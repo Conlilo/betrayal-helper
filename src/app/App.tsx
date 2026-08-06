@@ -15,6 +15,7 @@ import { useAppSelector } from './hooks';
 import { RootNavigator } from '@/navigation/RootNavigator';
 import { colors } from '@/modules/ui';
 import i18n from '@/modules/i18n';
+import { ResolutionSheetProvider } from '@/features/play/ResolutionSheetProvider';
 
 const navTheme: NavTheme = {
   ...DarkTheme,
@@ -66,9 +67,11 @@ export default function App() {
           <LanguageSync>
             <SafeAreaProvider>
               <StatusBar barStyle="light-content" backgroundColor={colors.surface} />
-              <NavigationContainer theme={navTheme}>
-                <RootNavigator />
-              </NavigationContainer>
+              <ResolutionSheetProvider>
+                <NavigationContainer theme={navTheme}>
+                  <RootNavigator />
+                </NavigationContainer>
+              </ResolutionSheetProvider>
             </SafeAreaProvider>
           </LanguageSync>
         </PersistGate>
