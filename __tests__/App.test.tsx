@@ -178,4 +178,16 @@ describe('card-engine slice', () => {
     expect(state.drawn).toHaveLength(0);
     expect(state.drawnDefIds).toContain('test-event-1');
   });
+
+  it('handles a legacy persisted state with no drawnDefIds field', () => {
+    const legacyState = { drawn: [] } as unknown as ReturnType<typeof cardReducer>;
+    const def: CardDef = {
+      defId: 'legacy-test-1',
+      type: 'item',
+      name: 'Legacy Test Item',
+      description: 'A test card for legacy state handling.',
+    };
+    // This should not throw even though legacyState.drawnDefIds is undefined.
+    expect(() => cardReducer(legacyState, drawCard(def))).not.toThrow();
+  });
 });

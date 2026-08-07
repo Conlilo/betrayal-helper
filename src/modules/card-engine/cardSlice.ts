@@ -15,6 +15,12 @@ const cardSlice = createSlice({
     drawCard: {
       reducer(state, action: PayloadAction<CardInstance>) {
         state.drawn.unshift(action.payload);
+        // Defensive fallback: guards against a legacy persisted/passed-in
+        // state that predates the drawnDefIds field (see store.ts's
+        // stateReconciler for the redux-persist rehydration side of this).
+        if (!state.drawnDefIds) {
+          state.drawnDefIds = [];
+        }
         if (!state.drawnDefIds.includes(action.payload.defId)) {
           state.drawnDefIds.push(action.payload.defId);
         }

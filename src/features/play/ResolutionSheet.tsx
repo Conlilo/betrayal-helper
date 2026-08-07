@@ -222,7 +222,7 @@ export function ResolutionSheet({
   const isLast = stageIndex >= stages.length - 1;
   const nextLabel = isLast ? t('explore.finish') : t('explore.next');
   const availableDefs = CARD_DEFS_BY_TYPE[symbol].filter(
-    def => !drawnDefIds.includes(def.defId),
+    def => !(drawnDefIds ?? []).includes(def.defId),
   );
 
   return (
