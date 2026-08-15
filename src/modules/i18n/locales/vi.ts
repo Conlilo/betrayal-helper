@@ -219,6 +219,8 @@ export const vi: TranslationSchema = {
     drawCard: '🃏 Rút bài',
     pickCardType: 'Chọn loại bài muốn rút',
     players: '🧑 Thông tin nhà thám hiểm',
+    items: '🗡️ Vật phẩm đang giữ',
+    noItems: 'Chưa có vật phẩm nào.',
     confirm: '✓ Xác nhận',
     cancel: '✕ Hủy',
     noCharacters: 'Chưa có nhà thám hiểm nào.',

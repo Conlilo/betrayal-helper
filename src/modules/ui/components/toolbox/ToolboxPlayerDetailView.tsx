@@ -27,6 +27,9 @@ export function ToolboxPlayerDetailView({ characterId, onDone }: Props) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const character = useAppSelector(s => s.game.characters.find(c => c.id === characterId));
+  const items = useAppSelector(s =>
+    s.cards.drawn.filter(c => c.type === 'item' && c.ownerId === characterId),
+  );
   const [draft, setDraft] = useState<Record<StatKey, StatTrack> | null>(() =>
     character ? cloneStats(character.stats) : null,
   );
@@ -51,6 +54,16 @@ export function ToolboxPlayerDetailView({ characterId, onDone }: Props) {
   return (
     <View style={toolboxStyles.menu}>
       <Text style={toolboxStyles.label}>{character.name}</Text>
+      <Text style={toolboxStyles.menuRowText}>{t('toolbox.items')}</Text>
+      {items.length === 0 ? (
+        <Text style={toolboxStyles.backText}>{t('toolbox.noItems')}</Text>
+      ) : (
+        items.map(item => (
+          <Text key={item.id} style={toolboxStyles.menuRowText}>
+            • {item.name}
+          </Text>
+        ))
+      )}
       {STAT_KEYS.map(stat => (
         <StatTrackSlider
           key={stat}

@@ -218,6 +218,8 @@ export const en = {
     drawCard: '🃏 Draw Card',
     pickCardType: 'Which card type?',
     players: '🧑 Explorer Info',
+    items: '🗡️ Items held',
+    noItems: 'No items yet.',
     confirm: '✓ Confirm',
     cancel: '✕ Cancel',
     noCharacters: 'No explorers yet.',
