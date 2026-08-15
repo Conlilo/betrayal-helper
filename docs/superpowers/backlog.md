@@ -15,4 +15,7 @@ tả nếu cần). Khi ghi xong, báo để bắt đầu phân tích/thiết k�
       thẻ ở `ResolutionSheet.tsx` — thêm sẵn 1 icon 🎲 để đổ xúc xắc ngay tại
       đó nhằm xử lý thẻ, thay vì phải thoát ra Toolbox riêng.
 
+- [ ] Hiển thị số nước di chuyển còn lại của nhân vật trên bàn (Board), bằng
+      đúng giá trị Speed hiện tại của nhân vật đang chọn/đang lượt.
+
 <!-- Thêm mục mới bên dưới, mỗi mục 1 dòng "- [ ] ..." -->
