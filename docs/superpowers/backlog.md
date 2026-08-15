@@ -21,4 +21,9 @@ tả nếu cần). Khi ghi xong, báo để bắt đầu phân tích/thiết k�
 - [ ] Đổi vị trí thanh hiển thị lượt người chơi hiện tại (▶ Tên · Vòng N) ở
       màn Board từ cuối màn hình lên đầu màn hình.
 
+- [ ] Đổi ô nhập token trong phòng (hiện là TextInput tự do, VD "Statue,
+      Smoke") thành dropdown chọn từ danh sách có sẵn — nguồn danh sách có
+      thể lấy từ thông tin lá bài (item/omen/event liên quan), hoặc người
+      dùng sẽ bổ sung sau qua file Excel riêng.
+
 <!-- Thêm mục mới bên dưới, mỗi mục 1 dòng "- [ ] ..." -->
