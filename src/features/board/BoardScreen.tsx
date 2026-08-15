@@ -282,11 +282,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
           <View style={styles.turnRow}>
             <Text style={styles.turnLabel} numberOfLines={1}>
               {turnChar
-                ? t('board.turn', {
-                    name: turnChar.name,
-                    round,
-                    speed: currentStat(turnChar.stats.speed),
-                  })
+                ? t('board.turn', { name: turnChar.name, round })
                 : t('board.tokensTitle')}
             </Text>
             <Pressable
@@ -303,6 +299,11 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
         <Text style={styles.omenText}>
           {t('board.omenTracker', { count: omenCount })}
         </Text>
+        {turnChar ? (
+          <Text style={styles.omenText}>
+            {t('board.moves', { speed: currentStat(turnChar.stats.speed) })}
+          </Text>
+        ) : null}
       </View>
 
       {/* Floor selector */}
@@ -725,6 +726,7 @@ const styles = StyleSheet.create({
   omenBar: {
     flexDirection: 'row',
     justifyContent: 'center',
+    gap: spacing.md,
     paddingTop: spacing.sm,
     paddingHorizontal: spacing.sm,
   },
