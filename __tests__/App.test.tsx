@@ -20,6 +20,7 @@ import {
   adjustStat,
   nextTurn,
   CHARACTER_TEMPLATES,
+  characterStarts,
   currentStat,
 } from '@/modules/game-engine';
 import {
@@ -158,6 +159,32 @@ describe('game-engine slice', () => {
     state = gameReducer(state, nextTurn());
     expect(state.activeCharacterId).toBe(a);
     expect(state.round).toBe(2);
+  });
+});
+
+describe('game-engine characters', () => {
+  it('every printed stat row contains its declared starting value', () => {
+    // A missing value means track() (lastIndexOf) can't find the circled
+    // starting box and silently falls back to index 0 — the skull/death box.
+    const problems: string[] = [];
+    for (const group of CHARACTER_TEMPLATES) {
+      for (const c of group.characters) {
+        const starts = characterStarts[c.id];
+        if (!starts) continue;
+        const checks: [string, number[], number][] = [
+          ['speed', c.speed, starts.speedStart],
+          ['might', c.might, starts.mightStart],
+          ['sanity', c.sanity, starts.sanityStart],
+          ['knowledge', c.knowledge, starts.knowledgeStart],
+        ];
+        for (const [stat, row, start] of checks) {
+          if (!row.includes(start)) {
+            problems.push(`${c.id} (${c.name}): ${stat}Start=${start} not in row [${row.join(',')}]`);
+          }
+        }
+      }
+    }
+    expect(problems).toEqual([]);
   });
 });
 

@@ -68,7 +68,7 @@ export const CHARACTER_TEMPLATES: CharacterTemplate[] = [
       {
         id: 'madame_zostra',
         name: 'Madame Zostra',
-        speed: [0, 2, 3, 3, 5, 5, 6, 6, 7],
+        speed: [0, 2, 3, 3, 4, 5, 6, 6, 7],
         might: [0, 2, 3, 3, 4, 5, 5, 5, 6],
         sanity: [0, 4, 4, 4, 5, 6, 7, 8, 8],
         knowledge: [0, 1, 3, 4, 4, 4, 5, 6, 6],
@@ -94,7 +94,7 @@ export const CHARACTER_TEMPLATES: CharacterTemplate[] = [
         // TODO: verify
         speed: [0, 3, 4, 4, 4, 5, 6, 7, 8],
         might: [0, 2, 3, 3, 4, 5, 6, 6, 7],
-        sanity: [0, 2, 3, 3, 5, 5, 6, 7, 8],
+        sanity: [0, 2, 3, 3, 4, 5, 6, 7, 8],
         knowledge: [0, 1, 3, 3, 5, 5, 6, 6, 7],
       },
       {
