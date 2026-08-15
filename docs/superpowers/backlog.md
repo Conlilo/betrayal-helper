@@ -18,4 +18,7 @@ tả nếu cần). Khi ghi xong, báo để bắt đầu phân tích/thiết k�
 - [ ] Hiển thị số nước di chuyển còn lại của nhân vật trên bàn (Board), bằng
       đúng giá trị Speed hiện tại của nhân vật đang chọn/đang lượt.
 
+- [ ] Đổi vị trí thanh hiển thị lượt người chơi hiện tại (▶ Tên · Vòng N) ở
+      màn Board từ cuối màn hình lên đầu màn hình.
+
 <!-- Thêm mục mới bên dưới, mỗi mục 1 dòng "- [ ] ..." -->
