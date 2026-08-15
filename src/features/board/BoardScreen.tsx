@@ -16,7 +16,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Button, colors, radius, spacing, typography } from '@/modules/ui';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { nextTurn, setCharacterRoom, type Character } from '@/modules/game-engine';
+import {
+  currentStat,
+  nextTurn,
+  setCharacterRoom,
+  type Character,
+} from '@/modules/game-engine';
 import {
   BOARD_CENTER,
   BOARD_SIZE,
@@ -268,6 +273,28 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
 
   return (
     <View style={styles.container}>
+      {/* Turn tracker — top of screen */}
+      {characters.length > 0 ? (
+        <View style={styles.topBar}>
+          <View style={styles.turnRow}>
+            <Text style={styles.turnLabel} numberOfLines={1}>
+              {turnChar
+                ? t('board.turn', {
+                    name: turnChar.name,
+                    round,
+                    speed: currentStat(turnChar.stats.speed),
+                  })
+                : t('board.tokensTitle')}
+            </Text>
+            <Pressable
+              onPress={() => dispatch(nextTurn())}
+              style={styles.endTurnBtn}>
+              <Text style={styles.endTurnText}>{t('board.endTurn')}</Text>
+            </Pressable>
+          </View>
+        </View>
+      ) : null}
+
       {/* Omen tracker */}
       <View style={styles.omenBar}>
         <Text style={styles.omenText}>
@@ -304,7 +331,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
         </View>
       </GestureDetector>
 
-      {/* Character tray + turn tracker */}
+      {/* Character tray */}
       <View style={styles.tray}>
         {characters.length === 0 ? (
           <>
@@ -312,53 +339,39 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
             <Text style={styles.hint}>{t('board.noCharacters')}</Text>
           </>
         ) : (
-          <>
-            <View style={styles.turnRow}>
-              <Text style={styles.turnLabel} numberOfLines={1}>
-                {turnChar
-                  ? t('board.turn', { name: turnChar.name, round })
-                  : t('board.tokensTitle')}
-              </Text>
-              <Pressable
-                onPress={() => dispatch(nextTurn())}
-                style={styles.endTurnBtn}>
-                <Text style={styles.endTurnText}>{t('board.endTurn')}</Text>
-              </Pressable>
-            </View>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.trayRow}>
-              {characters.map(c => {
-                const room = rooms.find(r => r.id === c.roomId);
-                const active = c.id === activeCharId;
-                const isTurn = c.id === turnCharId;
-                return (
-                  <Pressable
-                    key={c.id}
-                    onPress={() => selectChar(c.id)}
-                    style={[
-                      styles.chip,
-                      active && styles.chipActive,
-                      (active || isTurn) && { borderColor: c.color },
-                    ]}>
-                    <View style={[styles.chipDot, { backgroundColor: c.color }]}>
-                      <Text style={styles.chipInitial}>{initial(c.name)}</Text>
-                    </View>
-                    <View>
-                      <Text style={styles.chipName}>
-                        {isTurn ? '▶ ' : ''}
-                        {c.name}
-                      </Text>
-                      <Text style={styles.chipRoom}>
-                        {room ? room.name : t('board.offBoard')}
-                      </Text>
-                    </View>
-                  </Pressable>
-                );
-              })}
-            </ScrollView>
-          </>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.trayRow}>
+            {characters.map(c => {
+              const room = rooms.find(r => r.id === c.roomId);
+              const active = c.id === activeCharId;
+              const isTurn = c.id === turnCharId;
+              return (
+                <Pressable
+                  key={c.id}
+                  onPress={() => selectChar(c.id)}
+                  style={[
+                    styles.chip,
+                    active && styles.chipActive,
+                    (active || isTurn) && { borderColor: c.color },
+                  ]}>
+                  <View style={[styles.chipDot, { backgroundColor: c.color }]}>
+                    <Text style={styles.chipInitial}>{initial(c.name)}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.chipName}>
+                      {isTurn ? '▶ ' : ''}
+                      {c.name}
+                    </Text>
+                    <Text style={styles.chipRoom}>
+                      {room ? room.name : t('board.offBoard')}
+                    </Text>
+                  </View>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
         )}
       </View>
 
@@ -680,6 +693,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  topBar: {
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.sm,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xs,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
   },
   omenBar: {
     flexDirection: 'row',

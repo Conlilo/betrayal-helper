@@ -156,7 +156,7 @@ export const en = {
     addToken: 'Add',
     tokenPlaceholder: 'Token name (e.g. Statue, Smoke)…',
     tokensTitle: 'Characters',
-    turn: '▶ {{name}} · Round {{round}}',
+    turn: '▶ {{name}} · Round {{round}} · 👟 {{speed}}',
     endTurn: 'End turn →',
     placeHint: 'Tap a room to place {{name}}',
     offBoard: 'Off board',

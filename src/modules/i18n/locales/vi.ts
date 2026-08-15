@@ -157,7 +157,7 @@ export const vi: TranslationSchema = {
     addToken: 'Thêm',
     tokenPlaceholder: 'Tên token (vd Statue, Smoke)…',
     tokensTitle: 'Nhân vật',
-    turn: '▶ {{name}} · Vòng {{round}}',
+    turn: '▶ {{name}} · Vòng {{round}} · 👟 {{speed}}',
     endTurn: 'Kết thúc lượt →',
     placeHint: 'Chạm một phòng để đặt {{name}}',
     offBoard: 'Ngoài bàn',
