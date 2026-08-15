@@ -5,6 +5,7 @@ export const en = {
     remove: 'Remove',
     discard: 'Discard',
     effect: 'Effect',
+    search: 'Search...',
   },
   language: {
     label: 'Language',

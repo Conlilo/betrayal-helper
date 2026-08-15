@@ -6,6 +6,7 @@ export const vi: TranslationSchema = {
     remove: 'Xóa',
     discard: 'Bỏ thẻ',
     effect: 'Tác dụng',
+    search: 'Tìm kiếm...',
   },
   language: {
     label: 'Ngôn ngữ',

@@ -1,5 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, StatTrackSlider, colors, radius, spacing, typography } from '@/modules/ui';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
@@ -80,6 +88,7 @@ export function ResolutionSheet({
 
   const [card, setCard] = useState<CardDef | null>(null);
   const [stageIndex, setStageIndex] = useState(0);
+  const [cardSearch, setCardSearch] = useState('');
 
   // Primary / attacker roll, defender roll, and the Haunt roll.
   const [pCount, setPCount] = useState(2);
@@ -145,6 +154,7 @@ export function ResolutionSheet({
     setImpact(null);
     setChanged(false);
     setBaseline(null);
+    setCardSearch('');
     lastIndexRef.current = {};
     onClose();
   };
@@ -224,6 +234,9 @@ export function ResolutionSheet({
   const availableDefs = CARD_DEFS_BY_TYPE[symbol].filter(
     def => !(drawnDefIds ?? []).includes(def.defId),
   );
+  const searchedDefs = availableDefs.filter(def =>
+    def.name.toLowerCase().includes(cardSearch.trim().toLowerCase()),
+  );
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={close}>
@@ -235,13 +248,20 @@ export function ResolutionSheet({
               <Text style={styles.title}>
                 {t('explore.pickCard', { type: capitalize(symbol) })}
               </Text>
-              {availableDefs.length === 0 ? (
+              <TextInput
+                value={cardSearch}
+                onChangeText={setCardSearch}
+                placeholder={t('common.search')}
+                placeholderTextColor={colors.textMuted}
+                style={styles.searchInput}
+              />
+              {searchedDefs.length === 0 ? (
                 <Text style={styles.desc}>
                   {t('explore.noCardsLeft', { type: capitalize(symbol) })}
                 </Text>
               ) : (
                 <ScrollView style={styles.list}>
-                  {availableDefs.map(def => (
+                  {searchedDefs.map(def => (
                     <Pressable
                       key={def.defId}
                       style={styles.row}
@@ -540,6 +560,14 @@ const styles = StyleSheet.create({
   },
   list: {
     maxHeight: 320,
+  },
+  searchInput: {
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: radius.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    color: colors.text,
+    fontSize: typography.body,
   },
   row: {
     paddingVertical: spacing.sm,

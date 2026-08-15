@@ -84,6 +84,7 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
   const [justPlaced, setJustPlaced] = useState<
     { charId: ID; x: number; y: number } | null
   >(null);
+  const [roomSearch, setRoomSearch] = useState('');
 
   const selected = rooms.find(r => r.id === selectedId) ?? null;
   const activeChar = characters.find(c => c.id === activeCharId) ?? null;
@@ -198,11 +199,13 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
       setPendingExplore(null);
     }
     setPlacingAt(null);
+    setRoomSearch('');
   };
 
   const cancelPicker = () => {
     setPlacingAt(null);
     setPendingExplore(null);
+    setRoomSearch('');
   };
 
   // Once a freshly explored room exists in the store, move the explorer's
@@ -225,6 +228,9 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
   const floorDefs = roomDefsForFloor(floor);
   const availableDefs = floorDefs.filter(
     def => !rooms.some(r => r.defId === def.defId),
+  );
+  const searchedDefs = availableDefs.filter(def =>
+    def.name.toLowerCase().includes(roomSearch.trim().toLowerCase()),
   );
   const randomDef = () =>
     availableDefs[Math.floor(Math.random() * availableDefs.length)];
@@ -504,11 +510,18 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
                 if (def) onPickRoom(def.defId);
               }}
             />
-            {availableDefs.length === 0 ? (
+            <TextInput
+              value={roomSearch}
+              onChangeText={setRoomSearch}
+              placeholder={t('common.search')}
+              placeholderTextColor={colors.textMuted}
+              style={styles.tokenInput}
+            />
+            {searchedDefs.length === 0 ? (
               <Text style={styles.defDoors}>{t('board.noRoomsLeft')}</Text>
             ) : (
               <ScrollView style={styles.sheetList}>
-                {availableDefs.map(def => (
+                {searchedDefs.map(def => (
                   <Pressable
                     key={def.defId}
                     style={styles.defRow}
