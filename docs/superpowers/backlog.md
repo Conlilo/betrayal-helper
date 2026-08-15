@@ -11,4 +11,8 @@ tả nếu cần). Khi ghi xong, báo để bắt đầu phân tích/thiết k�
       không phân biệt hoa/thường trên danh sách đã lọc sẵn (không trùng
       lá/phòng đã dùng), dùng chung key i18n `common.search`.
 
+- [ ] Trong modal thông tin lá bài (Event/Omen/...) — chỗ hiện mô tả/hiệu ứng
+      thẻ ở `ResolutionSheet.tsx` — thêm sẵn 1 icon 🎲 để đổ xúc xắc ngay tại
+      đó nhằm xử lý thẻ, thay vì phải thoát ra Toolbox riêng.
+
 <!-- Thêm mục mới bên dưới, mỗi mục 1 dòng "- [ ] ..." -->
