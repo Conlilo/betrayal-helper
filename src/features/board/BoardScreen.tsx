@@ -68,6 +68,9 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const rooms = useAppSelector(s => s.rooms.rooms);
+  const usedTokenLabels = Array.from(
+    new Set(rooms.flatMap(r => (r.tokens ?? []).map(tk => tk.label))),
+  );
   const floor = useAppSelector(s => s.rooms.currentFloor);
   const characters = useAppSelector(s => s.game.characters);
   const turnCharId = useAppSelector(s => s.game.activeCharacterId);
@@ -445,6 +448,21 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
               ) : (
                 <Text style={styles.tokenEmpty}>{t('board.noTokens')}</Text>
               )}
+              {usedTokenLabels.length > 0 ? (
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.tokenSuggestRow}>
+                  {usedTokenLabels.map(label => (
+                    <Pressable
+                      key={label}
+                      onPress={() => dispatch(addRoomToken(selected.id, label))}
+                      style={styles.tokenSuggestChip}>
+                      <Text style={styles.tokenSuggestText}>{label}</Text>
+                    </Pressable>
+                  ))}
+                </ScrollView>
+              ) : null}
               <View style={styles.tokenAddRow}>
                 <TextInput
                   value={tokenInput}
@@ -976,6 +994,22 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
     color: colors.text,
     fontSize: typography.body,
+  },
+  tokenSuggestRow: {
+    gap: spacing.xs,
+    paddingBottom: spacing.xs,
+  },
+  tokenSuggestChip: {
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    borderRadius: radius.sm,
+    backgroundColor: colors.surfaceAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  tokenSuggestText: {
+    color: colors.text,
+    fontSize: typography.caption,
   },
   actionRow: {
     flexDirection: 'row',
