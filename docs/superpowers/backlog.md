@@ -26,4 +26,9 @@ tả nếu cần). Khi ghi xong, báo để bắt đầu phân tích/thiết k�
       thể lấy từ thông tin lá bài (item/omen/event liên quan), hoặc người
       dùng sẽ bổ sung sau qua file Excel riêng.
 
+- [ ] Hiển thị danh sách lá bài (Item) mà một nhân vật đang giữ — dữ liệu đã
+      có sẵn (`CardInstance.ownerId` trong card-engine), chỉ cần thêm UI
+      hiển thị, có thể ở Toolbox "Thông tin nhà thám hiểm" hoặc màn Board khi
+      chọn nhân vật.
+
 <!-- Thêm mục mới bên dưới, mỗi mục 1 dòng "- [ ] ..." -->
