@@ -259,7 +259,9 @@ export function ResolutionSheet({
               />
               {searchedDefs.length === 0 ? (
                 <Text style={styles.desc}>
-                  {t('explore.noCardsLeft', { type: capitalize(symbol) })}
+                  {cardSearch.trim()
+                    ? t('common.noResults')
+                    : t('explore.noCardsLeft', { type: capitalize(symbol) })}
                 </Text>
               ) : (
                 <ScrollView style={styles.list}>

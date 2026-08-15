@@ -7,6 +7,7 @@ export const vi: TranslationSchema = {
     discard: 'Bỏ thẻ',
     effect: 'Tác dụng',
     search: 'Tìm kiếm...',
+    noResults: 'Không có kết quả.',
   },
   language: {
     label: 'Ngôn ngữ',

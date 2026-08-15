@@ -54,7 +54,7 @@ export function ToolboxPlayerDetailView({ characterId, onDone }: Props) {
   return (
     <View style={toolboxStyles.menu}>
       <Text style={toolboxStyles.label}>{character.name}</Text>
-      <Text style={toolboxStyles.menuRowText}>{t('toolbox.items')}</Text>
+      <Text style={toolboxStyles.label}>{t('toolbox.items')}</Text>
       {items.length === 0 ? (
         <Text style={toolboxStyles.backText}>{t('toolbox.noItems')}</Text>
       ) : (

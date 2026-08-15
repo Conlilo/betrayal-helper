@@ -6,6 +6,7 @@ export const en = {
     discard: 'Discard',
     effect: 'Effect',
     search: 'Search...',
+    noResults: 'No results.',
   },
   language: {
     label: 'Language',

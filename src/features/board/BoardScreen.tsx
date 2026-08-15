@@ -546,10 +546,12 @@ export function BoardScreen(_props: RootScreenProps<'Board'>) {
               onChangeText={setRoomSearch}
               placeholder={t('common.search')}
               placeholderTextColor={colors.textMuted}
-              style={styles.tokenInput}
+              style={styles.searchInput}
             />
             {searchedDefs.length === 0 ? (
-              <Text style={styles.defDoors}>{t('board.noRoomsLeft')}</Text>
+              <Text style={styles.defDoors}>
+                {roomSearch.trim() ? t('common.noResults') : t('board.noRoomsLeft')}
+              </Text>
             ) : (
               <ScrollView style={styles.sheetList}>
                 {searchedDefs.map(def => (
@@ -988,6 +990,14 @@ const styles = StyleSheet.create({
   },
   tokenInput: {
     flex: 1,
+    backgroundColor: colors.surfaceAlt,
+    borderRadius: radius.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    color: colors.text,
+    fontSize: typography.body,
+  },
+  searchInput: {
     backgroundColor: colors.surfaceAlt,
     borderRadius: radius.sm,
     paddingHorizontal: spacing.sm,
