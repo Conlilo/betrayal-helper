@@ -101,6 +101,7 @@ export function ResolutionSheet({
   const [changed, setChanged] = useState(false);
   // Stat values captured when the card is drawn, for the before → after summary.
   const [baseline, setBaseline] = useState<Record<StatKey, number> | null>(null);
+  const [quickRoll, setQuickRoll] = useState<ReturnType<typeof rollDice> | null>(null);
   // Last index this component dispatched per stat, so StatTrackSlider deltas
   // are computed against our own last-sent value rather than a possibly-stale
   // Redux render snapshot when several drags land in the same React batch.
@@ -155,6 +156,7 @@ export function ResolutionSheet({
     setChanged(false);
     setBaseline(null);
     setCardSearch('');
+    setQuickRoll(null);
     lastIndexRef.current = {};
     onClose();
   };
@@ -283,6 +285,16 @@ export function ResolutionSheet({
                     <Text style={styles.effect}>{card.effect}</Text>
                   </>
                 ) : null}
+                <View style={styles.quickRollRow}>
+                  <Pressable
+                    onPress={() => setQuickRoll(rollDice(1))}
+                    style={styles.quickRollBtn}>
+                    <Text style={styles.quickRollIcon}>🎲</Text>
+                  </Pressable>
+                  {quickRoll ? (
+                    <Text style={styles.quickRollResult}>{quickRoll.dice[0]}</Text>
+                  ) : null}
+                </View>
               </Card>
 
               {/* --- Current stage --- */}
@@ -677,6 +689,28 @@ const styles = StyleSheet.create({
   hauntResultText: {
     color: colors.danger,
     fontSize: typography.body,
+    fontWeight: '700',
+  },
+  quickRollRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  quickRollBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: radius.sm,
+    backgroundColor: colors.surfaceAlt,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  quickRollIcon: {
+    fontSize: typography.heading,
+  },
+  quickRollResult: {
+    color: colors.text,
+    fontSize: typography.heading,
     fontWeight: '700',
   },
 });
